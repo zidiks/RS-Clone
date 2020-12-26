@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as THREE from 'three';
 import * as STATS from 'stats.js';
+import { CameraHelper } from 'three';
 
 @Component({
   selector: 'app-root',
@@ -25,11 +26,14 @@ export class AppComponent implements OnInit{
     let jumpLength = 50;
     let jumpHeight = 0;
     let xpos = 0;
-    let play = true;
+    let play = false;
+    let end = false;
+    let startAnim = false;
 
     const endGame = document.createElement('div');
     endGame.className = 'end-game';
-    endGame.textContent = 'GAME OVER!';
+    endGame.style.color = 'green';
+    endGame.textContent = 'PRESS SPACE TO START!';
     
 
     const renderer = new THREE.WebGLRenderer();
@@ -66,7 +70,7 @@ export class AppComponent implements OnInit{
       new THREE.MeshPhongMaterial( { color: 0xff0000 } )
     );
     enemy.position.y -= 1.5;
-    enemy.position.z = -15;
+    enemy.position.z = -40;
     enemy.receiveShadow = true;
     enemy.castShadow = true;
     scene.add(enemy);
@@ -80,9 +84,17 @@ export class AppComponent implements OnInit{
     cube.position.z += 3;
     scene.add( cube );
 
-    camera.position.z = 5;
+    // camera.position.z = 5;
+    // camera.position.y = 2;
+    // camera.rotation.x -= 0.75;
+
+    camera.position.z = 1;
     camera.position.y = 2;
-    camera.rotation.x -= 0.75;
+    camera.position.x = 9;
+    camera.rotation.y += 1.5;
+    let cameraTarget = new THREE.Vector3().copy(cube.position);
+    cameraTarget.y += 1.5;
+    camera.lookAt(cameraTarget);
 
     document.addEventListener("keydown", keyRightHandler, false);
 
@@ -95,6 +107,12 @@ export class AppComponent implements OnInit{
           xpos += 1;
         }
       }
+      if(e.keyCode == 32){
+        if (play === false && end === false) {
+          endGame.style.display = 'none';
+          startAnim = true;
+        }
+      }
       if(e.keyCode == 37){
         if (xpos > -1) {
           xpos -= 1;
@@ -103,7 +121,7 @@ export class AppComponent implements OnInit{
     }
   
     function detectCollisionCubes(object1: any, object2: any){
-      object1.geometry.computeBoundingBox(); //not needed if its already calculated
+      object1.geometry.computeBoundingBox();
       object2.geometry.computeBoundingBox();
       object1.updateMatrixWorld();
       object2.updateMatrixWorld();
@@ -119,6 +137,21 @@ export class AppComponent implements OnInit{
 
     function animate() {
       stats.begin();
+      if (startAnim) {
+        if (camera.position.x > 0 || camera.position.z < 5) {
+          if (camera.position.z < 5) camera.position.z += 0.05;
+          if (camera.position.x > 0) camera.position.x -= 0.1;
+          camera.lookAt(cameraTarget);
+        } else {
+          camera.position.x = 0;
+          camera.position.z = 5;
+          camera.rotation.y = 0;
+          camera.rotation.z = 0;
+          startAnim = false;
+          play = true;
+          console.log(camera.position);
+        }
+      }
      
       if (play) {
         if (enemy.position.z > 5) {
@@ -147,7 +180,10 @@ export class AppComponent implements OnInit{
   
         if (detectCollisionCubes(cube, enemy)) {
           endGame.style.display = 'flex';
+          endGame.textContent = 'GAME OVER!';
+          endGame.style.color = 'red';
           play = false;
+          end = true;
         }
       }
 
