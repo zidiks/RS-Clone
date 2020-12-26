@@ -120,7 +120,7 @@ export class AppComponent implements OnInit{
       }
     }
   
-    function detectCollisionCubes(object1: any, object2: any){
+    function detectCollisionPlayer(object1: any, object2: any){
       object1.geometry.computeBoundingBox();
       object2.geometry.computeBoundingBox();
       object1.updateMatrixWorld();
@@ -178,7 +178,7 @@ export class AppComponent implements OnInit{
         }
         cube.position.y = -1.5 + jumpHeight;
   
-        if (detectCollisionCubes(cube, enemy)) {
+        if (detectCollisionPlayer(cube, enemy)) {
           endGame.style.display = 'flex';
           endGame.textContent = 'GAME OVER!';
           endGame.style.color = 'red';
