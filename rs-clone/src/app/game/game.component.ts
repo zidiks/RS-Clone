@@ -6,6 +6,8 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { Mesh } from 'three';
 import { EnvironementService } from './environement.service';
 import { PlayerService } from './player.service';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 interface States {
   control: {
@@ -86,7 +88,7 @@ export class GameComponent implements OnInit {
     const player = new THREE.Group();
     const playerManager = new PlayerService();
 
-    loader.load( 'assets/player.fbx', function ( object ) {
+    loader.load( 'assets/player.fbx', function ( object ) {   
 
       mixer = new THREE.AnimationMixer( object );
 
@@ -122,7 +124,7 @@ export class GameComponent implements OnInit {
     endGame.textContent = 'PRESS SPACE TO START!';
     
 
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -142,48 +144,64 @@ export class GameComponent implements OnInit {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
     scene.add(ambientLight);
 
-    const light = new THREE.DirectionalLight( 0xffffff, 0.7 );
-    light.position.set(5, 9, 3);
+    const light = new THREE.DirectionalLight( 0xffffff, 0.6 );
+    light.position.set(2, 10, 7);
     light.castShadow = true;
     light.shadow.camera.near = 0.1;
-    light.shadow.camera.far = 25;
+    light.shadow.camera.far = 2000;
     light.shadow.mapSize.width = 1024;
     light.shadow.mapSize.height = 1024;
     scene.add(light);
 
-    const enemy = new THREE.Mesh(
-      new THREE.BoxGeometry(0.3, 1, 0.3),
+    const enemyBox = new THREE.Mesh(
+      new THREE.BoxGeometry(1.8, 1.5, 0.2),
       new THREE.MeshPhongMaterial( { color: 0xff0000 } )
     );
-    enemy.position.y -= 1.5;
-    enemy.position.z = -40;
-    enemy.receiveShadow = true;
-    enemy.castShadow = true;
-    scene.add(enemy);
+    enemyBox.position.y += 0.3
+    enemyBox.visible = false;
+    // enemy.receiveShadow = true;
+    // enemy.castShadow = true;
+    //cene.add(enemy);
 
-    const geometry = new THREE.BoxGeometry();
+    const enemy = new THREE.Group;
+    const mtlLoader = new MTLLoader;
+    mtlLoader.load( 'assets/enemy/1/1.vox.mtl', function( materials ) {
+
+      materials.preload();
+
+      var objLoader = new OBJLoader();
+      objLoader.setMaterials( materials );
+      objLoader.load( 'assets/enemy/1/1.vox.obj', function ( en ) {
+
+          //object.position.set(element.pos[0], element.pos[1], element.pos[2]);
+          en.traverse(function(child) {
+            if (child instanceof THREE.Mesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+          }
+          en.position.y -= 0.25;
+          enemy.add(en);
+          enemy.add(enemyBox);
+          enemy.position.y -= 0.8;
+          enemy.position.z = -40;
+          scene.add(enemy);
+          });
+          
+      }, () => console.log('load...'), () => console.log('err!') );
+    });
+
+
+    const geometry = new THREE.BoxGeometry(0.8, 1.8 , 0.3);
     const matherial = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
     const cube = new THREE.Mesh( geometry, matherial );
     cube.material.transparent = true;
     cube.visible = false;
-    cube.receiveShadow = true;
-    cube.castShadow = true;
-    cube.position.y -= 1.5;
+    cube.position.y -= 1;
     
     player.add( cube );
     player.position.z += 3;
     player.position.y += 0.1;
     scene.add(player);
-
-    for(let i = 0; i < 6; i++) {
-      env.GenerateEnv(
-        'assets/env/rails/rails.vox.mtl',
-        'assets/env/rails/rails.vox.obj',
-        [0, -2, -60],
-        i,
-        true
-      );
-    }
 
     camera.position.z = 1;
     camera.position.y = 2;
@@ -268,7 +286,7 @@ export class GameComponent implements OnInit {
         env.MoveEnv(STATES.speed);
         playerManager.setPlayerPos(player, STATES);
   
-        if (detectCollisionPlayer(cube, enemy)) {
+        if (detectCollisionPlayer(cube, enemyBox)) {
           endGame.style.display = 'flex';
           endGame.textContent = 'GAME OVER!';
           endGame.style.color = 'red';

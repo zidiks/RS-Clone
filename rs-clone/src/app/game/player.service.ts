@@ -26,10 +26,13 @@ export class PlayerService {
   setPlayerPos(target: THREE.Group, states: States) {
     if (target.position.x < ( states.control.xpos * 2 ) && (states.control.xpos * 2) - target.position.x > 0.1) {
       target.position.x += 0.1;
+      target.rotation.y = -Math.PI / 4;
     } else if (target.position.x > ( states.control.xpos * 2 ) && target.position.x - (states.control.xpos * 2) > 0.1) {
       target.position.x -= 0.1;
+      target.rotation.y = Math.PI / 4;
     } else {
       target.position.x = states.control.xpos * 2;
+      target.rotation.y = 0;
     }
     if(states.control.jumpPressed){
       states.control.jumpCount++;
