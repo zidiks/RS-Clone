@@ -88,13 +88,13 @@ export class GameComponent implements OnInit {
     const player = new THREE.Group();
     const playerManager = new PlayerService();
 
+    let playerAction:THREE.AnimationAction; 
     loader.load( 'assets/player.fbx', function ( object ) {   
 
       mixer = new THREE.AnimationMixer( object );
 
-      const action = mixer.clipAction( object.animations[ 0 ] );
-      action.setDuration(STATES.speed ** -1 + 0.1);
-      action.play();
+      playerAction = mixer.clipAction( object.animations[ 0 ] );
+      playerAction.play();
 
       object.traverse( function ( child ) {
 
@@ -144,9 +144,13 @@ export class GameComponent implements OnInit {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
     scene.add(ambientLight);
 
-    const light = new THREE.DirectionalLight( 0xffffff, 0.6 );
+    const light = new THREE.DirectionalLight( 0xffffff, 0.7 );
     light.position.set(2, 10, 7);
     light.castShadow = true;
+    light.shadow.camera.top = 30;
+    light.shadow.camera.right = 20;
+    light.shadow.camera.bottom = - 10;
+    light.shadow.camera.left = -20;
     light.shadow.camera.near = 0.1;
     light.shadow.camera.far = 2000;
     light.shadow.mapSize.width = 1024;
@@ -197,15 +201,14 @@ export class GameComponent implements OnInit {
     cube.material.transparent = true;
     cube.visible = false;
     cube.position.y -= 1;
-    
     player.add( cube );
     player.position.z += 3;
     player.position.y += 0.1;
     scene.add(player);
 
-    camera.position.z = 1;
+    camera.position.z = 3;
     camera.position.y = 2;
-    camera.position.x = 9;
+    camera.position.x = 5;
     camera.rotation.y += 1.5;
     let cameraTarget = new THREE.Vector3().copy(cube.position);
     cameraTarget.y -= 1;
@@ -276,6 +279,7 @@ export class GameComponent implements OnInit {
       }
      
       if (STATES.play) {
+        playerAction.setDuration(STATES.speed ** -1);
         if (enemy.position.z > 5) {
           enemy.position.z = -40;
           enemy.position.x = getRandomInt(-1, 2) * 2;
@@ -293,7 +297,7 @@ export class GameComponent implements OnInit {
           STATES.play = false;
           STATES.end = true;
         }
-        STATES.speed += 0.001 * (STATES.speed ** ( -1 * STATES.speed));
+        STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed));
         STATES.score += 0.01;
         domScore.textContent = `${Math.round(STATES.score)}`;
         const delta = clock.getDelta();

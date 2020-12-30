@@ -21,44 +21,51 @@ export class EnvironementService {
     public Queue: Array<any> = [],
     public inMove: Array<any> = []
   ) {
-    for(let i = 0; i < 6; i++) {
+    for(let i = 0; i < 10; i++) {
+      let id = this.getRandomInt(1, 3);
       this.GenerateEnv(
         [
           {
             mtl: 'assets/env/rails/rails.vox.mtl',
             obj: 'assets/env/rails/rails.vox.obj',
             pos:[0, -2, -60],
-            shadow: true
+            shadow: false
           },
           {
             mtl: 'assets/env/rails/rails.vox.mtl',
             obj: 'assets/env/rails/rails.vox.obj',
             pos:[-2, -2, -60],
-            shadow: true
+            shadow: false
           },
           {
             mtl: 'assets/env/rails/rails.vox.mtl',
             obj: 'assets/env/rails/rails.vox.obj',
             pos:[2, -2, -60],
-            shadow: true
-          },
-          {
-            mtl: 'assets/env/sity_1/sity_1.vox.mtl',
-            obj: 'assets/env/sity_1/sity_1.vox.obj',
-            pos:[-11, 3, -60],
             shadow: false
           },
           {
-            mtl: 'assets/env/sity_1/sity_1.vox.mtl',
-            obj: 'assets/env/sity_1/sity_1.vox.obj',
-            pos:[11, 3, -60],
-            shadow: false
+            mtl: `assets/env/sity_${id}/sity_${id}.vox.mtl`,
+            obj: `assets/env/sity_${id}/sity_${id}.vox.obj`,
+            pos:[-11, -2, -60],
+            shadow: id === 2 ? true : false
+          },
+          {
+            mtl: `assets/env/sity_${id}/sity_${id}.vox.mtl`,
+            obj: `assets/env/sity_${id}/sity_${id}.vox.obj`,
+            pos:[11, -2, -60],
+            shadow: id === 2 ? true : false
           }
         ],
-        i < 1 ? false : true,
+        i < 5 ? false : true,
         i
       );
     }
+  }
+
+  getRandomInt(min: number, max: number) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
   }
 
   GenerateEnv(grouppObjs: Array<LoadedObj>, starter: boolean, index: number) {
@@ -83,8 +90,8 @@ export class EnvironementService {
               if (child instanceof THREE.Mesh) {
                 if (element.shadow) {
                   child.castShadow = true;
-                  child.receiveShadow = true;
                 }
+                child.receiveShadow = true;
             }
             });
             group.add(object);
@@ -96,9 +103,9 @@ export class EnvironementService {
     if (starter) {
       inMov.unshift({
         obj: group,
-        initedNext: index === 1 ? false : true
+        initedNext: index === 5 ? false : true
       });
-      group.position.z += 18 * index;
+      group.position.z += 18 * (index - Math.abs(6 - 10));
     } else queue.unshift(
       {
         obj: group,
