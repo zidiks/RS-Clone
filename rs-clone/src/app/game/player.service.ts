@@ -1,17 +1,29 @@
+import { Injectable } from '@angular/core';
+
 interface States {
-    control: {
-      jumpPressed: boolean,
-      jumpCount: number,
-      jumpLength: number,
-      jumpHeight: number,
-      xpos: number
-    },
-    play: boolean,
-    end: boolean,
-    startAnim: boolean
+  control: {
+    jumpPressed: boolean,
+    jumpCount: number,
+    jumpLength: number,
+    jumpHeight: number,
+    xpos: number
+  },
+  speed: number,
+  play: boolean,
+  end: boolean,
+  startAnim: boolean,
+  score: number
 }
 
-export function setPlayerPos(target: THREE.Group, states: States) {
+@Injectable({
+  providedIn: 'root'
+})
+export class PlayerService {
+
+  constructor(
+  ) { }
+
+  setPlayerPos(target: THREE.Group, states: States) {
     if (target.position.x < ( states.control.xpos * 2 ) && (states.control.xpos * 2) - target.position.x > 0.1) {
       target.position.x += 0.1;
     } else if (target.position.x > ( states.control.xpos * 2 ) && target.position.x - (states.control.xpos * 2) > 0.1) {
@@ -29,5 +41,5 @@ export function setPlayerPos(target: THREE.Group, states: States) {
       states.control.jumpHeight=0;
     }
     target.position.y = states.control.jumpHeight;
-  
   }
+}

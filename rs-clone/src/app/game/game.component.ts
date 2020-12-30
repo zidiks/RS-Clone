@@ -2,7 +2,10 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import * as THREE from 'three';
 import * as STATS from 'stats.js';
-import {OBJLoader2} from 'three/examples/jsm/loaders/OBJLoader2.js';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { Mesh } from 'three';
+import { EnvironementService } from './environement.service';
+import { PlayerService } from './player.service';
 
 interface States {
   control: {
@@ -12,9 +15,11 @@ interface States {
     jumpHeight: number,
     xpos: number
   },
+  speed: number,
   play: boolean,
   end: boolean,
-  startAnim: boolean
+  startAnim: boolean,
+  score: number
 }
 
 @Component({
@@ -28,40 +33,88 @@ export class GameComponent implements OnInit {
     private elementRef: ElementRef
     ) { 
     this.location.replaceState('/');
-    console.log(this.elementRef.nativeElement.querySelector('game-scene'));
    }
 
   ngOnInit(): void {
-    const STATES = {
+    const STATES: States = {
       control: {
         jumpPressed: false,
         jumpCount: 0,
-        jumpLength: 50,
+        jumpLength: 37,
         jumpHeight: 0,
         xpos: 0
       },
-      speed: 1,
+      speed: 1.5,
       play: false,
       end: false,
-      startAnim: false
+      startAnim: false,
+      score: 0
     }
+
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
+    const domScore = <HTMLDivElement>document.getElementById('game-score');
 
     const stats = new STATS();
     stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
     domScene.appendChild(stats.dom);
 
+    const clock = new THREE.Clock();
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    scene.fog = new THREE.Fog('lightblue', 10, 30);
+    scene.background =  new THREE.Color('lightblue');
+    const env = new EnvironementService(scene);
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+    // var mtlLoader = new MTLLoader();
+    // var url = "assets/untitled.mtl";
+    // mtlLoader.load( url, function( materials ) {
 
-    // const objLoader = new OBJLoader2();
-    // objLoader.load("assets/untitled.obj", (obj) => {
-    //   obj.position.y -= 2;
-    //   obj.scale.set(0.3, 0.3, 0.3);
-    //   obj.castShadow = true;
-    //   obj.receiveShadow = true;
-    //   scene.add(obj);
+    //     materials.preload();
+
+    //     var objLoader = new OBJLoader();
+    //     objLoader.setMaterials( materials );
+    //     objLoader.load( 'assets/untitled.obj', function ( object ) {
+
+    //         object.position.y -=2;
+    //         scene.add( object );
+
+    //     }, () => console.log('load...'), () => console.log('err!') );
+
     // });
+
+    let mixer: THREE.AnimationMixer;
+    const loader = new FBXLoader();
+    const player = new THREE.Group();
+    const playerManager = new PlayerService();
+
+    loader.load( 'assets/player.fbx', function ( object ) {
+
+      mixer = new THREE.AnimationMixer( object );
+
+      const action = mixer.clipAction( object.animations[ 0 ] );
+      action.setDuration(STATES.speed ** -1 + 0.1);
+      action.play();
+
+      object.traverse( function ( child ) {
+
+        if ( child instanceof Mesh ) {
+
+          child.castShadow = true;
+          child.receiveShadow = true;
+
+        }
+
+      } );
+      
+      object.scale.set(1, 1, 1);
+      object.position.y -= 2;
+      object.rotation.y += Math.PI;
+
+      //scene.add( object );
+      
+      player.add(object);
+
+    } );
+
 
     const endGame = document.createElement('div');
     endGame.className = 'end-game';
@@ -111,25 +164,34 @@ export class GameComponent implements OnInit {
     const geometry = new THREE.BoxGeometry();
     const matherial = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
     const cube = new THREE.Mesh( geometry, matherial );
+    cube.material.transparent = true;
+    cube.visible = false;
     cube.receiveShadow = true;
     cube.castShadow = true;
     cube.position.y -= 1.5;
-    cube.position.z += 3;
-    scene.add( cube );
+    
+    player.add( cube );
+    player.position.z += 3;
+    player.position.y += 0.1;
+    scene.add(player);
 
-    // camera.position.z = 5;
-    // camera.position.y = 2;
-    // camera.rotation.x -= 0.75;
+    for(let i = 0; i < 6; i++) {
+      env.GenerateEnv(
+        'assets/env/rails/rails.vox.mtl',
+        'assets/env/rails/rails.vox.obj',
+        [0, -2, -60],
+        i,
+        true
+      );
+    }
 
     camera.position.z = 1;
     camera.position.y = 2;
     camera.position.x = 9;
     camera.rotation.y += 1.5;
     let cameraTarget = new THREE.Vector3().copy(cube.position);
-    cameraTarget.y += 1.5;
+    cameraTarget.y -= 1;
     camera.lookAt(cameraTarget);
-
-    STATES.control.jumpPressed = false;
 
     document.addEventListener("keydown", keyRightHandler, false);
 
@@ -170,27 +232,6 @@ export class GameComponent implements OnInit {
       return box1.intersectsBox(box2);
     }
 
-    function  setPlayerPos(target: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial>, states: States) {
-      if (target.position.x < ( states.control.xpos * 2 ) && (states.control.xpos * 2) - target.position.x > 0.1) {
-        target.position.x += 0.1;
-      } else if (target.position.x > ( states.control.xpos * 2 ) && target.position.x - (states.control.xpos * 2) > 0.1) {
-        target.position.x -= 0.1;
-      } else {
-        target.position.x = states.control.xpos * 2;
-      }
-      if(states.control.jumpPressed){
-        states.control.jumpCount++;
-        states.control.jumpHeight = 0.05*states.control.jumpLength*Math.sin(Math.PI*states.control.jumpCount/states.control.jumpLength);
-      }
-      if(states.control.jumpCount>states.control.jumpLength){
-        states.control.jumpCount=0;
-        states.control.jumpPressed=false;
-        states.control.jumpHeight=0;
-      }
-      target.position.y = -1.5 + states.control.jumpHeight;
-    
-    }
-
     function getRandomInt(min: number, max: number) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -221,9 +262,11 @@ export class GameComponent implements OnInit {
           enemy.position.z = -40;
           enemy.position.x = getRandomInt(-1, 2) * 2;
         } else {
-          enemy.position.z += 0.2 * STATES.speed;
+          enemy.position.z += 0.05 * STATES.speed;
         }
-        setPlayerPos(cube, STATES);
+
+        env.MoveEnv(STATES.speed);
+        playerManager.setPlayerPos(player, STATES);
   
         if (detectCollisionPlayer(cube, enemy)) {
           endGame.style.display = 'flex';
@@ -232,12 +275,17 @@ export class GameComponent implements OnInit {
           STATES.play = false;
           STATES.end = true;
         }
-        STATES.speed += 0.005;
+        STATES.speed += 0.001 * (STATES.speed ** ( -1 * STATES.speed));
+        STATES.score += 0.01;
+        domScore.textContent = `${Math.round(STATES.score)}`;
+        const delta = clock.getDelta();
+        if ( mixer ) mixer.update( delta );
       }
 
       stats.end();
 
       requestAnimationFrame( animate );
+
 
       renderer.render( scene, camera );
     }
