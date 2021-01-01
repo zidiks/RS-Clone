@@ -1,4 +1,8 @@
 import { Injectable } from '@angular/core';
+import * as THREE from 'three';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { Mesh } from 'three';
+import { NgStyle } from '@angular/common';
 
 interface States {
   control: {
@@ -19,9 +23,42 @@ interface States {
   providedIn: 'root'
 })
 export class PlayerService {
+  mixer: any;
+  player: any = new THREE.Group;
+  playerAction: any;
+  cube: any = new THREE.Mesh( 
+    new THREE.BoxGeometry(0.8, 1.8 , 0.3),
+    new THREE.MeshPhongMaterial( { color: 0x00ff00 } )
+  );
 
   constructor(
-  ) { }
+  ) {
+    this.cube.material.transparent = true;
+    this.cube.visible = false;
+    this.cube.position.y -= 1;
+    this.player.add( this.cube );
+    this.player.position.z += 3;
+    this.player.position.y += 0.1;
+    
+    const loader = new FBXLoader();
+    loader.load( 'assets/player.fbx', ( object ) => {   
+      this.mixer = new THREE.AnimationMixer( object );
+      this.playerAction = this.mixer.clipAction( object.animations[ 0 ] );
+      this.playerAction.play();
+      object.traverse( function ( child ) {
+        if ( child instanceof Mesh ) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+      
+      object.scale.set(1, 1, 1);
+      object.position.y -= 2;
+      object.rotation.y += Math.PI;
+      
+      this.player.add(object);
+    } );
+  }
 
   setPlayerPos(target: THREE.Group, states: States) {
     if (target.position.x < ( states.control.xpos * 2 ) && (states.control.xpos * 2) - target.position.x > 0.1) {

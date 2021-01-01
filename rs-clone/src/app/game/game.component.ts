@@ -83,39 +83,10 @@ export class GameComponent implements OnInit {
 
     // });
 
-    let mixer: THREE.AnimationMixer;
-    const loader = new FBXLoader();
-    const player = new THREE.Group();
+    // let mixer: THREE.AnimationMixer;
+    // const loader = new FBXLoader();
+    // const player = new THREE.Group();
     const playerManager = new PlayerService();
-
-    let playerAction:THREE.AnimationAction; 
-    loader.load( 'assets/player.fbx', function ( object ) {   
-
-      mixer = new THREE.AnimationMixer( object );
-
-      playerAction = mixer.clipAction( object.animations[ 0 ] );
-      playerAction.play();
-
-      object.traverse( function ( child ) {
-
-        if ( child instanceof Mesh ) {
-
-          child.castShadow = true;
-          child.receiveShadow = true;
-
-        }
-
-      } );
-      
-      object.scale.set(1, 1, 1);
-      object.position.y -= 2;
-      object.rotation.y += Math.PI;
-
-      //scene.add( object );
-      
-      player.add(object);
-
-    } );
 
 
     const endGame = document.createElement('div');
@@ -131,15 +102,6 @@ export class GameComponent implements OnInit {
 
     domScene.appendChild( renderer.domElement );
     domScene.appendChild( endGame );
-
-    const floor = new THREE.Mesh(
-      new THREE.PlaneGeometry(10, 100, 10, 10),
-      new THREE.MeshPhongMaterial( { color: 0xffffff } )
-    );
-    floor.rotation.x = -(Math.PI / 2);
-    floor.position.y -= 2;
-    floor.receiveShadow = true;
-    scene.add(floor);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
     scene.add(ambientLight);
@@ -163,9 +125,6 @@ export class GameComponent implements OnInit {
     );
     enemyBox.position.y += 0.3
     enemyBox.visible = false;
-    // enemy.receiveShadow = true;
-    // enemy.castShadow = true;
-    //cene.add(enemy);
 
     const enemy = new THREE.Group;
     const mtlLoader = new MTLLoader;
@@ -193,24 +152,14 @@ export class GameComponent implements OnInit {
           
       }, () => console.log('load...'), () => console.log('err!') );
     });
-
-
-    const geometry = new THREE.BoxGeometry(0.8, 1.8 , 0.3);
-    const matherial = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
-    const cube = new THREE.Mesh( geometry, matherial );
-    cube.material.transparent = true;
-    cube.visible = false;
-    cube.position.y -= 1;
-    player.add( cube );
-    player.position.z += 3;
-    player.position.y += 0.1;
-    scene.add(player);
+    
+    scene.add(playerManager.player);
 
     camera.position.z = 3;
     camera.position.y = 2;
     camera.position.x = 5;
     camera.rotation.y += 1.5;
-    let cameraTarget = new THREE.Vector3().copy(cube.position);
+    let cameraTarget = new THREE.Vector3().copy(playerManager.cube.position);
     cameraTarget.y -= 1;
     camera.lookAt(cameraTarget);
 
@@ -279,7 +228,7 @@ export class GameComponent implements OnInit {
       }
      
       if (STATES.play) {
-        playerAction.setDuration(STATES.speed ** -1);
+        playerManager.playerAction.setDuration(STATES.speed ** -1);
         if (enemy.position.z > 5) {
           enemy.position.z = -40;
           enemy.position.x = getRandomInt(-1, 2) * 2;
@@ -288,9 +237,9 @@ export class GameComponent implements OnInit {
         }
 
         env.MoveEnv(STATES.speed);
-        playerManager.setPlayerPos(player, STATES);
+        playerManager.setPlayerPos(playerManager.player, STATES);
   
-        if (detectCollisionPlayer(cube, enemyBox)) {
+        if (detectCollisionPlayer(playerManager.cube, enemyBox)) {
           endGame.style.display = 'flex';
           endGame.textContent = 'GAME OVER!';
           endGame.style.color = 'red';
@@ -301,7 +250,7 @@ export class GameComponent implements OnInit {
         STATES.score += 0.01;
         domScore.textContent = `${Math.round(STATES.score)}`;
         const delta = clock.getDelta();
-        if ( mixer ) mixer.update( delta );
+        if ( playerManager.mixer ) playerManager.mixer.update( delta );
       }
 
       stats.end();
