@@ -14,6 +14,7 @@ interface LoadedObj {
   providedIn: 'root'
 })
 export class EnvironementService {
+  ENV_LENGHT:number = 20;
 
   constructor(
     public Scene: THREE.Scene,
@@ -21,9 +22,8 @@ export class EnvironementService {
     public Queue: Array<any> = [],
     public inMove: Array<any> = []
   ) {
-    for(let i = 0; i < 10; i++) {
+    for(let i = 0; i < this.ENV_LENGHT; i++) {
       let id = this.getRandomInt(1, 4);
-      let id2 = this.getRandomInt(1, 4);
       this.GenerateEnv(
         [
           {
@@ -57,7 +57,7 @@ export class EnvironementService {
             shadow: true
           }
         ],
-        i < 5 ? false : true,
+        i < (this.ENV_LENGHT - 5) ? false : true,
         i
       );
     }
@@ -81,7 +81,7 @@ export class EnvironementService {
   GenerateEnv(grouppObjs: Array<LoadedObj>, starter: boolean, index: number) {
     let mtlLoader = new MTLLoader();
     let scene = this.Scene;
-    let preload = this.Preload;
+    //let preload = this.Preload;
     let queue = this.Queue;
     let inMov = this.inMove;
     // url = "assets/untitled.mtl";
@@ -113,9 +113,9 @@ export class EnvironementService {
     if (starter) {
       inMov.unshift({
         obj: group,
-        initedNext: index === 5 ? false : true
+        initedNext: index === (this.ENV_LENGHT - 5) ? false : true
       });
-      group.position.z += 18 * (index - Math.abs(6 - 10));
+      group.position.z += 18 * (index - Math.abs(6 - this.ENV_LENGHT));
     } else queue.unshift(
       {
         obj: group,
@@ -134,7 +134,8 @@ export class EnvironementService {
         enemy.obj.position.z += 0.05 * speed;
       }
       if ((enemy.obj.position.z) >= 18 && enemy.initedNext === false && this.Queue[0] !== undefined) {
-        this.inMove.push(this.Queue.shift());
+        //this.inMove.push(this.Queue.shift());
+        this.inMove.push(this.Queue.splice(this.getRandomInt(1, this.Queue.length), 1)[0]);
         enemy.initedNext = true;
       }
     });
