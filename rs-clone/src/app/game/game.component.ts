@@ -6,6 +6,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { Mesh } from 'three';
 import { EnvironementService } from './environement.service';
 import { PlayerService } from './player.service';
+import { EnemyService } from './enemy.service';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
@@ -56,9 +57,9 @@ export class GameComponent implements OnInit {
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
 
-    const stats = new STATS();
-    stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    domScene.appendChild(stats.dom);
+    // const stats = new STATS();
+    // stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+    // domScene.appendChild(stats.dom);
 
     const clock = new THREE.Clock();
     const scene = new THREE.Scene();
@@ -87,7 +88,8 @@ export class GameComponent implements OnInit {
     // const loader = new FBXLoader();
     // const player = new THREE.Group();
     const playerManager = new PlayerService();
-
+    const enemyManager = new EnemyService(scene);
+    enemyManager.generateWay(6);
 
     const endGame = document.createElement('div');
     endGame.className = 'end-game';
@@ -119,39 +121,40 @@ export class GameComponent implements OnInit {
     light.shadow.mapSize.height = 1024;
     scene.add(light);
 
-    const enemyBox = new THREE.Mesh(
-      new THREE.BoxGeometry(1.8, 1.5, 0.2),
-      new THREE.MeshPhongMaterial( { color: 0xff0000 } )
-    );
-    enemyBox.position.y += 0.3
-    enemyBox.visible = false;
+    // const enemyBox = new THREE.Mesh(
+    //   new THREE.BoxGeometry(1.8, 1.5, 0.2),
+    //   new THREE.MeshPhongMaterial( { color: 0xff0000 } )
+    // );
+    // enemyBox.position.y += 0.3
+    // enemyBox.visible = false;
 
-    const enemy = new THREE.Group;
-    const mtlLoader = new MTLLoader;
-    mtlLoader.load( 'assets/enemy/1/1.vox.mtl', function( materials ) {
+    // const enemy = new THREE.Group;
+    // const mtlLoader = new MTLLoader;
+    // mtlLoader.load( 'assets/enemy/1/1.vox.mtl', function( materials ) {
 
-      materials.preload();
+    //   materials.preload();
 
-      var objLoader = new OBJLoader();
-      objLoader.setMaterials( materials );
-      objLoader.load( 'assets/enemy/1/1.vox.obj', function ( en ) {
+    //   var objLoader = new OBJLoader();
+    //   objLoader.setMaterials( materials );
+    //   objLoader.load( 'assets/enemy/1/1.vox.obj', function ( en ) {
 
-          //object.position.set(element.pos[0], element.pos[1], element.pos[2]);
-          en.traverse(function(child) {
-            if (child instanceof THREE.Mesh) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-          }
-          en.position.y -= 0.25;
-          enemy.add(en);
-          enemy.add(enemyBox);
-          enemy.position.y -= 0.8;
-          enemy.position.z = -40;
-          scene.add(enemy);
-          });
+    //       //object.position.set(element.pos[0], element.pos[1], element.pos[2]);
+    //       en.traverse(function(child) {
+    //         if (child instanceof THREE.Mesh) {
+    //             child.castShadow = true;
+    //             child.receiveShadow = true;
+    //       }
+    //       en.position.y -= 0.25;
+    //       enemy.add(en);
+    //       enemy.add(enemyBox);
+    //       enemy.position.y -= 0.8;
+    //       enemy.position.z = -40;
+    //       scene.add(enemy);
+    //       });
           
-      }, () => console.log('load...'), () => console.log('err!') );
-    });
+    //   }, () => console.log('load...'), () => console.log('err!') );
+    // });
+
     
     scene.add(playerManager.player);
 
@@ -210,7 +213,7 @@ export class GameComponent implements OnInit {
 
     function animate() {
       
-      stats.begin();
+      //stats.begin();
       if (STATES.startAnim) {
         if (camera.position.x > 0 || camera.position.z < 5) {
           if (camera.position.z < 5) camera.position.z += 0.05;
@@ -223,29 +226,29 @@ export class GameComponent implements OnInit {
           camera.rotation.z = 0;
           STATES.startAnim = false;
           STATES.play = true;
-          console.log(camera.position);
         }
       }
      
       if (STATES.play) {
         playerManager.playerAction.setDuration(STATES.speed ** -1);
-        if (enemy.position.z > 5) {
-          enemy.position.z = -40;
-          enemy.position.x = getRandomInt(-1, 2) * 2;
-        } else {
-          enemy.position.z += 0.05 * STATES.speed;
-        }
+        // if (enemy.position.z > 5) {
+        //   enemy.position.z = -40;
+        //   enemy.position.x = getRandomInt(-1, 2) * 2;
+        // } else {
+        //   enemy.position.z += 0.05 * STATES.speed;
+        // }
+        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endGame, STATES);
 
         env.MoveEnv(STATES.speed);
         playerManager.setPlayerPos(playerManager.player, STATES);
   
-        if (detectCollisionPlayer(playerManager.cube, enemyBox)) {
-          endGame.style.display = 'flex';
-          endGame.textContent = 'GAME OVER!';
-          endGame.style.color = 'red';
-          STATES.play = false;
-          STATES.end = true;
-        }
+        // if (detectCollisionPlayer(playerManager.cube, enemyBox)) {
+        //   endGame.style.display = 'flex';
+        //   endGame.textContent = 'GAME OVER!';
+        //   endGame.style.color = 'red';
+        //   STATES.play = false;
+        //   STATES.end = true;
+        // }
         STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed));
         STATES.score += 0.01;
         domScore.textContent = `${Math.round(STATES.score)}`;
@@ -253,7 +256,7 @@ export class GameComponent implements OnInit {
         if ( playerManager.mixer ) playerManager.mixer.update( delta );
       }
 
-      stats.end();
+      //stats.end();
 
       requestAnimationFrame( animate );
 

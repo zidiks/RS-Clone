@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { Mesh } from 'three';
-import { NgStyle } from '@angular/common';
 
 interface States {
   control: {
