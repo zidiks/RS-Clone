@@ -47,13 +47,13 @@ export class EnvironementService {
           {
             mtl: `assets/env/sity_${id}/sity_${id}.vox.mtl`,
             obj: `assets/env/sity_${id}/sity_${id}.vox.obj`,
-            pos:[-11, -2, -60],
+            pos:[-11, -2.1, -60],
             shadow: true
           },
           {
             mtl: `assets/env/sity_${id}/sity_${id}.vox.mtl`,
             obj: `assets/env/sity_${id}/sity_${id}.vox.obj`,
-            pos:[11, -2, -60],
+            pos:[11, -2.1, -60],
             shadow: true
           }
         ],

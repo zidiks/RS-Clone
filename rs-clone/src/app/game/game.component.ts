@@ -2,13 +2,9 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import * as THREE from 'three';
 import * as STATS from 'stats.js';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import { Mesh } from 'three';
 import { EnvironementService } from './environement.service';
 import { PlayerService } from './player.service';
 import { EnemyService } from './enemy.service';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 interface States {
   control: {
@@ -32,8 +28,7 @@ interface States {
 })
 export class GameComponent implements OnInit {
   constructor(
-    private location: Location,
-    private elementRef: ElementRef
+    private location: Location
     ) { 
     this.location.replaceState('/');
    }
@@ -65,38 +60,17 @@ export class GameComponent implements OnInit {
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog('lightblue', 10, 30);
     scene.background =  new THREE.Color('lightblue');
-    const env = new EnvironementService(scene);
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-    // var mtlLoader = new MTLLoader();
-    // var url = "assets/untitled.mtl";
-    // mtlLoader.load( url, function( materials ) {
-
-    //     materials.preload();
-
-    //     var objLoader = new OBJLoader();
-    //     objLoader.setMaterials( materials );
-    //     objLoader.load( 'assets/untitled.obj', function ( object ) {
-
-    //         object.position.y -=2;
-    //         scene.add( object );
-
-    //     }, () => console.log('load...'), () => console.log('err!') );
-
-    // });
-
-    // let mixer: THREE.AnimationMixer;
-    // const loader = new FBXLoader();
-    // const player = new THREE.Group();
+  
+    const env = new EnvironementService(scene);
     const playerManager = new PlayerService();
     const enemyManager = new EnemyService(scene);
-    enemyManager.generateWay(6);
 
     const endGame = document.createElement('div');
     endGame.className = 'end-game';
     endGame.style.color = 'green';
     endGame.textContent = 'PRESS SPACE TO START!';
     
-
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
@@ -120,41 +94,6 @@ export class GameComponent implements OnInit {
     light.shadow.mapSize.width = 1024;
     light.shadow.mapSize.height = 1024;
     scene.add(light);
-
-    // const enemyBox = new THREE.Mesh(
-    //   new THREE.BoxGeometry(1.8, 1.5, 0.2),
-    //   new THREE.MeshPhongMaterial( { color: 0xff0000 } )
-    // );
-    // enemyBox.position.y += 0.3
-    // enemyBox.visible = false;
-
-    // const enemy = new THREE.Group;
-    // const mtlLoader = new MTLLoader;
-    // mtlLoader.load( 'assets/enemy/1/1.vox.mtl', function( materials ) {
-
-    //   materials.preload();
-
-    //   var objLoader = new OBJLoader();
-    //   objLoader.setMaterials( materials );
-    //   objLoader.load( 'assets/enemy/1/1.vox.obj', function ( en ) {
-
-    //       //object.position.set(element.pos[0], element.pos[1], element.pos[2]);
-    //       en.traverse(function(child) {
-    //         if (child instanceof THREE.Mesh) {
-    //             child.castShadow = true;
-    //             child.receiveShadow = true;
-    //       }
-    //       en.position.y -= 0.25;
-    //       enemy.add(en);
-    //       enemy.add(enemyBox);
-    //       enemy.position.y -= 0.8;
-    //       enemy.position.z = -40;
-    //       scene.add(enemy);
-    //       });
-          
-    //   }, () => console.log('load...'), () => console.log('err!') );
-    // });
-
     
     scene.add(playerManager.player);
 
@@ -189,30 +128,14 @@ export class GameComponent implements OnInit {
         }
       }
     }
-  
-    function detectCollisionPlayer(object1: any, object2: any){
-      object1.geometry.computeBoundingBox();
-      object2.geometry.computeBoundingBox();
-      object1.updateMatrixWorld();
-      object2.updateMatrixWorld();
-      
-      var box1 = object1.geometry.boundingBox.clone();
-      box1.applyMatrix4(object1.matrixWorld);
-    
-      var box2 = object2.geometry.boundingBox.clone();
-      box2.applyMatrix4(object2.matrixWorld);
-    
-      return box1.intersectsBox(box2);
-    }
 
-    function getRandomInt(min: number, max: number) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
-    }
+    // function getRandomInt(min: number, max: number) {
+    //   min = Math.ceil(min);
+    //   max = Math.floor(max);
+    //   return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
+    // }
 
     function animate() {
-      
       //stats.begin();
       if (STATES.startAnim) {
         if (camera.position.x > 0 || camera.position.z < 5) {
@@ -231,24 +154,10 @@ export class GameComponent implements OnInit {
      
       if (STATES.play) {
         playerManager.playerAction.setDuration(STATES.speed ** -1);
-        // if (enemy.position.z > 5) {
-        //   enemy.position.z = -40;
-        //   enemy.position.x = getRandomInt(-1, 2) * 2;
-        // } else {
-        //   enemy.position.z += 0.05 * STATES.speed;
-        // }
         enemyManager.moveEnemies(STATES.speed, playerManager.cube, endGame, STATES);
-
         env.MoveEnv(STATES.speed);
         playerManager.setPlayerPos(playerManager.player, STATES);
   
-        // if (detectCollisionPlayer(playerManager.cube, enemyBox)) {
-        //   endGame.style.display = 'flex';
-        //   endGame.textContent = 'GAME OVER!';
-        //   endGame.style.color = 'red';
-        //   STATES.play = false;
-        //   STATES.end = true;
-        // }
         STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed));
         STATES.score += 0.01;
         domScore.textContent = `${Math.round(STATES.score)}`;
@@ -259,7 +168,6 @@ export class GameComponent implements OnInit {
       //stats.end();
 
       requestAnimationFrame( animate );
-
 
       renderer.render( scene, camera );
     }
