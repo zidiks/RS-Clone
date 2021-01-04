@@ -91,7 +91,7 @@ export class EnvironementService {
 
         materials.preload();
 
-        var objLoader = new OBJLoader();
+        const objLoader = new OBJLoader();
         objLoader.setMaterials( materials );
         objLoader.load( element.obj, function ( object ) {
 
