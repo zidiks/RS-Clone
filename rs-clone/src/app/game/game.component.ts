@@ -154,8 +154,8 @@ export class GameComponent implements OnInit {
      
       if (STATES.play) {
         playerManager.playerAction.setDuration(STATES.speed ** -1);
-        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endGame, STATES);
         env.MoveEnv(STATES.speed);
+        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endGame, STATES);
         playerManager.setPlayerPos(playerManager.player, STATES);
   
         STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed));
