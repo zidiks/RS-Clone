@@ -63,7 +63,7 @@ export class GameComponent implements OnInit {
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
   
     const env = new EnvironementService(scene);
-    const playerManager = new PlayerService();
+    const playerManager = new PlayerService(camera);
     const enemyManager = new EnemyService(scene);
 
     const endGame = document.createElement('div');

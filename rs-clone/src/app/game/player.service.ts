@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import { Mesh } from 'three';
+import { Camera, Mesh } from 'three';
 
 interface States {
   control: {
@@ -29,9 +29,12 @@ export class PlayerService {
     new THREE.BoxGeometry(0.8, 1.8 , 0.3),
     new THREE.MeshPhongMaterial( { color: 0x00ff00 } )
   );
+  camera: THREE.PerspectiveCamera;
 
   constructor(
+    camera: THREE.PerspectiveCamera
   ) {
+    this.camera = camera;
     this.cube.material.transparent = true;
     this.cube.visible = false;
     this.cube.position.y -= 1;
@@ -62,9 +65,11 @@ export class PlayerService {
   setPlayerPos(target: THREE.Group, states: States) {
     if (target.position.x < ( states.control.xpos * 2 ) && (states.control.xpos * 2) - target.position.x > 0.1) {
       target.position.x += 0.1;
+      this.camera.position.x += 0.07;
       target.rotation.y = -Math.PI / 4;
     } else if (target.position.x > ( states.control.xpos * 2 ) && target.position.x - (states.control.xpos * 2) > 0.1) {
       target.position.x -= 0.1;
+      this.camera.position.x -= 0.07;
       target.rotation.y = Math.PI / 4;
     } else {
       target.position.x = states.control.xpos * 2;

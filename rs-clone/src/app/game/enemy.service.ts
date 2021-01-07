@@ -3,6 +3,7 @@ import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import * as THREE from 'three';
 import { BoardLowEnemy } from './enemies/board-low';
+import { TrainEnemy } from './enemies/train';
 
 interface EnemiesLine {
   line: THREE.Group,
@@ -14,9 +15,9 @@ interface enemiesProts {
   [key: string]: THREE.Group
 }
 
-interface Prototype {
-  enemy: THREE.Group | undefined,
-  hitBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> | undefined
+interface trainRoute {
+  lenght: number,
+  lastSegment: boolean
 }
 
 interface LoadedObjEnemy {
@@ -34,9 +35,23 @@ interface LoadedObjEnemy {
   providedIn: 'root'
 })
 export class EnemyService {
-  wayMap: Array<Array<Boolean>> = [];
+  wayMap: Array<Array<string>> = [];
   lastPos: number | undefined;
   enemiesProts:  enemiesProts = {};
+  trainMap: Array<trainRoute> = [
+    {
+      lenght: 0,
+      lastSegment: false
+    },
+    {
+      lenght: 0,
+      lastSegment: false
+    },
+    {
+      lenght: 0,
+      lastSegment: false
+    }
+  ];
 
   constructor(
     public Scene: THREE.Scene,
@@ -52,6 +67,16 @@ export class EnemyService {
         posY: -0.65,
         shadow: true,
         size: 1,
+        boxSize: [1.6, 1.6, 0.1],
+        hitBoxVisible: false
+        },
+        {
+        type: 'train',
+        mtl: 'assets/enemy/train/train.vox.mtl',
+        obj: 'assets/enemy/train/train.vox.obj',
+        posY: -0.65,
+        shadow: true,
+        size: 2,
         boxSize: [1.6, 1.6, 0.1],
         hitBoxVisible: false
         }
@@ -126,12 +151,12 @@ export class EnemyService {
   generateStartWay(mapLenght: number) {
     const Scene = this.Scene;
     for(let i = 0; i < 5; i++) {
-      this.wayMap.push([true, true, true]);
+      this.wayMap.push(['O', 'O', 'O']);
     }
     for(let i = 0; i <= mapLenght - 5; i++) {
       let wayPos: number;
       let addPos: Array<number | undefined> = [];
-      let wayLine: Array<Boolean> = [];
+      let wayLine: Array<string> = [];
       wayPos = this.getRandomInt(0, 3);
       if (i > 0 && this.lastPos !== wayPos) {
         addPos.push(this.lastPos);
@@ -142,7 +167,7 @@ export class EnemyService {
         }
       }
       for (let x = 0; x < 3; x++) {
-        wayLine.push(x === wayPos ? true : x === addPos[0] ? true : x === addPos[1] ? true : false);
+        wayLine.push(x === wayPos ? 'O' : x === addPos[0] ? 'O' : x === addPos[1] ? 'O' : 'B');
       }
       this.wayMap.push(wayLine);
       this.lastPos = wayPos;
@@ -157,7 +182,7 @@ export class EnemyService {
         initedNext: false
       }
       el.forEach((item, index) => {
-        if (item === false) {
+        if (item === 'B') {
           const newEnemy = new BoardLowEnemy(this.enemiesProts);
           enemiesLine.enemies.push(newEnemy);
           enemiesLine.line.add(newEnemy.object);
@@ -186,8 +211,20 @@ export class EnemyService {
 
   generateNewWay(line: EnemiesLine) {
     let addPos: Array<number | undefined> = [];
-    let wayLine: Array<Boolean> = [];
-    let wayPos: number = this.getRandomInt(0, 3);
+    let wayLine: Array<string> = [];
+    let wayPos: number = 1;
+    if (this.trainMap[1].lenght > 0 && this.lastPos !== 1) {
+      if (this.lastPos) wayPos = this.lastPos;
+    } else {
+      wayPos = this.getRandomInt(0, 3);
+      if (this.trainMap[wayPos].lenght > 0) {
+        if (wayPos === 0) wayPos += this.getRandomInt(1, 3);
+        else if (wayPos === 2) wayPos -= this.getRandomInt(1, 3);
+        else {
+          if (this.getRandomInt(0, 2) === 0) wayPos--; else wayPos++;
+        }
+      }
+    }
     if (this.lastPos !== wayPos) {
       addPos.push(this.lastPos);
       if (this.lastPos !== undefined && Math.abs(this.lastPos - wayPos) > 1) {
@@ -197,22 +234,58 @@ export class EnemyService {
       }
     }
     for (let x = 0; x < 3; x++) {
-      wayLine.push(x === wayPos ? true : x === addPos[0] ? true : x === addPos[1] ? true : false);
+      if (this.trainMap[x].lenght > 0) {
+        if (this.trainMap[x].lastSegment) wayLine.push('TB');
+        else wayLine.push('TH');
+      } else {
+        wayLine.push(x === wayPos ? 'O' : x === addPos[0] ? 'O' : x === addPos[1] ? 'O' : 'B');
+      }
     }
     //this.wayMap.push(wayLine);
     this.lastPos = wayPos;
 
     const enemiesLine = line;
     wayLine.forEach((item, index) => {
-      if (item === false) {
-        const newEnemy = new BoardLowEnemy(this.enemiesProts);
+      let activeTrainRoutes = 0;
+      for (let i = 0; i < 3; i++) {
+        if (this.trainMap[i].lenght > 0) activeTrainRoutes++;
+      };
+      if (item === 'TB') {
+        this.trainMap[index].lastSegment = false;
+        this.trainMap[index].lenght--;
+      } else if (item === 'TH' ) {
+        this.trainMap[index].lastSegment = true;
+        this.trainMap[index].lenght--;
+        const newEnemy = new TrainEnemy(this.enemiesProts);
         enemiesLine.enemies.push(newEnemy);
         enemiesLine.line.add(newEnemy.object);
         enemiesLine.line.position.x = (index - 1) * 2;
+      } else if (item === 'B') {
+        if (this.getRandomInt(0,2) === 0 && this.lastPos !== index && activeTrainRoutes < 2 && this.trainMap[index].lenght <= 0) {
+          item = 'TH';
+          this.trainMap[index].lenght = 2 * this.getRandomInt(1, 5) - 1;
+          this.trainMap[index].lastSegment = true;
+          const newEnemy = new TrainEnemy(this.enemiesProts);
+          enemiesLine.enemies.push(newEnemy);
+          enemiesLine.line.add(newEnemy.object);
+          enemiesLine.line.position.x = (index - 1) * 2;
+        } else {
+          // false board
+        }
+      } else {
+        if (this.getRandomInt(0, 2) === 0) {
+          const newEnemy = new BoardLowEnemy(this.enemiesProts);
+          enemiesLine.enemies.push(newEnemy);
+          enemiesLine.line.add(newEnemy.object);
+          enemiesLine.line.position.x = (index - 1) * 2;
+        }
       }
     });
     enemiesLine.line.position.z = -40;
     this.Queue.push(enemiesLine);
+    setTimeout(() => {
+      console.log(wayLine[0], wayLine[1], wayLine[2]);
+    }, 5000);
   }
 
   detectCollisionPlayer(object1: any, object2: any){
@@ -234,9 +307,9 @@ export class EnemyService {
     for (let ind = this.inMove.length-1; ind >= 0; ind--) {
       let el = this.inMove[ind];
       el.enemies.forEach((element: any) => {
-        if (el.line.position.z > -1) element.checkCollisions(playerCube, endGame, states);
+        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, states);
         });
-        if (el.line.position.z > 10) {
+        if (el.line.position.z > 15) {
           let obj = this.inMove[0];
           obj.line.clear();
           obj.line.position.z = -40;
