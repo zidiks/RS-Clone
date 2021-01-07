@@ -75,6 +75,7 @@ export class GameComponent implements OnInit {
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
+    //renderer.setPixelRatio( 0.5 );
 
     domScene.appendChild( renderer.domElement );
     domScene.appendChild( endGame );
@@ -91,8 +92,8 @@ export class GameComponent implements OnInit {
     light.shadow.camera.left = -20;
     light.shadow.camera.near = 0.1;
     light.shadow.camera.far = 2000;
-    light.shadow.mapSize.width = 1024;
-    light.shadow.mapSize.height = 1024;
+    light.shadow.mapSize.width = window.innerWidth * 2;
+    light.shadow.mapSize.height = window.innerHeight * 2;
     scene.add(light);
     
     scene.add(playerManager.player);

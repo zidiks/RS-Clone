@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import * as THREE from 'three';
+import { BoardLowEnemy } from './enemies/board-low';
 
 interface EnemiesLine {
   line: THREE.Group,
-  hitBoxes: Array<THREE.Object3D | undefined>,
+  enemies: Array<object | undefined>,
   initedNext: Boolean
 }
 
@@ -35,8 +36,7 @@ interface LoadedObjEnemy {
 export class EnemyService {
   wayMap: Array<Array<Boolean>> = [];
   lastPos: number | undefined;
-  enemiesProts:  enemiesProts = {
-  }
+  enemiesProts:  enemiesProts = {};
 
   constructor(
     public Scene: THREE.Scene,
@@ -70,7 +70,7 @@ export class EnemyService {
       arr.forEach((el, index) => {
           const  enemy = new THREE.Group();
           const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> = new THREE.Mesh(
-            new THREE.BoxGeometry(...el.boxSize),
+            new THREE.BoxGeometry(1.6, 1.6, 0.1),
             new THREE.MeshPhongMaterial( { color: 0xff0000 } )
           );
           enemyBox.position.y = -1.2;
@@ -95,7 +95,6 @@ export class EnemyService {
                   object.position.z = 0;
                   enemy.add(object);
                   enemy.add(enemyBox);
-
                   // //clone
                   // const clone = new THREE.Group();
                   // clone.add(enemy.clone());
@@ -113,7 +112,11 @@ export class EnemyService {
       });
     });
     promise.then((e) => {
-      this.generateStartWay(20);
+      this.generateStartWay(10);
+      // console.log(this.enemiesProts);
+      // const newEn = new BoardLowEnemy(this.enemiesProts);
+      // this.Scene.add(newEn.object);
+      // newEn.checkCollisions();
     })
     .catch(e => {
       throw new Error(e);
@@ -150,14 +153,14 @@ export class EnemyService {
     this.wayMap.forEach((el, bindex) => {
       const enemiesLine: EnemiesLine = {
         line: new THREE.Group,
-        hitBoxes: [],
+        enemies: [],
         initedNext: false
       }
       el.forEach((item, index) => {
         if (item === false) {
-          const newEnemy = this.enemiesProts['board'].clone();
-          enemiesLine.hitBoxes.push(newEnemy.children[1]);
-          enemiesLine.line.add(newEnemy);
+          const newEnemy = new BoardLowEnemy(this.enemiesProts);
+          enemiesLine.enemies.push(newEnemy);
+          enemiesLine.line.add(newEnemy.object);
           enemiesLine.line.position.x = (index - 1) * 2;
         }
       });
@@ -170,13 +173,18 @@ export class EnemyService {
       } else {
         this.Queue.push(enemiesLine);
         enemiesLine.line.position.z = -40;
+        this.Scene.add(enemiesLine.line);
       }
     });
 
-    console.log('inMovie: ', this.inMove)
+    console.log('inMovie: ', this.inMove);
+    const domLoading = <HTMLDivElement>document.getElementById('game-loading');
+    setTimeout(() => {
+      domLoading.style.display = 'none';
+    }, 1000);
   }
 
-  generateNewWay() {
+  generateNewWay(line: EnemiesLine) {
     let addPos: Array<number | undefined> = [];
     let wayLine: Array<Boolean> = [];
     let wayPos: number = this.getRandomInt(0, 3);
@@ -194,17 +202,17 @@ export class EnemyService {
     //this.wayMap.push(wayLine);
     this.lastPos = wayPos;
 
-      const enemiesLine = this.Queue[this.Queue.length-1];
-      wayLine.forEach((item, index) => {
-        if (item === false) {
-          const newEnemy = this.enemiesProts['board'].clone();
-          enemiesLine.hitBoxes.push(newEnemy.children[1]);
-          enemiesLine.line.add(newEnemy);
-          enemiesLine.line.position.x = (index - 1) * 2;
-        }
-      });
-     // this.Queue.push(enemiesLine);
-      enemiesLine.line.position.z = -40;
+    const enemiesLine = line;
+    wayLine.forEach((item, index) => {
+      if (item === false) {
+        const newEnemy = new BoardLowEnemy(this.enemiesProts);
+        enemiesLine.enemies.push(newEnemy);
+        enemiesLine.line.add(newEnemy.object);
+        enemiesLine.line.position.x = (index - 1) * 2;
+      }
+    });
+    enemiesLine.line.position.z = -40;
+    this.Queue.push(enemiesLine);
   }
 
   detectCollisionPlayer(object1: any, object2: any){
@@ -225,23 +233,16 @@ export class EnemyService {
   moveEnemies(speed:number, playerCube:any, endGame: any, states: any) {
     for (let ind = this.inMove.length-1; ind >= 0; ind--) {
       let el = this.inMove[ind];
-      el.hitBoxes.forEach((element: any) => {
-        if (this.detectCollisionPlayer(playerCube, element) && el.line.position.z > -1) {
-          endGame.style.display = 'flex';
-          endGame.textContent = 'GAME OVER!';
-          endGame.style.color = 'red';
-          states.play = false;
-          states.end = true;
-        }
+      el.enemies.forEach((element: any) => {
+        if (el.line.position.z > -1) element.checkCollisions(playerCube, endGame, states);
         });
-        if (el.line.position.z > 7) {
+        if (el.line.position.z > 10) {
           let obj = this.inMove[0];
           obj.line.clear();
           obj.line.position.z = -40;
           obj.hitBoxes = [];
           obj.initedNext = false;
-          this.Queue.push(this.inMove.shift());
-          this.generateNewWay();
+          this.generateNewWay(this.inMove.shift());
         } else {
           el.line.position.z += 0.05 * speed;
         }
