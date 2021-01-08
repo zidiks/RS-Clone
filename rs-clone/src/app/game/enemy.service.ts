@@ -17,6 +17,7 @@ interface enemiesProts {
 
 interface trainRoute {
   lenght: number,
+  allLength: number,
   lastSegment: number | undefined
 }
 
@@ -41,14 +42,17 @@ export class EnemyService {
   trainMap: Array<trainRoute> = [
     {
       lenght: 0,
+      allLength: 0,
       lastSegment: undefined
     },
     {
       lenght: 0,
+      allLength: 0,
       lastSegment: undefined
     },
     {
       lenght: 0,
+      allLength: 0,
       lastSegment: undefined
     }
   ];
@@ -175,7 +179,6 @@ export class EnemyService {
     }
     console.log('wayMap: ', this.wayMap);
 
-
     this.wayMap.forEach((el, bindex) => {
       const enemiesLine: EnemiesLine = {
         line: new THREE.Group,
@@ -266,21 +269,30 @@ export class EnemyService {
           && this.trainMap[x].lastSegment === undefined
           && !this.lastWayLine.includes('TE')) {
           square = 'TH';
-          this.trainMap[x].lenght = 3 * this.getRandomInt(1, 3) - 1;
+          this.trainMap[x].lenght = (3 * this.getRandomInt(1, 5)) - 1;
+          this.trainMap[x].allLength =  this.trainMap[x].lenght;
           this.trainMap[x].lastSegment = 1;
         }
         wayLine.push(square);
       }
     }
+
+
+
+
+    
     //this.wayMap.push(wayLine);
     this.lastPos = wayPos;
 
+    this.wayMap.push(wayLine);
+
     const enemiesLine = line;
     wayLine.forEach((item, index) => {
-      if (item === 'TB' || item === 'TC') {
+      if (item === 'TB' || item === 'TE') {
         
       } else if (item === 'TH' ) {
         const newEnemy = new TrainEnemy(this.enemiesProts);
+        if (this.trainMap[index].allLength > this.trainMap[index].lenght) newEnemy.object.position.z += 6;
         enemiesLine.enemies.push(newEnemy);
         enemiesLine.line.add(newEnemy.object);
         enemiesLine.line.position.x = (index - 1) * 2;
@@ -319,7 +331,7 @@ export class EnemyService {
     for (let ind = this.inMove.length-1; ind >= 0; ind--) {
       let el = this.inMove[ind];
       el.enemies.forEach((element: any) => {
-        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, states, audio);
+        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, states, audio, this.wayMap);
         });
         if (el.line.position.z > 25) {
           let obj = this.inMove[0];

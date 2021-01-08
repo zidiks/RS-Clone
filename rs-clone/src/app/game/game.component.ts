@@ -49,10 +49,16 @@ export class GameComponent implements OnInit {
       score: 0
     }
 
-    const audioObj = new Audio('assets/audio/audio_1.mp3');
+    function getRandomInt(min: number, max: number) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
+    }
+
+    const audioObj = new Audio(`assets/audio/audio_${getRandomInt(1, 3)}.mp3`);
     audioObj.onended = function() {
       audioObj.play();
-  };
+    };
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
 
