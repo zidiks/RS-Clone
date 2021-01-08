@@ -39,11 +39,12 @@ export class BoardLowEnemy {
     return box1.intersectsBox(box2);
   }
 
-  checkCollisions(player: any, endGame: any, states: any) {
+  checkCollisions(player: any, endGame: any, states: any, audio: any) {
     if (this.detectCollisionPlayer(player)) {
       endGame.style.display = 'flex';
       endGame.textContent = 'GAME OVER!';
       endGame.style.color = 'red';
+      audio.pause();
       states.play = false;
       states.end = true;
     }

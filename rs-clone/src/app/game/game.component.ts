@@ -49,6 +49,7 @@ export class GameComponent implements OnInit {
       score: 0
     }
 
+    const audioObj = new Audio('assets/audio/audio_1.mp3');
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
 
@@ -120,6 +121,9 @@ export class GameComponent implements OnInit {
       if(e.keyCode == 32){
         if (STATES.play === false && STATES.end === false) {
           endGame.style.display = 'none';
+          setTimeout(() => {
+            audioObj.play();
+          }, 700);
           STATES.startAnim = true;
         }
       }
@@ -156,7 +160,7 @@ export class GameComponent implements OnInit {
       if (STATES.play) {
         playerManager.playerAction.setDuration(STATES.speed ** -1);
         env.MoveEnv(STATES.speed);
-        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endGame, STATES);
+        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endGame, STATES, audioObj);
         playerManager.setPlayerPos(playerManager.player, STATES);
   
         STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed));

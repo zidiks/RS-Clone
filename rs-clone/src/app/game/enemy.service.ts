@@ -17,7 +17,7 @@ interface enemiesProts {
 
 interface trainRoute {
   lenght: number,
-  lastSegment: boolean
+  lastSegment: number | undefined
 }
 
 interface LoadedObjEnemy {
@@ -41,17 +41,18 @@ export class EnemyService {
   trainMap: Array<trainRoute> = [
     {
       lenght: 0,
-      lastSegment: false
+      lastSegment: undefined
     },
     {
       lenght: 0,
-      lastSegment: false
+      lastSegment: undefined
     },
     {
       lenght: 0,
-      lastSegment: false
+      lastSegment: undefined
     }
   ];
+  lastWayLine: Array<string> = [];
 
   constructor(
     public Scene: THREE.Scene,
@@ -193,7 +194,7 @@ export class EnemyService {
       if (bindex < 8) enemiesLine.initedNext = true;
       if (bindex < 10) {
         this.inMove.push(enemiesLine);
-        enemiesLine.line.position.z -= bindex * 5;
+        enemiesLine.line.position.z -= bindex * 6;
         this.Scene.add(enemiesLine.line);
       } else {
         this.Queue.push(enemiesLine);
@@ -221,7 +222,7 @@ export class EnemyService {
         if (wayPos === 0) wayPos += this.getRandomInt(1, 3);
         else if (wayPos === 2) wayPos -= this.getRandomInt(1, 3);
         else {
-          if (this.getRandomInt(0, 2) === 0) wayPos--; else wayPos++;
+          if (this.getRandomInt(0, 2) === 0) wayPos -= 1; else wayPos += 1;
         }
       }
     }
@@ -234,11 +235,41 @@ export class EnemyService {
       }
     }
     for (let x = 0; x < 3; x++) {
+      let activeTrainRoutes = 0;
+      for (let i = 0; i < 3; i++) {
+        if (this.trainMap[i].lenght > 0) activeTrainRoutes++;
+      };
       if (this.trainMap[x].lenght > 0) {
-        if (this.trainMap[x].lastSegment) wayLine.push('TB');
-        else wayLine.push('TH');
+        if (this.trainMap[x].lastSegment === 1) {
+          wayLine.push('TB');
+          this.trainMap[x].lastSegment = 2;
+          this.trainMap[x].lenght -= 1;
+        }
+        else if (this.trainMap[x].lastSegment === 2) {
+          wayLine.push('TE');
+          this.trainMap[x].lastSegment = 3;
+          this.trainMap[x].lenght -= 1;
+          if (this.trainMap[x].lenght === 0) this.trainMap[x].lastSegment = undefined;
+        }
+        else if (this.trainMap[x].lastSegment === 3)  {
+          wayLine.push('TH');
+          this.trainMap[x].lastSegment = 1;
+          this.trainMap[x].lenght -= 1;
+        }
       } else {
-        wayLine.push(x === wayPos ? 'O' : x === addPos[0] ? 'O' : x === addPos[1] ? 'O' : 'B');
+        let square = x === wayPos ? 'O' : x === addPos[0] ? 'O' : x === addPos[1] ? 'O' : 'B';
+        if (square === 'B' 
+          && this.getRandomInt(0, 2) === 0 
+          && this.lastPos !== x 
+          && activeTrainRoutes < 2 
+          && this.trainMap[x].lenght === 0
+          && this.trainMap[x].lastSegment === undefined
+          && !this.lastWayLine.includes('TE')) {
+          square = 'TH';
+          this.trainMap[x].lenght = 3 * this.getRandomInt(1, 3) - 1;
+          this.trainMap[x].lastSegment = 1;
+        }
+        wayLine.push(square);
       }
     }
     //this.wayMap.push(wayLine);
@@ -246,33 +277,16 @@ export class EnemyService {
 
     const enemiesLine = line;
     wayLine.forEach((item, index) => {
-      let activeTrainRoutes = 0;
-      for (let i = 0; i < 3; i++) {
-        if (this.trainMap[i].lenght > 0) activeTrainRoutes++;
-      };
-      if (item === 'TB') {
-        this.trainMap[index].lastSegment = false;
-        this.trainMap[index].lenght--;
+      if (item === 'TB' || item === 'TC') {
+        
       } else if (item === 'TH' ) {
-        this.trainMap[index].lastSegment = true;
-        this.trainMap[index].lenght--;
         const newEnemy = new TrainEnemy(this.enemiesProts);
         enemiesLine.enemies.push(newEnemy);
         enemiesLine.line.add(newEnemy.object);
         enemiesLine.line.position.x = (index - 1) * 2;
       } else if (item === 'B') {
-        if (this.getRandomInt(0,2) === 0 && this.lastPos !== index && activeTrainRoutes < 2 && this.trainMap[index].lenght <= 0) {
-          item = 'TH';
-          this.trainMap[index].lenght = 2 * this.getRandomInt(1, 5) - 1;
-          this.trainMap[index].lastSegment = true;
-          const newEnemy = new TrainEnemy(this.enemiesProts);
-          enemiesLine.enemies.push(newEnemy);
-          enemiesLine.line.add(newEnemy.object);
-          enemiesLine.line.position.x = (index - 1) * 2;
-        } else {
           // false board
-        }
-      } else {
+      } else if (item === 'O') {
         if (this.getRandomInt(0, 2) === 0) {
           const newEnemy = new BoardLowEnemy(this.enemiesProts);
           enemiesLine.enemies.push(newEnemy);
@@ -281,11 +295,9 @@ export class EnemyService {
         }
       }
     });
+    this.lastWayLine = wayLine;
     enemiesLine.line.position.z = -40;
     this.Queue.push(enemiesLine);
-    setTimeout(() => {
-      console.log(wayLine[0], wayLine[1], wayLine[2]);
-    }, 5000);
   }
 
   detectCollisionPlayer(object1: any, object2: any){
@@ -303,13 +315,13 @@ export class EnemyService {
     return box1.intersectsBox(box2);
   }
 
-  moveEnemies(speed:number, playerCube:any, endGame: any, states: any) {
+  moveEnemies(speed:number, playerCube:any, endGame: any, states: any, audio: any) {
     for (let ind = this.inMove.length-1; ind >= 0; ind--) {
       let el = this.inMove[ind];
       el.enemies.forEach((element: any) => {
-        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, states);
+        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, states, audio);
         });
-        if (el.line.position.z > 15) {
+        if (el.line.position.z > 25) {
           let obj = this.inMove[0];
           obj.line.clear();
           obj.line.position.z = -40;
@@ -319,7 +331,7 @@ export class EnemyService {
         } else {
           el.line.position.z += 0.05 * speed;
         }
-        if ((el.line.position.z) > -40 && el.initedNext === false && this.Queue[0] !== undefined) {
+        if ((el.line.position.z) > -34 && el.initedNext === false && this.Queue[0] !== undefined) {
           this.inMove.push(this.Queue.shift());
           el.initedNext = true;
         }

@@ -5,29 +5,48 @@ interface enemiesProts {
 }
 
 export class TrainEnemy {
-  hitBox: THREE.Mesh
+  hitBox: THREE.Mesh;
+  hitBox2: THREE.Mesh;
+  hitBox3: THREE.Mesh;
   object: THREE.Group = new THREE.Group;
   constructor(
     public prototypes: enemiesProts
   ) {
-    const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> = new THREE.Mesh(
-      new THREE.BoxGeometry(1.8, 4, 9.9),
+    this.hitBox = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 4, 9.9),
       new THREE.MeshPhongMaterial( { color: 0xff0ff0 } )
+    );
+    this.hitBox2 = new THREE.Mesh(
+      new THREE.BoxGeometry(0.1, 4, 9.9),
+      new THREE.MeshPhongMaterial( { color: 0xFFFF00 } )
+    );
+    this.hitBox3 = new THREE.Mesh(
+      new THREE.BoxGeometry(0.1, 4, 9.9),
+      new THREE.MeshPhongMaterial( { color: 0xFFFF00 } )
     );
     const train =  prototypes['train'].clone();
     this.object.add(train);
-    train.position.z += 2.5;
+    const fixZ = -6;
+    train.position.z = fixZ;
     train.position.y = 0;
-    this.hitBox = enemyBox;
-    enemyBox.position.y = -1;
-    enemyBox.position.z += 2.5;
-    enemyBox.visible = false;
+    this.hitBox.position.y = -1;
+    this.hitBox.position.z = fixZ;
+    this.hitBox.visible = false;
+    this.hitBox2.position.y = -1;
+    this.hitBox2.position.z = fixZ;
+    this.hitBox2.position.x += 0.8;
+    this.hitBox2.visible = false;
+    this.hitBox3.position.y = -1;
+    this.hitBox3.position.z = fixZ;
+    this.hitBox3.position.x -= 0.8;
+    this.hitBox3.visible = false;
     //this.object.add(prototypes['board'].clone());
-    this.object.add(enemyBox);
+    this.object.add(this.hitBox3);
+    this.object.add(this.hitBox2);
+    this.object.add(this.hitBox);
   }
 
-  detectCollisionPlayer(object1: any){
-    let object2: any = this.hitBox;
+  detectCollisionPlayer(object1: any, object2: any){
     object1.geometry.computeBoundingBox();
     object2.geometry.computeBoundingBox();
     object1.updateMatrixWorld();
@@ -42,13 +61,24 @@ export class TrainEnemy {
     return box1.intersectsBox(box2);
   }
 
-  checkCollisions(player: any, endGame: any, states: any) {
-    if (this.detectCollisionPlayer(player)) {
+  checkCollisions(player: any, endGame: any, states: any, audio: any) {
+    if (this.detectCollisionPlayer(player, this.hitBox)) {
       endGame.style.display = 'flex';
       endGame.textContent = 'GAME OVER!';
       endGame.style.color = 'red';
+      audio.pause();
       states.play = false;
       states.end = true;
+    }
+    if (this.detectCollisionPlayer(player, this.hitBox2)) {
+      if (states.control.xpos < 1) {
+        states.control.xpos += 1;
+      }
+    }
+    if (this.detectCollisionPlayer(player, this.hitBox3)) {
+      if (states.control.xpos > -1) {
+        states.control.xpos -= 1;
+      }
     }
   }
 }
