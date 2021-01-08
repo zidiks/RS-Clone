@@ -8,6 +8,8 @@ export class TrainEnemy {
   hitBox: THREE.Mesh;
   hitBox2: THREE.Mesh;
   hitBox3: THREE.Mesh;
+  headlight1: THREE.Mesh;
+  headlight2: THREE.Mesh;
   object: THREE.Group = new THREE.Group;
   constructor(
     public prototypes: enemiesProts
@@ -24,7 +26,15 @@ export class TrainEnemy {
       new THREE.BoxGeometry(0.1, 4, 9.9),
       new THREE.MeshPhongMaterial( { color: 0xFFFF00 } )
     );
-    const train =  prototypes['train'].clone();
+    this.headlight1 = new THREE.Mesh(
+      new THREE.BoxGeometry(0.3, 0.3, 0.3),
+      new THREE.MeshPhongMaterial( { color: 0xFFFF00, emissive: 0xFFFF00, emissiveIntensity: 1 } )
+    );
+    this.headlight2 = new THREE.Mesh(
+      new THREE.BoxGeometry(0.3, 0.3, 0.3),
+      new THREE.MeshPhongMaterial( { color: 0xFFFF00, emissive: 0xFFFF00, emissiveIntensity: 1 } )
+    );
+    const train = prototypes['train'].clone();
     this.object.add(train);
     const fixZ = -6;
     train.position.z = fixZ;
@@ -40,10 +50,13 @@ export class TrainEnemy {
     this.hitBox3.position.z = fixZ;
     this.hitBox3.position.x -= 0.8;
     this.hitBox3.visible = false;
-    //this.object.add(prototypes['board'].clone());
+    this.headlight1.position.set(-0.3, -1.1, -1.1);
+    this.headlight2.position.set(0.3, -1.1, -1.1);
     this.object.add(this.hitBox3);
     this.object.add(this.hitBox2);
     this.object.add(this.hitBox);
+    this.object.add(this.headlight1);
+    this.object.add(this.headlight2);
   }
 
   detectCollisionPlayer(object1: any, object2: any){

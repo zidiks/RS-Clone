@@ -50,6 +50,9 @@ export class GameComponent implements OnInit {
     }
 
     const audioObj = new Audio('assets/audio/audio_1.mp3');
+    audioObj.onended = function() {
+      audioObj.play();
+  };
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
 
