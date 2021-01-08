@@ -131,7 +131,7 @@ export class GameComponent implements OnInit {
         if (STATES.play === false && STATES.end === false) {
           endGame.style.display = 'none';
           setTimeout(() => {
-            audioObj.play();
+            //audioObj.play();
           }, 700);
           STATES.startAnim = true;
         }
