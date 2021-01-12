@@ -13,9 +13,3 @@ export class MenuComponent implements OnInit {
   }
 
 }
-<<<<<<< HEAD
-=======
-export function openMenu() {
-  alert("menu");
-}
->>>>>>> AndreiYa
