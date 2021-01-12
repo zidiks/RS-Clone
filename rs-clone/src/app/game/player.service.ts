@@ -26,7 +26,7 @@ export class PlayerService {
   player: any = new THREE.Group;
   playerAction: any;
   cube: any = new THREE.Mesh( 
-    new THREE.BoxGeometry(0.6, 1.8 , 0.3),
+    new THREE.BoxGeometry(0.5, 1.7 , 0.3),
     new THREE.MeshPhongMaterial( { color: 0x00ff00 } )
   );
   camera: THREE.PerspectiveCamera;
