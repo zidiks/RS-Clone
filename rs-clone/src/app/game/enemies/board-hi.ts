@@ -12,6 +12,7 @@ export class BoardHiEnemy {
   constructor(
     public prototypes: enemiesProts
   ) {
+    this.object.name = 'BoardHi';
     const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> = new THREE.Mesh(
       new THREE.BoxGeometry(1.2, 1.6, 0.1),
       new THREE.MeshPhongMaterial({ color: 0xff0000 })
@@ -33,7 +34,7 @@ export class BoardHiEnemy {
     enemyBox.position.y = 0.6;
     enemyBox.position.z += 0.05;
     enemyBox.position.z = 0;
-    enemyBox.visible = false;
+    enemyBox.visible = true;
     this.object.add(prototypes['boardHi'].clone());
     this.blinklight1.position.set(-0.6, -0.35, 0);
     this.blinklight2.position.set(0.6, -0.35, 0);

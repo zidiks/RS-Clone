@@ -14,6 +14,7 @@ export class TrainEnemy {
   constructor(
     public prototypes: enemiesProts
   ) {
+    this.object.name = 'Train';
     this.hitBox = new THREE.Mesh(
       new THREE.BoxGeometry(1.5, 4, 9.9),
       new THREE.MeshPhongMaterial( { color: 0xff0ff0 } )

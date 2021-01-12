@@ -12,6 +12,7 @@ export class BoardLowEnemy {
   constructor(
     public prototypes: enemiesProts
   ) {
+    this.object.name = 'BoardLow';
     const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> = new THREE.Mesh(
       new THREE.BoxGeometry(1.2, 1.6, 0.1),
       new THREE.MeshPhongMaterial({ color: 0xff0000 })

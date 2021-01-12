@@ -10,6 +10,7 @@ export class Coin {
   constructor(
     public prototypes: enemiesProts
   ) {
+    this.object.name = 'Coin';
     const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> = new THREE.Mesh(
       new THREE.BoxGeometry(0.3, 0.3, 0.1),
       new THREE.MeshPhongMaterial({ color: 0xff0000 })

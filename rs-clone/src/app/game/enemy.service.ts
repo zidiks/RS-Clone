@@ -212,11 +212,11 @@ export class EnemyService {
           const newEnemy = new BoardLowEnemy(this.enemiesProts);
           enemiesLine.enemies.push(newEnemy);
           enemiesLine.line.add(newEnemy.object);
-          enemiesLine.line.position.x = (index - 1) * 2;
+          newEnemy.object.position.x = (index - 1) * 2;
         }
       });
       //enemiesLine.line.position.y -= 0.8;
-      if (bindex < 8) enemiesLine.initedNext = true;
+      if (bindex < 9) enemiesLine.initedNext = true;
       if (bindex < 10) {
         this.inMove.push(enemiesLine);
         enemiesLine.line.position.z -= bindex * 6;
@@ -228,7 +228,7 @@ export class EnemyService {
       }
     });
 
-    console.log('inMovie: ', this.inMove);
+    console.log('Queue: ', this.Queue);
     const domLoading = <HTMLDivElement>document.getElementById('game-loading');
     setTimeout(() => {
       domLoading.style.display = 'none';
@@ -300,45 +300,80 @@ export class EnemyService {
     }
 
 
-
-
-
     //this.wayMap.push(wayLine);
     this.lastPos = wayPos;
 
     this.wayMap.push(wayLine);
+    console.log(wayLine);
 
     const enemiesLine = line;
     wayLine.forEach((item, index) => {
-      if (item === 'TB' || item === 'TE') {
-
-      } else if (item === 'TH' ) {
-        const newEnemy = new TrainEnemy(this.enemiesProts);
-        if (this.trainMap[index].allLength > this.trainMap[index].lenght) newEnemy.object.position.z += 6;
-        enemiesLine.enemies.push(newEnemy);
-        enemiesLine.line.add(newEnemy.object);
-        enemiesLine.line.position.x = (index - 1) * 2;
-      } else if (item === 'B') {
-        // false board
-        const newCoin = new Coin(this.enemiesProts);
-        enemiesLine.enemies.push(newCoin);
-        enemiesLine.line.add(newCoin.object);
-        enemiesLine.line.position.x = (index - 1) * 2;
-
-      } else if (item === 'O') {
-        if (this.getRandomInt(0, 2) === 0) {
-          const newEnemy = new BoardLowEnemy(this.enemiesProts);
+      switch (item) {
+        case 'TH':
+          const newEnemy = new TrainEnemy(this.enemiesProts);
+          if (this.trainMap[index].allLength > this.trainMap[index].lenght) newEnemy.object.position.z += 3;
           enemiesLine.enemies.push(newEnemy);
           enemiesLine.line.add(newEnemy.object);
-          enemiesLine.line.position.x = (index - 1) * 2;
-        } else{
-          const newEnemy = new BoardHiEnemy(this.enemiesProts);
-          enemiesLine.enemies.push(newEnemy);
-          enemiesLine.line.add(newEnemy.object);
-          enemiesLine.line.position.x = (index - 1) * 2;
-        }
+          newEnemy.object.position.x = (index - 1) * 2;
+          break;
+        case 'B':
 
+          break;
+        case 'O':
+          let rand = this.getRandomInt(0, 3);
+          if (rand === 0) {
+            const newEnemy = new BoardLowEnemy(this.enemiesProts);
+            enemiesLine.enemies.push(newEnemy);
+            enemiesLine.line.add(newEnemy.object);
+            newEnemy.object.position.x = (index - 1) * 2;
+            console.log(index);
+          } else if (rand === 1) {
+            const newEnemy = new BoardHiEnemy(this.enemiesProts);
+            enemiesLine.enemies.push(newEnemy);
+            enemiesLine.line.add(newEnemy.object);
+            newEnemy.object.position.x = (index - 1) * 2;
+            console.log('boardHi:', index);
+          } else if (rand === 2) {
+            const newCoin = new Coin(this.enemiesProts);
+            enemiesLine.enemies.push(newCoin);
+            enemiesLine.line.add(newCoin.object);
+            newCoin.object.position.x = (index - 1) * 2;
+          }
+          break;
+        default:
+          break;
       }
+
+
+      // if (item === 'TB' || item === 'TE') {
+
+      // } else if (item === 'TH' ) {
+      //   const newEnemy = new TrainEnemy(this.enemiesProts);
+      //   if (this.trainMap[index].allLength > this.trainMap[index].lenght) newEnemy.object.position.z += 6;
+      //   enemiesLine.enemies.push(newEnemy);
+      //   enemiesLine.line.add(newEnemy.object);
+      //   enemiesLine.line.position.x = (index - 1) * 2;
+      // } else if (item === 'B') {
+      //   // false board
+      //   // const newCoin = new Coin(this.enemiesProts);
+      //   // enemiesLine.enemies.push(newCoin);
+      //   // enemiesLine.line.add(newCoin.object);
+      //   // enemiesLine.line.position.x = (index - 1) * 2;
+
+      // } else if (item === 'O') {
+      //   let rand = this.getRandomInt(0, 2);
+      //   if (rand === 0) {
+      //     const newEnemy = new BoardLowEnemy(this.enemiesProts);
+      //     enemiesLine.enemies.push(newEnemy);
+      //     enemiesLine.line.add(newEnemy.object);
+      //     enemiesLine.line.position.x = (index - 1) * 2;
+      //   } else if (rand === 1) {
+      //     const newEnemy = new BoardHiEnemy(this.enemiesProts);
+      //     enemiesLine.enemies.push(newEnemy);
+      //     enemiesLine.line.add(newEnemy.object);
+      //     enemiesLine.line.position.x = (index - 1) * 2;
+      //   }
+      // }
     });
     this.lastWayLine = wayLine;
     enemiesLine.line.position.z = -40;
@@ -367,18 +402,19 @@ export class EnemyService {
         if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, states, audio, this.wayMap);
         });
         if (el.line.position.z > 25) {
-          let obj = this.inMove[0];
+          let obj = this.inMove[ind];
           obj.line.clear();
           obj.line.position.z = -40;
           obj.hitBoxes = [];
           obj.initedNext = false;
+          obj.enemies = [];
           this.generateNewWay(this.inMove.shift());
         } else {
           el.line.position.z += 0.05 * speed;
         }
         if ((el.line.position.z) > -34 && el.initedNext === false && this.Queue[0] !== undefined) {
-          this.inMove.push(this.Queue.shift());
           el.initedNext = true;
+          this.inMove.push(this.Queue.shift());
         }
     }
   }
