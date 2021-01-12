@@ -34,7 +34,7 @@ export class BoardHiEnemy {
     enemyBox.position.y = 0.6;
     enemyBox.position.z += 0.05;
     enemyBox.position.z = 0;
-    enemyBox.visible = true;
+    enemyBox.visible = false;
     this.object.add(prototypes['boardHi'].clone());
     this.blinklight1.position.set(-0.6, -0.35, 0);
     this.blinklight2.position.set(0.6, -0.35, 0);
