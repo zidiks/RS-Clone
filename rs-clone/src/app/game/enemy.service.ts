@@ -99,8 +99,8 @@ export class EnemyService {
         },
         {
         type: 'train',
-        mtl: 'assets/enemy/train/train-1.mtl',
-        obj: 'assets/enemy/train/train-1.obj',
+        mtl: 'assets/enemy/train/train.vox.mtl',
+        obj: 'assets/enemy/train/train.vox.obj',
         posY: -0.65,
         shadow: true,
         size: 2,
@@ -311,7 +311,7 @@ export class EnemyService {
       switch (item) {
         case 'TH':
           const newEnemy = new TrainEnemy(this.enemiesProts);
-          if (this.trainMap[index].allLength > this.trainMap[index].lenght) newEnemy.object.position.z += 6;
+          if (this.trainMap[index].allLength > this.trainMap[index].lenght) newEnemy.object.position.z += 8;
           enemiesLine.enemies.push(newEnemy);
           enemiesLine.line.add(newEnemy.object);
           newEnemy.object.position.x = (index - 1) * 2;
@@ -320,7 +320,7 @@ export class EnemyService {
 
           break;
         case 'O':
-          let rand = this.getRandomInt(0, 5);
+          let rand = this.getRandomInt(0, 4);
           if (rand === 0) {
             const newEnemy = new BoardLowEnemy(this.enemiesProts);
             enemiesLine.enemies.push(newEnemy);

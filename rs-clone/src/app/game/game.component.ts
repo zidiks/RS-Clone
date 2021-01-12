@@ -91,7 +91,7 @@ export class GameComponent implements OnInit {
 
     const renderer = new THREE.WebGLRenderer({ antialias: false });
     renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.shadowMap.enabled = false;
+    renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     //renderer.setPixelRatio( 0.5 );
 
