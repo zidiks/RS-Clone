@@ -12,13 +12,6 @@ interface States {
     jumpCount: number,
     jumpLength: number,
     jumpHeight: number,
-<<<<<<< HEAD
-=======
-    squatCount: number,
-    squatLength: number,
-    squatHeight: number,
-    squat: boolean,
->>>>>>> AndreiYa
     xpos: number
   },
   speed: number,
@@ -36,11 +29,7 @@ interface States {
 export class GameComponent implements OnInit {
   constructor(
     private location: Location
-<<<<<<< HEAD
     ) { 
-=======
-    ) {
->>>>>>> AndreiYa
     this.location.replaceState('/');
    }
 
@@ -51,19 +40,9 @@ export class GameComponent implements OnInit {
         jumpCount: 0,
         jumpLength: 37,
         jumpHeight: 0,
-<<<<<<< HEAD
         xpos: 0
       },
       speed: 1.5,
-=======
-        squat: false,
-        squatCount: 0,
-        squatLength: 25,
-        squatHeight: 0,
-        xpos: 0
-      },
-      speed: 2.5,
->>>>>>> AndreiYa
       play: false,
       end: false,
       startAnim: false,
@@ -83,26 +62,16 @@ export class GameComponent implements OnInit {
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
 
-<<<<<<< HEAD
     // const stats = new STATS();
     // stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
     // domScene.appendChild(stats.dom);
-=======
-    const stats = new STATS();
-    stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    domScene.appendChild(stats.dom);
->>>>>>> AndreiYa
 
     const clock = new THREE.Clock();
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog('lightblue', 10, 30);
     scene.background =  new THREE.Color('lightblue');
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-<<<<<<< HEAD
   
-=======
-
->>>>>>> AndreiYa
     const env = new EnvironementService(scene);
     const playerManager = new PlayerService(camera);
     const enemyManager = new EnemyService(scene);
@@ -111,13 +80,8 @@ export class GameComponent implements OnInit {
     endGame.className = 'end-game';
     endGame.style.color = 'green';
     endGame.textContent = 'PRESS SPACE TO START!';
-<<<<<<< HEAD
     
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-=======
-
-    const renderer = new THREE.WebGLRenderer({ antialias: false });
->>>>>>> AndreiYa
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -141,11 +105,7 @@ export class GameComponent implements OnInit {
     light.shadow.mapSize.width = window.innerWidth * 2;
     light.shadow.mapSize.height = window.innerHeight * 2;
     scene.add(light);
-<<<<<<< HEAD
     
-=======
-
->>>>>>> AndreiYa
     scene.add(playerManager.player);
 
     camera.position.z = 3;
@@ -153,11 +113,7 @@ export class GameComponent implements OnInit {
     camera.position.x = 5;
     camera.rotation.y += 1.5;
     let cameraTarget = new THREE.Vector3().copy(playerManager.cube.position);
-<<<<<<< HEAD
     cameraTarget.y -= 1;
-=======
-    cameraTarget.y -= 0;
->>>>>>> AndreiYa
     camera.lookAt(cameraTarget);
 
     document.addEventListener("keydown", keyRightHandler, false);
@@ -166,12 +122,6 @@ export class GameComponent implements OnInit {
       if(e.keyCode == 38){
         STATES.control.jumpPressed = true;
       }
-<<<<<<< HEAD
-=======
-      if(e.keyCode === 40){
-        STATES.control.squat = true;
-      }
->>>>>>> AndreiYa
       if(e.keyCode == 39){
         if (STATES.control.xpos < 1) {
           STATES.control.xpos += 1;
@@ -200,11 +150,7 @@ export class GameComponent implements OnInit {
     // }
 
     function animate() {
-<<<<<<< HEAD
       //stats.begin();
-=======
-      stats.begin();
->>>>>>> AndreiYa
       if (STATES.startAnim) {
         if (camera.position.x > 0 || camera.position.z < 5) {
           if (camera.position.z < 5) camera.position.z += 0.05;
@@ -219,21 +165,13 @@ export class GameComponent implements OnInit {
           STATES.play = true;
         }
       }
-<<<<<<< HEAD
      
-=======
-
->>>>>>> AndreiYa
       if (STATES.play) {
         playerManager.playerAction.setDuration(STATES.speed ** -1);
         env.MoveEnv(STATES.speed);
         enemyManager.moveEnemies(STATES.speed, playerManager.cube, endGame, STATES, audioObj);
         playerManager.setPlayerPos(playerManager.player, STATES);
-<<<<<<< HEAD
   
-=======
-
->>>>>>> AndreiYa
         STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed));
         STATES.score += 0.01;
         domScore.textContent = `${Math.round(STATES.score)}`;
@@ -241,11 +179,7 @@ export class GameComponent implements OnInit {
         if ( playerManager.mixer ) playerManager.mixer.update( delta );
       }
 
-<<<<<<< HEAD
       //stats.end();
-=======
-      stats.end();
->>>>>>> AndreiYa
 
       requestAnimationFrame( animate );
 

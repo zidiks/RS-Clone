@@ -14,10 +14,6 @@ export class TrainEnemy {
   constructor(
     public prototypes: enemiesProts
   ) {
-<<<<<<< HEAD
-=======
-    this.object.name = 'Train';
->>>>>>> AndreiYa
     this.hitBox = new THREE.Mesh(
       new THREE.BoxGeometry(1.5, 4, 9.9),
       new THREE.MeshPhongMaterial( { color: 0xff0ff0 } )
@@ -31,19 +27,11 @@ export class TrainEnemy {
       new THREE.MeshPhongMaterial( { color: 0xFFFF00 } )
     );
     this.headlight1 = new THREE.Mesh(
-<<<<<<< HEAD
       new THREE.BoxGeometry(0.3, 0.3, 0.3),
       new THREE.MeshPhongMaterial( { color: 0xFFFF00, emissive: 0xFFFF00, emissiveIntensity: 1 } )
     );
     this.headlight2 = new THREE.Mesh(
       new THREE.BoxGeometry(0.3, 0.3, 0.3),
-=======
-      new THREE.BoxGeometry(0.3, 0.2, 0.3),
-      new THREE.MeshPhongMaterial( { color: 0xFFFF00, emissive: 0xFFFF00, emissiveIntensity: 1 } )
-    );
-    this.headlight2 = new THREE.Mesh(
-      new THREE.BoxGeometry(0.3, 0.2, 0.3),
->>>>>>> AndreiYa
       new THREE.MeshPhongMaterial( { color: 0xFFFF00, emissive: 0xFFFF00, emissiveIntensity: 1 } )
     );
     const train = prototypes['train'].clone();
@@ -76,17 +64,10 @@ export class TrainEnemy {
     object2.geometry.computeBoundingBox();
     object1.updateMatrixWorld();
     object2.updateMatrixWorld();
-<<<<<<< HEAD
     
     var box1 = object1.geometry.boundingBox.clone();
     box1.applyMatrix4(object1.matrixWorld);
   
-=======
-
-    var box1 = object1.geometry.boundingBox.clone();
-    box1.applyMatrix4(object1.matrixWorld);
-
->>>>>>> AndreiYa
     var box2 = object2.geometry.boundingBox.clone();
     box2.applyMatrix4(object2.matrixWorld);
 
@@ -114,8 +95,4 @@ export class TrainEnemy {
       }
     }
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> AndreiYa
