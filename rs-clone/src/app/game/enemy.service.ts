@@ -3,6 +3,11 @@ import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import * as THREE from 'three';
 import { BoardLowEnemy } from './enemies/board-low';
+<<<<<<< HEAD
+=======
+import { BoardHiEnemy } from './enemies/board-hi';
+import { Coin } from './enemies/coin';
+>>>>>>> AndreiYa
 import { TrainEnemy } from './enemies/train';
 
 interface EnemiesLine {
@@ -67,12 +72,41 @@ export class EnemyService {
       [
         {
         type: 'board',
+<<<<<<< HEAD
         mtl: 'assets/enemy/1/1.vox.mtl',
         obj: 'assets/enemy/1/1.vox.obj',
         posY: -0.65,
         shadow: true,
         size: 1,
         boxSize: [1.6, 1.6, 0.1],
+=======
+        mtl: 'assets/enemy/1/lowboard-1.mtl',
+        obj: 'assets/enemy/1/lowboard-1.obj',
+        posY: -1.65,
+        shadow: true,
+        size: 1,
+        boxSize: [1.6, 1.5, 0.1],
+        hitBoxVisible: false
+        },
+        {
+        type: 'boardHi',
+        mtl: 'assets/enemy/1/hiboard.mtl',
+        obj: 'assets/enemy/1/hiboard.obj',
+        posY: -0.65,
+        shadow: true,
+        size: 1,
+        boxSize: [1.6, 2.6, 0.1],
+        hitBoxVisible: false
+        },
+        {
+        type: 'coin',
+        mtl: 'assets/enemy/1/coin.mtl',
+        obj: 'assets/enemy/1/coin.obj',
+        posY: -0.65,
+        shadow: true,
+        size: 1,
+        boxSize: [1.6, 2.6, 0.1],
+>>>>>>> AndreiYa
         hitBoxVisible: false
         },
         {
@@ -109,12 +143,20 @@ export class EnemyService {
           enemyBox.visible = el.hitBoxVisible;
           const mtlLoader = new MTLLoader();
           mtlLoader.load( el.mtl, ( materials ) => {
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> AndreiYa
             materials.preload();
             const objLoader = new OBJLoader();
             objLoader.setMaterials( materials );
             objLoader.load( el.obj,  ( object ) => {
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> AndreiYa
                 //object.position.set(element.pos[0], element.pos[1], element.pos[2]);
                 object.traverse((child) => {
                   if (child instanceof THREE.Mesh) {
@@ -143,7 +185,11 @@ export class EnemyService {
     });
     promise.then((e) => {
       this.generateStartWay(10);
+<<<<<<< HEAD
       // console.log(this.enemiesProts);
+=======
+      console.log(this.enemiesProts);
+>>>>>>> AndreiYa
       // const newEn = new BoardLowEnemy(this.enemiesProts);
       // this.Scene.add(newEn.object);
       // newEn.checkCollisions();
@@ -190,11 +236,19 @@ export class EnemyService {
           const newEnemy = new BoardLowEnemy(this.enemiesProts);
           enemiesLine.enemies.push(newEnemy);
           enemiesLine.line.add(newEnemy.object);
+<<<<<<< HEAD
           enemiesLine.line.position.x = (index - 1) * 2;
         }
       });
       //enemiesLine.line.position.y -= 0.8;
       if (bindex < 8) enemiesLine.initedNext = true;
+=======
+          newEnemy.object.position.x = (index - 1) * 2;
+        }
+      });
+      //enemiesLine.line.position.y -= 0.8;
+      if (bindex < 9) enemiesLine.initedNext = true;
+>>>>>>> AndreiYa
       if (bindex < 10) {
         this.inMove.push(enemiesLine);
         enemiesLine.line.position.z -= bindex * 6;
@@ -206,7 +260,11 @@ export class EnemyService {
       }
     });
 
+<<<<<<< HEAD
     console.log('inMovie: ', this.inMove);
+=======
+    console.log('Queue: ', this.Queue);
+>>>>>>> AndreiYa
     const domLoading = <HTMLDivElement>document.getElementById('game-loading');
     setTimeout(() => {
       domLoading.style.display = 'none';
@@ -261,10 +319,17 @@ export class EnemyService {
         }
       } else {
         let square = x === wayPos ? 'O' : x === addPos[0] ? 'O' : x === addPos[1] ? 'O' : 'B';
+<<<<<<< HEAD
         if (square === 'B' 
           && this.getRandomInt(0, 2) === 0 
           && this.lastPos !== x 
           && activeTrainRoutes < 2 
+=======
+        if (square === 'B'
+          && this.getRandomInt(0, 2) === 0
+          && this.lastPos !== x
+          && activeTrainRoutes < 2
+>>>>>>> AndreiYa
           && this.trainMap[x].lenght === 0
           && this.trainMap[x].lastSegment === undefined
           && !this.lastWayLine.includes('TE')) {
@@ -278,13 +343,17 @@ export class EnemyService {
     }
 
 
+<<<<<<< HEAD
 
 
     
+=======
+>>>>>>> AndreiYa
     //this.wayMap.push(wayLine);
     this.lastPos = wayPos;
 
     this.wayMap.push(wayLine);
+<<<<<<< HEAD
 
     const enemiesLine = line;
     wayLine.forEach((item, index) => {
@@ -306,6 +375,78 @@ export class EnemyService {
           enemiesLine.line.position.x = (index - 1) * 2;
         }
       }
+=======
+    console.log(wayLine);
+
+    const enemiesLine = line;
+    wayLine.forEach((item, index) => {
+      switch (item) {
+        case 'TH':
+          const newEnemy = new TrainEnemy(this.enemiesProts);
+          if (this.trainMap[index].allLength > this.trainMap[index].lenght) newEnemy.object.position.z += 8;
+          enemiesLine.enemies.push(newEnemy);
+          enemiesLine.line.add(newEnemy.object);
+          newEnemy.object.position.x = (index - 1) * 2;
+          break;
+        case 'B':
+
+          break;
+        case 'O':
+          let rand = this.getRandomInt(0, 4);
+          if (rand === 0) {
+            const newEnemy = new BoardLowEnemy(this.enemiesProts);
+            enemiesLine.enemies.push(newEnemy);
+            enemiesLine.line.add(newEnemy.object);
+            newEnemy.object.position.x = (index - 1) * 2;
+            console.log(index);
+          } else if (rand === 1) {
+            const newEnemy = new BoardHiEnemy(this.enemiesProts);
+            enemiesLine.enemies.push(newEnemy);
+            enemiesLine.line.add(newEnemy.object);
+            newEnemy.object.position.x = (index - 1) * 2;
+            console.log('boardHi:', index);
+          } else if (rand === 2) {
+            const newCoin = new Coin(this.enemiesProts);
+            enemiesLine.enemies.push(newCoin);
+            enemiesLine.line.add(newCoin.object);
+            newCoin.object.position.x = (index - 1) * 2;
+          }
+          break;
+        default:
+          break;
+      }
+
+
+      // if (item === 'TB' || item === 'TE') {
+
+      // } else if (item === 'TH' ) {
+      //   const newEnemy = new TrainEnemy(this.enemiesProts);
+      //   if (this.trainMap[index].allLength > this.trainMap[index].lenght) newEnemy.object.position.z += 6;
+      //   enemiesLine.enemies.push(newEnemy);
+      //   enemiesLine.line.add(newEnemy.object);
+      //   enemiesLine.line.position.x = (index - 1) * 2;
+      // } else if (item === 'B') {
+      //   // false board
+      //   // const newCoin = new Coin(this.enemiesProts);
+      //   // enemiesLine.enemies.push(newCoin);
+      //   // enemiesLine.line.add(newCoin.object);
+      //   // enemiesLine.line.position.x = (index - 1) * 2;
+
+      // } else if (item === 'O') {
+      //   let rand = this.getRandomInt(0, 2);
+      //   if (rand === 0) {
+      //     const newEnemy = new BoardLowEnemy(this.enemiesProts);
+      //     enemiesLine.enemies.push(newEnemy);
+      //     enemiesLine.line.add(newEnemy.object);
+      //     enemiesLine.line.position.x = (index - 1) * 2;
+      //   } else if (rand === 1) {
+      //     const newEnemy = new BoardHiEnemy(this.enemiesProts);
+      //     enemiesLine.enemies.push(newEnemy);
+      //     enemiesLine.line.add(newEnemy.object);
+      //     enemiesLine.line.position.x = (index - 1) * 2;
+      //   }
+      // }
+>>>>>>> AndreiYa
     });
     this.lastWayLine = wayLine;
     enemiesLine.line.position.z = -40;
@@ -317,10 +458,17 @@ export class EnemyService {
     object2.geometry.computeBoundingBox();
     object1.updateMatrixWorld();
     object2.updateMatrixWorld();
+<<<<<<< HEAD
     
     var box1 = object1.geometry.boundingBox.clone();
     box1.applyMatrix4(object1.matrixWorld);
   
+=======
+
+    var box1 = object1.geometry.boundingBox.clone();
+    box1.applyMatrix4(object1.matrixWorld);
+
+>>>>>>> AndreiYa
     var box2 = object2.geometry.boundingBox.clone();
     box2.applyMatrix4(object2.matrixWorld);
 
@@ -334,18 +482,31 @@ export class EnemyService {
         if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, states, audio, this.wayMap);
         });
         if (el.line.position.z > 25) {
+<<<<<<< HEAD
           let obj = this.inMove[0];
+=======
+          let obj = this.inMove[ind];
+>>>>>>> AndreiYa
           obj.line.clear();
           obj.line.position.z = -40;
           obj.hitBoxes = [];
           obj.initedNext = false;
+<<<<<<< HEAD
+=======
+          obj.enemies = [];
+>>>>>>> AndreiYa
           this.generateNewWay(this.inMove.shift());
         } else {
           el.line.position.z += 0.05 * speed;
         }
         if ((el.line.position.z) > -34 && el.initedNext === false && this.Queue[0] !== undefined) {
+<<<<<<< HEAD
           this.inMove.push(this.Queue.shift());
           el.initedNext = true;
+=======
+          el.initedNext = true;
+          this.inMove.push(this.Queue.shift());
+>>>>>>> AndreiYa
         }
     }
   }
