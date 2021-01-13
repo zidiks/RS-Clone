@@ -46,7 +46,7 @@ export class GameComponent implements OnInit {
         jumpHeight: 0,
         squat: false,
         squatCount: 0,
-        squatLength: 25,
+        squatLength: 60,
         squatHeight: 0,
         xpos: 0
       },
@@ -70,9 +70,9 @@ export class GameComponent implements OnInit {
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
 
-    const stats = new STATS();
-    stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    domScene.appendChild(stats.dom);
+    // const stats = new STATS();
+    // stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+    // domScene.appendChild(stats.dom);
 
     const clock = new THREE.Clock();
     const scene = new THREE.Scene();
@@ -161,7 +161,7 @@ export class GameComponent implements OnInit {
     // }
 
     function animate() {
-      stats.begin();
+      // stats.begin();
       if (STATES.startAnim) {
         if (camera.position.x > 0 || camera.position.z < 5) {
           if (camera.position.z < 5) camera.position.z += 0.05;
@@ -178,7 +178,7 @@ export class GameComponent implements OnInit {
       }
 
       if (STATES.play) {
-        playerManager.playerAction.setDuration(STATES.speed ** -1);
+        playerManager.playerActions[0].setDuration(STATES.speed ** -1);
         env.MoveEnv(STATES.speed);
         enemyManager.moveEnemies(STATES.speed, playerManager.cube, endGame, STATES, audioObj);
         playerManager.setPlayerPos(playerManager.player, STATES);
@@ -190,7 +190,7 @@ export class GameComponent implements OnInit {
         if ( playerManager.mixer ) playerManager.mixer.update( delta );
       }
 
-      stats.end();
+      // stats.end();
 
       requestAnimationFrame( animate );
 

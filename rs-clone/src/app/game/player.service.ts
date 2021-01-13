@@ -28,7 +28,8 @@ interface States {
 export class PlayerService {
   mixer: any;
   player: any = new THREE.Group;
-  playerAction: any;
+  //playerAction: any;
+  playerActions: THREE.AnimationAction[] = new Array();
   cube: any = new THREE.Mesh(
     new THREE.BoxGeometry(0.4, 1.6 , 0.2),
     new THREE.MeshPhongMaterial( { color: 0x00ff00 } )
@@ -40,7 +41,7 @@ export class PlayerService {
   ) {
     this.camera = camera;
     this.cube.material.transparent = true;
-    this.cube.visible = true;
+    this.cube.visible = false;
     this.cube.position.y -= 1;
     this.player.add( this.cube );
     this.player.position.z += 3;
@@ -49,8 +50,15 @@ export class PlayerService {
     const loader = new FBXLoader();
     loader.load( 'assets/player.fbx', ( object ) => {
       this.mixer = new THREE.AnimationMixer( object );
-      this.playerAction = this.mixer.clipAction( object.animations[ 0 ] );
-      this.playerAction.play();
+      let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
+      this.playerActions.push(playerAction);
+
+      loader.load( 'assets/player-roll.fbx', (object) => {
+        let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
+        this.playerActions.push(playerAction);
+        this.playerActions[0].play();
+      } );
+
       object.traverse( function ( child ) {
         if ( child instanceof Mesh ) {
           child.castShadow = true;
@@ -82,12 +90,20 @@ export class PlayerService {
     if(states.control.squat){
       states.control.squatCount++;
       this.cube.position.y = -2;
+      this.playerActions[0].stop();
+      this.playerActions[0].reset();
+      this.playerActions[1].play();
     }
     if(states.control.squatCount>states.control.squatLength){
       states.control.squatCount=0;
       states.control.squat=false;
       states.control.squatHeight = 0;
       this.cube.position.y += 1;
+      setTimeout(() => {
+        this.playerActions[1].stop();
+        this.playerActions[1].reset();
+        this.playerActions[0].play();
+      }, 250);
     }
 
     if(states.control.jumpPressed){
