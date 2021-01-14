@@ -56,8 +56,14 @@ export class PlayerService {
       loader.load( 'assets/player-roll.fbx', (object) => {
         let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
         this.playerActions.push(playerAction);
-        this.playerActions[0].play();
-      } );
+
+        loader.load( 'assets/player-fall.fbx', (object) => {
+          let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
+          playerAction.setLoop( THREE.LoopOnce );
+          this.playerActions.push(playerAction);
+          this.playerActions[0].play();
+        });
+      });
 
       object.traverse( function ( child ) {
         if ( child instanceof Mesh ) {

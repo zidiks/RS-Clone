@@ -199,7 +199,6 @@ export class EnemyService {
       this.wayMap.push(wayLine);
       this.lastPos = wayPos;
     }
-    console.log('wayMap: ', this.wayMap);
 
     this.wayMap.forEach((el, bindex) => {
       const enemiesLine: EnemiesLine = {
@@ -228,7 +227,6 @@ export class EnemyService {
       }
     });
 
-    console.log('Queue: ', this.Queue);
     const domLoading = <HTMLDivElement>document.getElementById('game-loading');
     setTimeout(() => {
       domLoading.style.display = 'none';
@@ -304,7 +302,6 @@ export class EnemyService {
     this.lastPos = wayPos;
 
     this.wayMap.push(wayLine);
-    console.log(wayLine);
 
     const enemiesLine = line;
     wayLine.forEach((item, index) => {
@@ -326,13 +323,11 @@ export class EnemyService {
             enemiesLine.enemies.push(newEnemy);
             enemiesLine.line.add(newEnemy.object);
             newEnemy.object.position.x = (index - 1) * 2;
-            console.log(index);
           } else if (rand === 1) {
             const newEnemy = new BoardHiEnemy(this.enemiesProts);
             enemiesLine.enemies.push(newEnemy);
             enemiesLine.line.add(newEnemy.object);
             newEnemy.object.position.x = (index - 1) * 2;
-            console.log('boardHi:', index);
           } else if (rand === 2) {
             const newCoin = new Coin(this.enemiesProts);
             enemiesLine.enemies.push(newCoin);

@@ -64,8 +64,16 @@ export class BoardLowEnemy {
       endGame.style.display = 'flex';
       endGame.textContent = 'GAME OVER!';
       endGame.style.color = 'red';
-
       audio.pause();
+      // let animations = states.playerService;
+      // animations.playerActions[0].stop();
+      // animations.playerActions[0].reset();
+      // animations.playerActions[1].stop();
+      // animations.playerActions[1].reset();
+      // animations.playerActions[2].play();
+      // setTimeout(() => {
+      //   animations.player.visible = false;
+      // }, 600);
       console.log(wayMap);
       states.play = false;
       states.end = true;

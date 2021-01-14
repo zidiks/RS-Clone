@@ -6,7 +6,7 @@ import { EnvironementService } from './environement.service';
 import { PlayerService } from './player.service';
 import { EnemyService } from './enemy.service';
 
-interface States {
+export interface States {
   control: {
     jumpPressed: boolean,
     jumpCount: number,
@@ -31,6 +31,7 @@ interface States {
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
+
   constructor(
     private location: Location
     ) {
@@ -186,11 +187,13 @@ export class GameComponent implements OnInit {
         STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed));
         STATES.score += 0.01;
         domScore.textContent = `${Math.round(STATES.score)}`;
-        const delta = clock.getDelta();
-        if ( playerManager.mixer ) playerManager.mixer.update( delta );
       }
 
+      const delta = clock.getDelta();
+      if ( playerManager.mixer ) playerManager.mixer.update( delta );
+
       // stats.end();
+      
 
       requestAnimationFrame( animate );
 
