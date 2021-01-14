@@ -13,12 +13,12 @@ export class Coin {
   ) {
     this.object.name = 'Coin';
     const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> = new THREE.Mesh(
-      new THREE.BoxGeometry(0.3, 0.3, 0.1),
+      new THREE.BoxGeometry(0.5, 0.5, 0.3),
       new THREE.MeshPhongMaterial({ color: 0xff0000 })
     );
 
     this.hitBox = enemyBox;
-    enemyBox.position.y = -1.2;
+    enemyBox.position.y = -1.0;
     enemyBox.position.z += 0.05;
     enemyBox.position.z = 0;
     enemyBox.visible = false;
