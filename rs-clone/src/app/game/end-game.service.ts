@@ -30,9 +30,11 @@ export class EndGameService {
     this.audio.pause();
     this.states.play = false;
     this.states.end = true;
-    this.animationManager.changeAnimationTo('hit');
+    setTimeout(() => {
+      this.animationManager.changeAnimationTo('hit');
+    }, 10);
     setTimeout(() => {
       this.states.animation = false;
-    }, 700);
+    }, 710);
   }
 }

@@ -7,6 +7,7 @@ interface enemiesProts {
 export class Coin {
   hitBox: THREE.Mesh
   object: THREE.Group = new THREE.Group;
+  collision: boolean = false;
   constructor(
     public prototypes: enemiesProts
   ) {
@@ -42,15 +43,11 @@ export class Coin {
   }
 
   checkCollisions(player: any, endGame: any, states: any) {
-    if (this.detectCollisionPlayer(player)) {
-      // endGame.style.display = 'flex';
-      // endGame.textContent = 'GAME OVER!';
-      // endGame.style.color = 'red';
-
-      // audio.pause();
-      // console.log(wayMap);
-      // states.play = false;
-      // states.end = true;
+    if (!this.collision) {
+      if (this.detectCollisionPlayer(player)) {
+        this.collision = true;
+        this.object.visible = false;
+      }
     }
   }
 }
