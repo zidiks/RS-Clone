@@ -92,7 +92,7 @@ export class EnemyService {
         mtl: 'assets/enemy/1/coin.mtl',
         obj: 'assets/enemy/1/coin.obj',
         posY: -0.65,
-        shadow: true,
+        shadow: false,
         size: 1,
         boxSize: [1.6, 2.6, 0.1],
         hitBoxVisible: false
@@ -131,7 +131,6 @@ export class EnemyService {
           enemyBox.visible = el.hitBoxVisible;
           const mtlLoader = new MTLLoader();
           mtlLoader.load( el.mtl, ( materials ) => {
-
             materials.preload();
             const objLoader = new OBJLoader();
             objLoader.setMaterials( materials );
@@ -142,6 +141,10 @@ export class EnemyService {
                   if (child instanceof THREE.Mesh) {
                       if (el.shadow) child.castShadow = true;
                       child.receiveShadow = true;
+                      if (el.type === 'coin') {
+                        child.material.emissive.set('yellow');
+                        child.material.emissiveIntensity = 0.7;
+                      }
                   }
                   object.position.y = -2;
                   object.position.z = 0;
@@ -390,11 +393,12 @@ export class EnemyService {
     return box1.intersectsBox(box2);
   }
 
-  moveEnemies(speed:number, playerCube:any, endGame: any, states: any, audio: any) {
+  moveEnemies(speed:number, playerCube:any, endGame: any, STATES: any) {
     for (let ind = this.inMove.length-1; ind >= 0; ind--) {
       let el = this.inMove[ind];
       el.enemies.forEach((element: any) => {
-        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, states, audio, this.wayMap);
+        if (element.object.name === 'Coin') element.object.rotation.y += 0.04;
+        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, STATES);
         });
         if (el.line.position.z > 25) {
           let obj = this.inMove[ind];

@@ -20,7 +20,7 @@ export class Coin {
     enemyBox.position.y = -1.2;
     enemyBox.position.z += 0.05;
     enemyBox.position.z = 0;
-    enemyBox.visible = true;
+    enemyBox.visible = false;
     this.object.add(prototypes['coin'].clone());
     this.object.add(enemyBox);
   }
@@ -41,7 +41,7 @@ export class Coin {
     return box1.intersectsBox(box2);
   }
 
-  checkCollisions(player: any, endGame: any, states: any, audio: any, wayMap: any) {
+  checkCollisions(player: any, endGame: any, states: any) {
     if (this.detectCollisionPlayer(player)) {
       // endGame.style.display = 'flex';
       // endGame.textContent = 'GAME OVER!';

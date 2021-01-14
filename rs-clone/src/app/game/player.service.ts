@@ -28,6 +28,7 @@ interface States {
 export class PlayerService {
   mixer: any;
   player: any = new THREE.Group;
+  rollLock: boolean = false;
   //playerAction: any;
   playerActions: THREE.AnimationAction[] = new Array();
   cube: any = new THREE.Mesh(
@@ -61,7 +62,12 @@ export class PlayerService {
           let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
           playerAction.setLoop( THREE.LoopOnce );
           this.playerActions.push(playerAction);
-          this.playerActions[0].play();
+          
+          loader.load( 'assets/player-idle.fbx', (object) => {
+            let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
+            this.playerActions.push(playerAction);
+            this.playerActions[3].play();
+          });
         });
       });
 
@@ -80,7 +86,7 @@ export class PlayerService {
     } );
   }
 
-  setPlayerPos(target: THREE.Group, states: States) {
+  setPlayerPos(target: THREE.Group, states: States, animationManager: any) {
     if (target.position.x < ( states.control.xpos * 2 ) && (states.control.xpos * 2) - target.position.x > 0.1) {
       target.position.x += 0.1;
       this.camera.position.x += 0.07;
@@ -96,9 +102,13 @@ export class PlayerService {
     if(states.control.squat){
       states.control.squatCount++;
       this.cube.position.y = -2;
-      this.playerActions[0].stop();
-      this.playerActions[0].reset();
-      this.playerActions[1].play();
+      if (!this.rollLock) { 
+        animationManager.changeAnimationTo('roll');
+        this.rollLock = true;
+      }
+      // this.playerActions[0].stop();
+      // this.playerActions[0].reset();
+      // this.playerActions[1].play();
     }
     if(states.control.squatCount>states.control.squatLength){
       states.control.squatCount=0;
@@ -106,10 +116,9 @@ export class PlayerService {
       states.control.squatHeight = 0;
       this.cube.position.y += 1;
       setTimeout(() => {
-        this.playerActions[1].stop();
-        this.playerActions[1].reset();
-        this.playerActions[0].play();
-      }, 250);
+        animationManager.changeAnimationTo('run');
+        this.rollLock = false;
+      }, 230);
     }
 
     if(states.control.jumpPressed){

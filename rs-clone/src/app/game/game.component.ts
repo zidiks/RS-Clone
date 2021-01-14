@@ -1,10 +1,14 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import * as THREE from 'three';
 import * as STATS from 'stats.js';
 import { EnvironementService } from './environement.service';
 import { PlayerService } from './player.service';
 import { EnemyService } from './enemy.service';
+import { EndGameService } from './end-game.service';
+import { InjectionToken } from '@angular/core';
+import { AnimationAction } from 'three';
+import { AnimationService } from './animation.service';
 
 export interface States {
   control: {
@@ -19,27 +23,26 @@ export interface States {
     xpos: number
   },
   speed: number,
+  animation: boolean,
   play: boolean,
   end: boolean,
   startAnim: boolean,
   score: number
 }
 
+export interface Animations {
+  [key: string]: THREE.AnimationAction[];
+}
+
+export const STATES_TOKEN = new InjectionToken<States>('StatesToken');
+export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken');
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
-  styleUrls: ['./game.component.scss']
-})
-export class GameComponent implements OnInit {
-
-  constructor(
-    private location: Location
-    ) {
-    this.location.replaceState('/');
-   }
-
-  ngOnInit(): void {
-    const STATES: States = {
+  styleUrls: ['./game.component.scss'],
+  providers: [
+    { provide: STATES_TOKEN, useValue: {
       control: {
         jumpPressed: false,
         jumpCount: 0,
@@ -52,12 +55,48 @@ export class GameComponent implements OnInit {
         xpos: 0
       },
       speed: 2.5,
+      animation: true,
       play: false,
       end: false,
       startAnim: false,
       score: 0
-    }
+    } },
+    { provide: ANIMATIONS_TOKEN, useValue: {} }
+  ]
+})
+export class GameComponent implements OnInit {
+  STATES: States;
+  ANIMATIONS: Animations;
+  constructor(
+    @Inject(STATES_TOKEN) public STATES_TOKEN: States = {
+      control: {
+        jumpPressed: false,
+        jumpCount: 0,
+        jumpLength: 37,
+        jumpHeight: 0,
+        squat: false,
+        squatCount: 0,
+        squatLength: 60,
+        squatHeight: 0,
+        xpos: 0
+      },
+      speed: 2.5,
+      animation: true,
+      play: false,
+      end: false,
+      startAnim: false,
+      score: 0
+    },
+    @Inject(ANIMATIONS_TOKEN) public ANIMATIONS_TOKEN: Animations = {},
+    private location: Location
+    ) {
+    this.location.replaceState('/');
+    this.STATES = STATES_TOKEN;
+    this.ANIMATIONS = ANIMATIONS_TOKEN;
+   }
 
+  ngOnInit(): void {
+    const STATES = this.STATES;
     function getRandomInt(min: number, max: number) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -84,11 +123,16 @@ export class GameComponent implements OnInit {
     const env = new EnvironementService(scene);
     const playerManager = new PlayerService(camera);
     const enemyManager = new EnemyService(scene);
+    this.ANIMATIONS.playerAnimations = playerManager.playerActions;
+    const animationManager = new AnimationService(this.ANIMATIONS, STATES);
 
     const endGame = document.createElement('div');
     endGame.className = 'end-game';
     endGame.style.color = 'green';
     endGame.textContent = 'PRESS SPACE TO START!';
+    
+  
+    const endManager = new EndGameService(endGame, STATES, audioObj, animationManager);
 
     const renderer = new THREE.WebGLRenderer({ antialias: false });
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -164,25 +208,26 @@ export class GameComponent implements OnInit {
     function animate() {
       // stats.begin();
       if (STATES.startAnim) {
-        if (camera.position.x > 0 || camera.position.z < 5) {
-          if (camera.position.z < 5) camera.position.z += 0.05;
+        if (camera.position.x > 0 || camera.position.z < 6) {
+          if (camera.position.z < 6) camera.position.z += 0.06;
           if (camera.position.x > 0) camera.position.x -= 0.1;
           camera.lookAt(cameraTarget);
         } else {
           camera.position.x = 0;
-          camera.position.z = 5;
+          camera.position.z = 6;
           camera.rotation.y = 0;
           camera.rotation.z = 0;
           STATES.startAnim = false;
           STATES.play = true;
+          animationManager.changeAnimationTo('run');
         }
       }
 
       if (STATES.play) {
         playerManager.playerActions[0].setDuration(STATES.speed ** -1);
         env.MoveEnv(STATES.speed);
-        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endGame, STATES, audioObj);
-        playerManager.setPlayerPos(playerManager.player, STATES);
+        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endManager, STATES);
+        playerManager.setPlayerPos(playerManager.player, STATES, animationManager);
 
         STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed));
         STATES.score += 0.01;
@@ -190,7 +235,7 @@ export class GameComponent implements OnInit {
       }
 
       const delta = clock.getDelta();
-      if ( playerManager.mixer ) playerManager.mixer.update( delta );
+      if ( playerManager.mixer && STATES.animation ) playerManager.mixer.update( delta );
 
       // stats.end();
       
