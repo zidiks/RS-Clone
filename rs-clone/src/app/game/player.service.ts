@@ -86,21 +86,21 @@ export class PlayerService {
     } );
   }
 
-  setPlayerPos(target: THREE.Group, states: States, animationManager: any) {
+  setPlayerPos(target: THREE.Group, states: States, animationManager: any, delta: any) {
     if (target.position.x < ( states.control.xpos * 2 ) && (states.control.xpos * 2) - target.position.x > 0.1) {
-      target.position.x += 0.1;
-      this.camera.position.x += 0.07;
+      target.position.x += 0.1 * delta;
+      this.camera.position.x += 0.07 * delta;
       target.rotation.y = -Math.PI / 4;
     } else if (target.position.x > ( states.control.xpos * 2 ) && target.position.x - (states.control.xpos * 2) > 0.1) {
-      target.position.x -= 0.1;
-      this.camera.position.x -= 0.07;
+      target.position.x -= 0.1 * delta;
+      this.camera.position.x -= 0.07 * delta;
       target.rotation.y = Math.PI / 4;
     } else {
       target.position.x = states.control.xpos * 2;
       target.rotation.y = 0;
     }
     if(states.control.squat){
-      states.control.squatCount++;
+      states.control.squatCount += 1 * delta;
       this.cube.position.y = -2;
       if (!this.rollLock) { 
         animationManager.changeAnimationTo('roll');
@@ -114,7 +114,7 @@ export class PlayerService {
       states.control.squatCount=0;
       states.control.squat=false;
       states.control.squatHeight = 0;
-      this.cube.position.y += 1;
+      this.cube.position.y += 1 * delta;
       setTimeout(() => {
         animationManager.changeAnimationTo('run');
         this.rollLock = false;
@@ -122,7 +122,7 @@ export class PlayerService {
     }
 
     if(states.control.jumpPressed){
-      states.control.jumpCount++;
+      states.control.jumpCount += 1 * delta;
       states.control.jumpHeight = 0.05*states.control.jumpLength*Math.sin(Math.PI*states.control.jumpCount/states.control.jumpLength);
     }
     if(states.control.jumpCount>states.control.jumpLength){

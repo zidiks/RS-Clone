@@ -46,11 +46,11 @@ export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken'
       control: {
         jumpPressed: false,
         jumpCount: 0,
-        jumpLength: 37,
+        jumpLength: 35,
         jumpHeight: 0,
         squat: false,
         squatCount: 0,
-        squatLength: 60,
+        squatLength: 50,
         squatHeight: 0,
         xpos: 0
       },
@@ -76,7 +76,7 @@ export class GameComponent implements OnInit {
         jumpHeight: 0,
         squat: false,
         squatCount: 0,
-        squatLength: 60,
+        squatLength: 50,
         squatHeight: 0,
         xpos: 0
       },
@@ -206,11 +206,13 @@ export class GameComponent implements OnInit {
     // }
 
     function animate() {
+      const delta = clock.getDelta();
+      const deltak = delta * 50;
       // stats.begin();
       if (STATES.startAnim) {
         if (camera.position.x > 0 || camera.position.z < 6) {
-          if (camera.position.z < 6) camera.position.z += 0.06;
-          if (camera.position.x > 0) camera.position.x -= 0.1;
+          if (camera.position.z < 6) camera.position.z += 0.06 * deltak;
+          if (camera.position.x > 0) camera.position.x -= 0.1 * deltak;
           camera.lookAt(cameraTarget);
         } else {
           camera.position.x = 0;
@@ -225,16 +227,16 @@ export class GameComponent implements OnInit {
 
       if (STATES.play) {
         playerManager.playerActions[0].setDuration(STATES.speed ** -1);
-        env.MoveEnv(STATES.speed);
-        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endManager, STATES);
-        playerManager.setPlayerPos(playerManager.player, STATES, animationManager);
+        env.MoveEnv(STATES.speed, deltak);
+        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endManager, STATES, deltak);
+        playerManager.setPlayerPos(playerManager.player, STATES, animationManager, deltak);
 
-        STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed));
-        STATES.score += 0.01;
+        STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed)) * deltak;
+        STATES.score += 0.01 * deltak;
         domScore.textContent = `${Math.round(STATES.score)}`;
       }
 
-      const delta = clock.getDelta();
+     
       if ( playerManager.mixer && STATES.animation ) playerManager.mixer.update( delta );
 
       // stats.end();

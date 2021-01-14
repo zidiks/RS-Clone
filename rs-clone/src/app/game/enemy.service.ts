@@ -393,7 +393,7 @@ export class EnemyService {
     return box1.intersectsBox(box2);
   }
 
-  moveEnemies(speed:number, playerCube:any, endGame: any, STATES: any) {
+  moveEnemies(speed:number, playerCube:any, endGame: any, STATES: any, delta:any) {
     for (let ind = this.inMove.length-1; ind >= 0; ind--) {
       let el = this.inMove[ind];
       el.enemies.forEach((element: any) => {
@@ -409,7 +409,7 @@ export class EnemyService {
           obj.enemies = [];
           this.generateNewWay(this.inMove.shift());
         } else {
-          el.line.position.z += 0.05 * speed;
+          el.line.position.z += 0.05 * speed * delta;
         }
         if ((el.line.position.z) > -34 && el.initedNext === false && this.Queue[0] !== undefined) {
           el.initedNext = true;
