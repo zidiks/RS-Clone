@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { Camera, Mesh } from 'three';
+import { STATES_TOKEN } from './game.component';
+import { state } from '@angular/animations';
 
 interface States {
   control: {
@@ -36,10 +38,12 @@ export class PlayerService {
     new THREE.MeshPhongMaterial( { color: 0x00ff00 } )
   );
   camera: THREE.PerspectiveCamera;
-
+  states: States;
   constructor(
-    camera: THREE.PerspectiveCamera
+    camera: THREE.PerspectiveCamera,
+    @Inject(STATES_TOKEN) public STATES_TOKEN: States
   ) {
+    this.states = STATES_TOKEN;
     this.camera = camera;
     this.cube.material.transparent = true;
     this.cube.visible = false;
@@ -56,6 +60,7 @@ export class PlayerService {
 
       loader.load( 'assets/player-roll.fbx', (object) => {
         let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
+        playerAction.setDuration(STATES_TOKEN.control.squatLength / 38);
         this.playerActions.push(playerAction);
 
         loader.load( 'assets/player-fall.fbx', (object) => {

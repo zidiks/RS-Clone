@@ -75,18 +75,20 @@ export class TrainEnemy {
     return box1.intersectsBox(box2);
   }
 
-  checkCollisions(player: any, endGame: any, states: any) {
+  checkCollisions(player: any, endGame: any, states: any, audioManager: any) {
     if (this.detectCollisionPlayer(player, this.hitBox)) {
       endGame.endFunc();
     }
     if (this.detectCollisionPlayer(player, this.hitBox2)) {
       if (states.control.xpos < 1) {
         states.control.xpos += 1;
+        audioManager.sideTrainPlay();
       }
     }
     if (this.detectCollisionPlayer(player, this.hitBox3)) {
       if (states.control.xpos > -1) {
         states.control.xpos -= 1;
+        audioManager.sideTrainPlay();
       }
     }
   }

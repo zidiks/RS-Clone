@@ -40,7 +40,6 @@ export class AnimationService {
         this.currentAnimation = this.playerAnimations[3];
         break;
     }
-    console.log(this.currentAnimation);
     this.currentAnimation.play();
   }
 }

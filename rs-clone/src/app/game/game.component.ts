@@ -46,11 +46,11 @@ export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken'
       control: {
         jumpPressed: false,
         jumpCount: 0,
-        jumpLength: 35,
+        jumpLength: 40,
         jumpHeight: 0,
         squat: false,
         squatCount: 0,
-        squatLength: 50,
+        squatLength: 40,
         squatHeight: 0,
         xpos: 0
       },
@@ -82,11 +82,11 @@ export class GameComponent implements OnInit {
       control: {
         jumpPressed: false,
         jumpCount: 0,
-        jumpLength: 37,
+        jumpLength: 40,
         jumpHeight: 0,
         squat: false,
         squatCount: 0,
-        squatLength: 50,
+        squatLength: 35,
         squatHeight: 0,
         xpos: 0
       },
@@ -123,7 +123,7 @@ export class GameComponent implements OnInit {
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 
     const env = new EnvironementService(scene);
-    const playerManager = new PlayerService(camera);
+    const playerManager = new PlayerService(camera, STATES);
     const enemyManager = new EnemyService(scene);
     this.ANIMATIONS.playerAnimations = playerManager.playerActions;
     const animationManager = new AnimationService(this.ANIMATIONS, STATES);
@@ -136,7 +136,7 @@ export class GameComponent implements OnInit {
   
     const endManager = new EndGameService(endGame, STATES, audioManager, animationManager);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: false });
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -235,7 +235,7 @@ export class GameComponent implements OnInit {
         enemyManager.moveEnemies(STATES.speed, playerManager.cube, endManager, STATES, audioManager, deltak);
         playerManager.setPlayerPos(playerManager.player, STATES, animationManager, deltak);
 
-        STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed)) * deltak;
+        STATES.speed += 0.01 * (STATES.speed ** ( -1 * STATES.speed)) * deltak;
         STATES.score += 0.01 * STATES.speed * deltak;
         domScore.textContent = `${Math.round(STATES.score)}`;
       }

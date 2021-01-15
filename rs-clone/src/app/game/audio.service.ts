@@ -10,6 +10,7 @@ export class AudioService {
   deathSound: HTMLAudioElement;
   jumpSound: HTMLAudioElement;
   rollSound: HTMLAudioElement;
+  sideTrainSound: HTMLAudioElement;
 
   constructor(
     //@Inject(STATES_TOKEN) public STATES_TOKEN: States
@@ -27,6 +28,12 @@ export class AudioService {
     this.deathSound = new Audio(`assets/audio/death.wav`);
     this.jumpSound = new Audio(`assets/audio/jump.wav`);
     this.rollSound = new Audio(`assets/audio/roll.wav`);
+    this.sideTrainSound = new Audio(`assets/audio/side-train.wav`);
+  }
+
+  sideTrainPlay() {
+    this.sideTrainSound.currentTime = 0;
+    this.sideTrainSound.play();
   }
 
   deathPlay() {
