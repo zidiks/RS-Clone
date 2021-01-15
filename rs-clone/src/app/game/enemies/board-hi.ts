@@ -31,7 +31,7 @@ export class BoardHiEnemy {
       new THREE.MeshPhongMaterial( { color: color, emissive: color, emissiveIntensity: 1 } )
     );
     this.hitBox = enemyBox;
-    enemyBox.position.y = 0.6;
+    enemyBox.position.y = 0.4;
     enemyBox.position.z += 0.05;
     enemyBox.position.z = 0;
     enemyBox.visible = false;
