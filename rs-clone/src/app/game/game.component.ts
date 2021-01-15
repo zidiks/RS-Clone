@@ -68,7 +68,17 @@ export class GameComponent implements OnInit {
   STATES: States;
   ANIMATIONS: Animations;
   constructor(
-    @Inject(STATES_TOKEN) public STATES_TOKEN: States = {
+    @Inject(STATES_TOKEN) public STATES_TOKEN: States,
+    @Inject(ANIMATIONS_TOKEN) public ANIMATIONS_TOKEN: Animations = {},
+    private location: Location
+    ) {
+    this.location.replaceState('/');
+    this.STATES = STATES_TOKEN;
+    this.ANIMATIONS = ANIMATIONS_TOKEN;
+   }
+
+  ngOnInit(): void {
+    this.STATES = {
       control: {
         jumpPressed: false,
         jumpCount: 0,
@@ -86,16 +96,7 @@ export class GameComponent implements OnInit {
       end: false,
       startAnim: false,
       score: 0
-    },
-    @Inject(ANIMATIONS_TOKEN) public ANIMATIONS_TOKEN: Animations = {},
-    private location: Location
-    ) {
-    this.location.replaceState('/');
-    this.STATES = STATES_TOKEN;
-    this.ANIMATIONS = ANIMATIONS_TOKEN;
-   }
-
-  ngOnInit(): void {
+    };
     const STATES = this.STATES;
     function getRandomInt(min: number, max: number) {
       min = Math.ceil(min);
