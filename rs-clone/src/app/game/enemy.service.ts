@@ -393,12 +393,12 @@ export class EnemyService {
     return box1.intersectsBox(box2);
   }
 
-  moveEnemies(speed:number, playerCube:any, endGame: any, STATES: any, delta:any) {
+  moveEnemies(speed:number, playerCube:any, endGame: any, STATES: any, audioManager: any, delta:any) {
     for (let ind = this.inMove.length-1; ind >= 0; ind--) {
       let el = this.inMove[ind];
       el.enemies.forEach((element: any) => {
         if (element.object.name === 'Coin') element.object.rotation.y += 0.04;
-        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, STATES);
+        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, STATES, audioManager);
         });
         if (el.line.position.z > 25) {
           let obj = this.inMove[ind];

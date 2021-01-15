@@ -42,10 +42,11 @@ export class Coin {
     return box1.intersectsBox(box2);
   }
 
-  checkCollisions(player: any, endGame: any, states: any) {
+  checkCollisions(player: any, endGame: any, states: any, audioManager: any) {
     if (!this.collision) {
       if (this.detectCollisionPlayer(player)) {
         this.collision = true;
+        audioManager.coinPlay();
         this.object.visible = false;
       }
     }

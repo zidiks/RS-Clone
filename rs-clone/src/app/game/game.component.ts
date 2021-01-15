@@ -7,8 +7,8 @@ import { PlayerService } from './player.service';
 import { EnemyService } from './enemy.service';
 import { EndGameService } from './end-game.service';
 import { InjectionToken } from '@angular/core';
-import { AnimationAction } from 'three';
 import { AnimationService } from './animation.service';
+import { AudioService } from './audio.service';
 
 export interface States {
   control: {
@@ -103,10 +103,11 @@ export class GameComponent implements OnInit {
       return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
     }
 
-    const audioObj = new Audio(`assets/audio/audio_${getRandomInt(1, 3)}.mp3`);
-    audioObj.onended = function() {
-      audioObj.play();
-    };
+    // const audioObj = new Audio(`assets/audio/audio_${getRandomInt(1, 3)}.mp3`);
+    // audioObj.onended = function() {
+    //   audioObj.play();
+    // };
+    const audioManager = new AudioService();
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
 
@@ -132,7 +133,7 @@ export class GameComponent implements OnInit {
     endGame.textContent = 'PRESS SPACE TO START!';
     
   
-    const endManager = new EndGameService(endGame, STATES, audioObj, animationManager);
+    const endManager = new EndGameService(endGame, STATES, audioManager, animationManager);
 
     const renderer = new THREE.WebGLRenderer({ antialias: false });
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -173,9 +174,11 @@ export class GameComponent implements OnInit {
 
     function keyRightHandler(e: { keyCode: number; }){
       if(e.keyCode == 38){
+        if (STATES.control.jumpPressed === false) audioManager.jumpPlay();
         STATES.control.jumpPressed = true;
       }
       if(e.keyCode === 40){
+        if (STATES.control.squat === false) audioManager.rollPlay();
         STATES.control.squat = true;
       }
       if(e.keyCode == 39){
@@ -187,8 +190,8 @@ export class GameComponent implements OnInit {
         if (STATES.play === false && STATES.end === false) {
           endGame.style.display = 'none';
           setTimeout(() => {
-            //audioObj.play();
-          }, 700);
+            audioManager.playBackground();
+          }, 800);
           STATES.startAnim = true;
         }
       }
@@ -228,7 +231,7 @@ export class GameComponent implements OnInit {
       if (STATES.play) {
         playerManager.playerActions[0].setDuration(STATES.speed ** -1);
         env.MoveEnv(STATES.speed, deltak);
-        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endManager, STATES, deltak);
+        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endManager, STATES, audioManager, deltak);
         playerManager.setPlayerPos(playerManager.player, STATES, animationManager, deltak);
 
         STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed)) * deltak;
