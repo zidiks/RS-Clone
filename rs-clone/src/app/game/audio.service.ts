@@ -35,7 +35,9 @@ export class AudioService {
 
   rollPlay() {
     this.rollSound.currentTime = 0;
-    this.rollSound.play();
+    setTimeout(() => {
+      this.rollSound.play();
+    }, 100);
   }
 
   jumpPlay() {
