@@ -1,3 +1,4 @@
+import { state } from '@angular/animations';
 import * as THREE from 'three';
 
 interface enemiesProts {
@@ -47,6 +48,7 @@ export class Coin {
       if (this.detectCollisionPlayer(player)) {
         this.collision = true;
         audioManager.coinPlay();
+        states.score += 5;
         this.object.visible = false;
       }
     }

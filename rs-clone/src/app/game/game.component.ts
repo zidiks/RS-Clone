@@ -136,7 +136,7 @@ export class GameComponent implements OnInit {
   
     const endManager = new EndGameService(endGame, STATES, audioManager, animationManager);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: false });
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -236,7 +236,7 @@ export class GameComponent implements OnInit {
         playerManager.setPlayerPos(playerManager.player, STATES, animationManager, deltak);
 
         STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed)) * deltak;
-        STATES.score += 0.01 * deltak;
+        STATES.score += 0.01 * STATES.speed * deltak;
         domScore.textContent = `${Math.round(STATES.score)}`;
       }
 
