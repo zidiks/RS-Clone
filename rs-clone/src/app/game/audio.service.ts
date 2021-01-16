@@ -15,11 +15,6 @@ export class AudioService {
   constructor(
     //@Inject(STATES_TOKEN) public STATES_TOKEN: States
   ) {
-    function getRandomInt(min: number, max: number) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
-    }
     this.gameBachground = new Audio(`assets/audio/background.mp3`);
     this.gameBachground.onended = () => {
       this.gameBachground.play();
