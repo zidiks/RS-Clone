@@ -91,10 +91,10 @@ export class AuthService {
   AuthLogin(provider: any) {
     return this.afAuth.signInWithPopup(provider)
     .then((result) => {
-       this.ngZone.run(() => {
-          this.router.navigate(['']);
-        })
       this.SetUserData(result.user);
+      setTimeout(() => {
+        this.router.navigate(['']);
+      }, 300);
     }).catch((error) => {
       window.alert(error)
     })
