@@ -28,8 +28,9 @@ export class BoardLowEnemy {
 
     this.blinklight2 = new THREE.Mesh(
       new THREE.BoxGeometry(0.2, 0.1, -0.1),
-      new THREE.MeshPhongMaterial( { color: color, emissive: color, emissiveIntensity: 1 } )
+      new THREE.MeshPhongMaterial({ color: color, emissive: color, emissiveIntensity: 1 })
     );
+
     this.hitBox = enemyBox;
     enemyBox.position.y = -1.2;
     enemyBox.position.z += 0.05;

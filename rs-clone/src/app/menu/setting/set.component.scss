@@ -5,7 +5,7 @@ menu {
   background: url("https://images.wallpaperscraft.ru/image/tonnel_metro_podzemnyj_149680_1920x1080.jpg") center center/cover no-repeat;
 }
 
-.wrapper{
+.wrapper {
   width: 500px;
   height: 400px;
   background: rgb(87, 87, 87);
@@ -13,6 +13,10 @@ menu {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+h3 {
+ text-align: center;
 }
 
 .main-link {

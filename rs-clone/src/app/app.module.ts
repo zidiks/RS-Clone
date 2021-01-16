@@ -5,12 +5,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GameComponent } from './game/game.component';
 import { MenuComponent } from './menu/menu.component';
+import { SetComponent } from './menu/setting/set.component';
+import { StoreComponent } from './menu/store/store.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameComponent,
-    MenuComponent
+    MenuComponent,
+    SetComponent,
+    StoreComponent
   ],
   imports: [
     BrowserModule,

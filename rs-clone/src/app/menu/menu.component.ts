@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Animations, States, STATES_TOKEN } from '../game/game.component';
 
 @Component({
   selector: 'app-menu',
@@ -13,6 +14,14 @@ export class MenuComponent implements OnInit {
   }
 
 }
-export function openMenu() {
-  alert("menu");
-}
+// console.log(STATES_TOKEN)
+// if (States.play === false) {
+//   console.log('tut')
+// }
+// export function mainMenu() {
+//   const wrapper = document.createElement("div");
+//   wrapper.classList.add("wrapper");
+//   document.body.appendChild(wrapper);
+// }
+
+// mainMenu()

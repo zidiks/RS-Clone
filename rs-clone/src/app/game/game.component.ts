@@ -88,8 +88,14 @@ export class GameComponent implements OnInit {
     endGame.className = 'end-game';
     endGame.style.color = 'green';
     endGame.textContent = 'PRESS SPACE TO START!';
+<<<<<<< Updated upstream
+=======
 
-    const renderer = new THREE.WebGLRenderer({ antialias: false });
+
+    const endManager = new EndGameService(endGame, STATES, audioManager, animationManager);
+>>>>>>> Stashed changes
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -154,6 +160,18 @@ export class GameComponent implements OnInit {
       }
     }
 
+    function pauseGame() {
+      // STATES.startAnim === true ? STATES.startAnim = false : STATES.startAnim = true;
+      STATES.startAnim = false;
+      // STATES.play = false;
+      console.log("ok")
+    }
+
+    // const menuBtn = document.querySelector(".main__menu");
+
+    // menuBtn.addEventListener("click", function (e) {
+    //   pauseGame();
+    // })
     // function getRandomInt(min: number, max: number) {
     //   min = Math.ceil(min);
     //   max = Math.floor(max);
@@ -190,7 +208,15 @@ export class GameComponent implements OnInit {
         if ( playerManager.mixer ) playerManager.mixer.update( delta );
       }
 
+<<<<<<< Updated upstream
       stats.end();
+=======
+
+      if ( playerManager.mixer && STATES.animation ) playerManager.mixer.update( delta );
+
+      // stats.end();
+
+>>>>>>> Stashed changes
 
       requestAnimationFrame( animate );
 
