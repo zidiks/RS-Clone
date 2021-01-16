@@ -7,9 +7,11 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 
 import { AuthGuard } from "./auth.guard";
+import { MeComponent } from './menu/me/me.component';
 
 const itemRoutes: Routes = [
-  { path: '', component: HomeComponent}
+  { path: '', component: HomeComponent },
+  { path: 'me', component: MeComponent }
 ];
 
 const routes: Routes = [

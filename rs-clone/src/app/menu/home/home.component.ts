@@ -10,6 +10,7 @@ import { audioManager} from '../menu.component';
 export class HomeComponent implements OnInit {
   menuLinks: HTMLDListElement[] | undefined;
   activeLink = 0;
+  linksBox: any;
   moveMenu = (e: any) => {
     if (this.menuLinks) {
       if (e.key == 'ArrowDown' || e.key == 'ArrowUp') {
@@ -25,7 +26,8 @@ export class HomeComponent implements OnInit {
       } else {
         if(e.key == 'Enter'){
           if (this.activeLink === 0) audioManager.pauseBg();
-          this.menuLinks[this.activeLink].click();
+          const ml = this.menuLinks;
+            ml[this.activeLink].click();
         }
       }
     }
@@ -35,6 +37,7 @@ export class HomeComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.linksBox = <HTMLDivElement>document.getElementById('menu-links');
     const domName= <HTMLDivElement>document.getElementById('p-name');
     domName.textContent = JSON.parse(localStorage.getItem('user') || '{}').displayName;
     this.menuLinks = Array.prototype.slice.call(<HTMLDivElement><unknown>document.getElementsByClassName('menu-link'));

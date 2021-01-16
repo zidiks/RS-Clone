@@ -1,13 +1,13 @@
-.home {
+.me {
     perspective: 500px;
     transform-style: preserve-3d;
-    .menu-links {
+    .me-links {
         transform-origin: left;
         transition: .4s;
         transform: rotateY(40deg);
         display: flex;
         flex-direction: column;
-        .menu-link {
+        .me-link {
             text-shadow: 1px 1px 1px black;
             font-family: 'Press Start 2P', cursive;
             font-size: 2rem;
@@ -16,7 +16,7 @@
             text-decoration: none;
             transition: .3s;
         }
-        .menu-active-link {
+        .me-active-link {
             color: gold !important;
             transform: scale(1.1);
         }

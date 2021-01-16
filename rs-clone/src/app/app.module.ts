@@ -13,6 +13,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { AuthService } from './auth.service';
+import { MeComponent } from './menu/me/me.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AuthService } from './auth.service';
     HomeComponent,
     SignUpComponent,
     SignInComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    MeComponent
   ],
   imports: [
     BrowserModule,
