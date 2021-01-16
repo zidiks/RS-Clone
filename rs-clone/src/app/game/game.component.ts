@@ -67,6 +67,7 @@ export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken'
 export class GameComponent implements OnInit {
   STATES: States;
   ANIMATIONS: Animations;
+  AUDIO: AudioService | undefined = undefined;
   constructor(
     @Inject(STATES_TOKEN) public STATES_TOKEN: States,
     @Inject(ANIMATIONS_TOKEN) public ANIMATIONS_TOKEN: Animations = {},
@@ -109,6 +110,7 @@ export class GameComponent implements OnInit {
     //   audioObj.play();
     // };
     const audioManager = new AudioService();
+    this.AUDIO = audioManager;
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
 
@@ -251,6 +253,30 @@ export class GameComponent implements OnInit {
       renderer.render( scene, camera );
     }
     animate();
+  }
+
+  ngOnDestroy() {
+    console.log('Items destroyed');
+    this.STATES = {
+      control: {
+        jumpPressed: false,
+        jumpCount: 0,
+        jumpLength: 40,
+        jumpHeight: 0,
+        squat: false,
+        squatCount: 0,
+        squatLength: 35,
+        squatHeight: 0,
+        xpos: 0
+      },
+      speed: 2.5,
+      animation: true,
+      play: false,
+      end: false,
+      startAnim: false,
+      score: 0
+    };
+    this.AUDIO?.pauseBackground();
   }
 
 }

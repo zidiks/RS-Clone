@@ -2,10 +2,12 @@
     perspective: 500px;
     transform-style: preserve-3d;
     .menu-links {
+        transform-origin: left;
         transform: rotateY(40deg);
         display: flex;
         flex-direction: column;
         .menu-link {
+            text-shadow: 1px 1px 1px black;
             font-family: 'Press Start 2P', cursive;
             font-size: 2rem;
             color: black;
