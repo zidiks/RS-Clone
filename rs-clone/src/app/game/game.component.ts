@@ -89,7 +89,10 @@ export class GameComponent implements OnInit {
     endGame.style.color = 'green';
     endGame.textContent = 'PRESS SPACE TO START!';
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 
 
     const endManager = new EndGameService(endGame, STATES, audioManager, animationManager);
@@ -104,10 +107,10 @@ export class GameComponent implements OnInit {
     domScene.appendChild( renderer.domElement );
     domScene.appendChild( endGame );
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
 
-    const light = new THREE.DirectionalLight( 0xffffff, 0.7 );
+    const light = new THREE.DirectionalLight( 0xffffff, 0.8 );
     light.position.set(2, 10, 7);
     light.castShadow = true;
     light.shadow.camera.top = 30;
@@ -209,13 +212,19 @@ export class GameComponent implements OnInit {
       }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       stats.end();
 =======
+=======
+>>>>>>> Stashed changes
 
       if ( playerManager.mixer && STATES.animation ) playerManager.mixer.update( delta );
 
       // stats.end();
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
       requestAnimationFrame( animate );
