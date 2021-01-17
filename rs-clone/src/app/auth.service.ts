@@ -4,6 +4,7 @@ import firebase from 'firebase/app'
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
+import { audioManager } from './menu/menu.component';
 
 @Injectable({
   providedIn: 'root'
@@ -104,7 +105,8 @@ export class AuthService {
   SignOut() {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
-      this.router.navigate(['sign-in']);
-    })
+      audioManager.pauseBg();
+      this.router.navigate(['../../login']);
+    });
   }
 }

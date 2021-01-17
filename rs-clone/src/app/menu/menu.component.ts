@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { Mesh } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { AudioService } from './audio.service';
+import { globalProps } from './globalprops';
 
 export const audioManager = new AudioService();
 
@@ -18,10 +19,14 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const Hi = <HTMLDivElement>document.getElementById('hi');
+    if (globalProps.hiScreen) {
+      audioManager.playBg();
+      Hi.style.display = 'none';
+    }
     const clock = new THREE.Clock();
     const domScene = <HTMLDivElement>document.getElementById('menu-background');
     const domHi = <HTMLDivElement>document.getElementById('hi-play');
-    const Hi = <HTMLDivElement>document.getElementById('hi');
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog('lightblue', 10, 30);
     scene.background =  new THREE.Color('lightblue');
@@ -50,7 +55,8 @@ export class MenuComponent implements OnInit {
     domHi.addEventListener('click', () => {
       audioManager.playBg();
       Hi.style.display = 'none';
-    })
+      globalProps.hiScreen = true;
+    });
 
 
     let mixer: any;

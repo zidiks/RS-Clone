@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { audioManager} from '../menu.component';
-
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-me',
@@ -29,7 +29,9 @@ export class MeComponent implements OnInit {
       }
     }
   }
-  constructor() { }
+  constructor(
+    public authService: AuthService
+  ) { }
 
   ngOnInit(): void {
     this.menuLinks = Array.prototype.slice.call(<HTMLDivElement><unknown>document.getElementsByClassName('me-link'));

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import * as THREE from 'three';
 import * as STATS from 'stats.js';
@@ -64,11 +64,16 @@ export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken'
     { provide: ANIMATIONS_TOKEN, useValue: {} }
   ]
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
+  RENDERER: any;
+  SCENE: any;
   STATES: States;
   ANIMATIONS: Animations;
   AUDIO: AudioService | undefined = undefined;
+  animate: any;
+  REQANIMFRAME: any;
   constructor(
+    private elementRef: ElementRef,
     @Inject(STATES_TOKEN) public STATES_TOKEN: States,
     @Inject(ANIMATIONS_TOKEN) public ANIMATIONS_TOKEN: Animations = {},
     private location: Location
@@ -119,7 +124,8 @@ export class GameComponent implements OnInit {
     // domScene.appendChild(stats.dom);
 
     const clock = new THREE.Clock();
-    const scene = new THREE.Scene();
+    this.SCENE = new THREE.Scene();
+    const scene = this.SCENE;
     scene.fog = new THREE.Fog('lightblue', 10, 30);
     scene.background =  new THREE.Color('lightblue');
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
@@ -138,7 +144,8 @@ export class GameComponent implements OnInit {
   
     const endManager = new EndGameService(endGame, STATES, audioManager, animationManager);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: false });
+    this.RENDERER = new THREE.WebGLRenderer({ antialias: false });
+    const renderer = this.RENDERER;
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -211,7 +218,7 @@ export class GameComponent implements OnInit {
     //   return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
     // }
 
-    function animate() {
+    this.animate = () => {
       const delta = clock.getDelta();
       const deltak = delta * 50;
       // stats.begin();
@@ -248,15 +255,15 @@ export class GameComponent implements OnInit {
       // stats.end();
       
 
-      requestAnimationFrame( animate );
+      this.REQANIMFRAME =  requestAnimationFrame( this.animate );
 
       renderer.render( scene, camera );
     }
-    animate();
+    this.animate();
   }
 
   ngOnDestroy() {
-    console.log('Items destroyed');
+    cancelAnimationFrame(this.REQANIMFRAME);
     this.STATES = {
       control: {
         jumpPressed: false,
@@ -276,7 +283,11 @@ export class GameComponent implements OnInit {
       startAnim: false,
       score: 0
     };
-    this.AUDIO?.pauseBackground();
+    if (this.AUDIO) this.AUDIO.pauseBackground();
+    this.RENDERER = null;
+    this.SCENE = null;
+    //this.animate = null;
+    this.elementRef.nativeElement.remove();
   }
 
 }
