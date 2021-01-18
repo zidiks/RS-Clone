@@ -123,7 +123,7 @@ export class EnemyService {
           const  enemy = new THREE.Group();
           const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> = new THREE.Mesh(
             new THREE.BoxGeometry(1.6, 1.6, 0.1),
-            new THREE.MeshPhongMaterial( { color: 0xff0000 } )
+            new THREE.MeshPhongMaterial( { color: 0xbd914f } )
           );
           enemyBox.position.y = -1.2;
           enemyBox.position.z += 0.05;

@@ -145,8 +145,8 @@ export class GameComponent implements OnInit, OnDestroy {
     endGame.className = 'end-game';
     endGame.style.color = 'green';
     endGame.textContent = 'PRESS SPACE TO START!';
-    
-  
+
+
     const endManager = new EndGameService(endGame, STATES, audioManager, animationManager, this.userManager);
 
     this.RENDERER = new THREE.WebGLRenderer({ antialias: false });
@@ -159,10 +159,10 @@ export class GameComponent implements OnInit, OnDestroy {
     domScene.appendChild( renderer.domElement );
     domScene.appendChild( endGame );
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
 
-    const light = new THREE.DirectionalLight( 0xffffff, 0.7 );
+    const light = new THREE.DirectionalLight( 0xffffff, 0.8 );
     light.position.set(2, 10, 7);
     light.castShadow = true;
     light.shadow.camera.top = 30;
@@ -254,11 +254,11 @@ export class GameComponent implements OnInit, OnDestroy {
         domScore.textContent = `${Math.round(STATES.score)}`;
       }
 
-     
+
       if ( playerManager.mixer && STATES.animation ) playerManager.mixer.update( delta );
 
       // stats.end();
-      
+
 
       this.REQANIMFRAME =  requestAnimationFrame( this.animate );
 
