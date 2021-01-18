@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as THREE from 'three';
 import { Mesh } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { User } from '../user';
 import { AudioService } from './audio.service';
 import { globalProps } from './globalprops';
+import { UserService} from './user.service';
 
 export const audioManager = new AudioService();
 
@@ -13,9 +15,16 @@ export const audioManager = new AudioService();
   styleUrls: ['./menu.component.scss']
 })
 
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
   audioManager: AudioService = audioManager;
-  constructor() { 
+  public user: User | undefined;
+  constructor(
+    public userManager: UserService
+  ) {
+    this.userManager.getUser().subscribe(data => {
+      if (data) globalProps.coins = data.coins;
+      this.user = data;
+    });
   }
 
   ngOnInit(): void {
@@ -94,7 +103,8 @@ export class MenuComponent implements OnInit {
     animate();
   }
 
-}
-export function openMenu() {
-  alert("menu");
+  ngOnDestroy() {
+    audioManager.pauseAll();
+  }
+
 }

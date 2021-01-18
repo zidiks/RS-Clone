@@ -9,6 +9,7 @@ import { EndGameService } from './end-game.service';
 import { InjectionToken } from '@angular/core';
 import { AnimationService } from './animation.service';
 import { AudioService } from './audio.service';
+import { UserService } from '../menu/user.service';
 
 export interface States {
   control: {
@@ -27,7 +28,8 @@ export interface States {
   play: boolean,
   end: boolean,
   startAnim: boolean,
-  score: number
+  score: number,
+  coins: number
 }
 
 export interface Animations {
@@ -59,7 +61,8 @@ export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken'
       play: false,
       end: false,
       startAnim: false,
-      score: 0
+      score: 0,
+      coins: 0
     } },
     { provide: ANIMATIONS_TOKEN, useValue: {} }
   ]
@@ -73,6 +76,7 @@ export class GameComponent implements OnInit, OnDestroy {
   animate: any;
   REQANIMFRAME: any;
   constructor(
+    public userManager: UserService,
     private elementRef: ElementRef,
     @Inject(STATES_TOKEN) public STATES_TOKEN: States,
     @Inject(ANIMATIONS_TOKEN) public ANIMATIONS_TOKEN: Animations = {},
@@ -101,7 +105,8 @@ export class GameComponent implements OnInit, OnDestroy {
       play: false,
       end: false,
       startAnim: false,
-      score: 0
+      score: 0,
+      coins: 0
     };
     const STATES = this.STATES;
     function getRandomInt(min: number, max: number) {
@@ -142,7 +147,7 @@ export class GameComponent implements OnInit, OnDestroy {
     endGame.textContent = 'PRESS SPACE TO START!';
     
   
-    const endManager = new EndGameService(endGame, STATES, audioManager, animationManager);
+    const endManager = new EndGameService(endGame, STATES, audioManager, animationManager, this.userManager);
 
     this.RENDERER = new THREE.WebGLRenderer({ antialias: false });
     const renderer = this.RENDERER;
@@ -264,29 +269,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     cancelAnimationFrame(this.REQANIMFRAME);
-    this.STATES = {
-      control: {
-        jumpPressed: false,
-        jumpCount: 0,
-        jumpLength: 40,
-        jumpHeight: 0,
-        squat: false,
-        squatCount: 0,
-        squatLength: 35,
-        squatHeight: 0,
-        xpos: 0
-      },
-      speed: 2.5,
-      animation: true,
-      play: false,
-      end: false,
-      startAnim: false,
-      score: 0
-    };
     if (this.AUDIO) this.AUDIO.pauseBackground();
     this.RENDERER = null;
     this.SCENE = null;
-    //this.animate = null;
     this.elementRef.nativeElement.remove();
   }
 

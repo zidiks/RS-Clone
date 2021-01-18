@@ -5,6 +5,8 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
 import { audioManager } from './menu/menu.component';
+import { globalProps } from './menu/globalprops';
+import { UserService } from './menu/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -61,14 +63,24 @@ export class AuthService {
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
   SetUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    const userData: User = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      emailVerified: true
-    }
-    return userRef.set(userData, {
-      merge: true
+    let userData: User;
+    let coins = 0;
+    userRef.ref.get().then(doc => {
+      if (doc.exists) {
+        coins = doc.data().coins;
+      }
+    }).then(() => {
+      userData = {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        emailVerified: true,
+        coins: coins
+      }
+    }).then(() => {
+      userRef.set(userData, {
+        merge: true
+      })
     })
   }
 

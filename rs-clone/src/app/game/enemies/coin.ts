@@ -49,6 +49,7 @@ export class Coin {
         this.collision = true;
         audioManager.coinPlay();
         states.score += 5;
+        states.coins += 1;
         this.object.visible = false;
       }
     }

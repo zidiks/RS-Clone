@@ -15,24 +15,21 @@ export class HomeComponent implements OnInit {
     if (this.menuLinks) {
       if (e.key == 'ArrowDown' || e.key == 'ArrowUp') {
         this.menuLinks[this.activeLink].classList.remove('menu-active-link');
-      if(e.key == 'ArrowDown'){
-        if (this.activeLink + 1 > this.menuLinks.length - 1) this.activeLink = 0; else this.activeLink++;
-      }
-      if(e.key == 'ArrowUp'){
-        if (this.activeLink - 1 < 0) this.activeLink = 3; else this.activeLink--;
-      }
-      this.menuLinks[this.activeLink].classList.add('menu-active-link');
-      audioManager.playLink();
-      } else {
-        if(e.key == 'Enter'){
-          if (this.activeLink === 0) audioManager.pauseBg();
-          const ml = this.menuLinks;
-            ml[this.activeLink].click();
+        if(e.key == 'ArrowDown'){
+          if (this.activeLink + 1 > this.menuLinks.length - 1) this.activeLink = 0; else this.activeLink++;
         }
+        if(e.key == 'ArrowUp'){
+          if (this.activeLink - 1 < 0) this.activeLink = 3; else this.activeLink--;
+        }
+        this.menuLinks[this.activeLink].classList.add('menu-active-link');
+        audioManager.playLink();
+      } else if(e.key == 'Enter') {
+          this.menuLinks[this.activeLink].click();
       }
     }
   }
-  constructor() {
+  constructor(
+  ) {
     
    }
 

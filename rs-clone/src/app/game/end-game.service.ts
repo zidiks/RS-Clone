@@ -2,7 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import { Animations, States, STATES_TOKEN } from './game.component';
 import { AnimationService } from './animation.service';
 import { AudioService } from './audio.service';
-
+import { globalProps } from '../menu/globalprops';
+import { UserService } from '../menu/user.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +17,8 @@ export class EndGameService {
     DOMel: HTMLDivElement,
     @Inject(STATES_TOKEN) public STATES_TOKEN: States,
     audio: AudioService,
-    animationManager: AnimationService
+    animationManager: AnimationService,
+    public userManager: UserService
   ) { 
     this.endGame = DOMel;
     this.audio = audio;
@@ -38,5 +40,6 @@ export class EndGameService {
     setTimeout(() => {
       this.states.animation = false;
     }, 710);
+    this.userManager.setCoins(globalProps.coins + this.states.coins)
   }
 }
