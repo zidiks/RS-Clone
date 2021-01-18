@@ -135,8 +135,6 @@ export class EnemyService {
             const objLoader = new OBJLoader();
             objLoader.setMaterials( materials );
             objLoader.load( el.obj,  ( object ) => {
-
-                //object.position.set(element.pos[0], element.pos[1], element.pos[2]);
                 object.traverse((child) => {
                   if (child instanceof THREE.Mesh) {
                       if (el.shadow) child.castShadow = true;
@@ -150,11 +148,6 @@ export class EnemyService {
                   object.position.z = 0;
                   enemy.add(object);
                   enemy.add(enemyBox);
-                  // //clone
-                  // const clone = new THREE.Group();
-                  // clone.add(enemy.clone());
-                  // clone.position.z -= 10;
-                  // this.Scene.add(clone);
                 });
                 if (index === arr.length-1) {
                   this.enemiesProts[el.type] = enemy;
@@ -169,9 +162,6 @@ export class EnemyService {
     promise.then((e) => {
       this.generateStartWay(10);
       console.log(this.enemiesProts);
-      // const newEn = new BoardLowEnemy(this.enemiesProts);
-      // this.Scene.add(newEn.object);
-      // newEn.checkCollisions();
     })
     .catch(e => {
       throw new Error(e);
