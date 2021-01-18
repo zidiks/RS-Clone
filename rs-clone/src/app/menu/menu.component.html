@@ -1,9 +1,14 @@
-<!-- <a routerLink="/game">Play</a>
-<a routerLink="/set">Settings</a> -->
-<menu>
-  <div class="wrapper">
-    <a class = "main-link" routerLinkActive = "active" routerLink="/game">Play</a>
-    <a class = "main-link" routerLinkActive = "active" routerLink="/set">Settings</a>
-  </div>
-</menu>
-
+<div id="menu-background"></div>
+<div class="menu-outer">
+    <div id="logo"></div>
+    <div class="stats">
+        <div id="coins" *ngIf="user"><div class="coin-icon"></div> {{ user.coins }} </div>
+    </div>
+    <div class="menu-inner">
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<div id="hi">
+    <p>Cubway surfers by @zidiks, @AndreiYa, @pavelgitvasilev</p>
+    <div id="hi-play">Play!</div>
+</div>

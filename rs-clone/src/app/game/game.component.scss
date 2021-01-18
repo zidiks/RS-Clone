@@ -21,6 +21,23 @@
         font-size: 1.5rem;
         margin-right: 1rem;
     }
+    #coins {
+        color: gold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        font-family: Arial, Helvetica, sans-serif;
+        .coin-icon {
+            background-image: url('../../assets/UI/money.svg');
+            width: 1.5rem;
+            height: 1.5rem;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            margin-right: 0.5rem;
+        }
+    }
 }
 #game-loading {
     position: fixed;

@@ -1,12 +1,17 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import * as THREE from 'three';
 import * as STATS from 'stats.js';
 import { EnvironementService } from './environement.service';
 import { PlayerService } from './player.service';
 import { EnemyService } from './enemy.service';
+import { EndGameService } from './end-game.service';
+import { InjectionToken } from '@angular/core';
+import { AnimationService } from './animation.service';
+import { AudioService } from './audio.service';
+import { UserService } from '../menu/user.service';
 
-interface States {
+export interface States {
   control: {
     jumpPressed: boolean,
     jumpCount: number,
@@ -19,86 +24,133 @@ interface States {
     xpos: number
   },
   speed: number,
+  animation: boolean,
   play: boolean,
   end: boolean,
   startAnim: boolean,
-  score: number
+  score: number,
+  coins: number
 }
+
+export interface Animations {
+  [key: string]: THREE.AnimationAction[];
+}
+
+export const STATES_TOKEN = new InjectionToken<States>('StatesToken');
+export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken');
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
-  styleUrls: ['./game.component.scss']
-})
-export class GameComponent implements OnInit {
-  constructor(
-    private location: Location
-    ) {
-    this.location.replaceState('/');
-   }
-
-  ngOnInit(): void {
-    const STATES: States = {
+  styleUrls: ['./game.component.scss'],
+  providers: [
+    { provide: STATES_TOKEN, useValue: {
       control: {
         jumpPressed: false,
         jumpCount: 0,
-        jumpLength: 37,
+        jumpLength: 40,
         jumpHeight: 0,
         squat: false,
         squatCount: 0,
-        squatLength: 25,
+        squatLength: 40,
         squatHeight: 0,
         xpos: 0
       },
       speed: 2.5,
+      animation: true,
       play: false,
       end: false,
       startAnim: false,
-      score: 0
-    }
+      score: 0,
+      coins: 0
+    } },
+    { provide: ANIMATIONS_TOKEN, useValue: {} }
+  ]
+})
+export class GameComponent implements OnInit, OnDestroy {
+  RENDERER: any;
+  SCENE: any;
+  STATES: States;
+  ANIMATIONS: Animations;
+  AUDIO: AudioService | undefined = undefined;
+  animate: any;
+  REQANIMFRAME: any;
+  constructor(
+    public userManager: UserService,
+    private elementRef: ElementRef,
+    @Inject(STATES_TOKEN) public STATES_TOKEN: States,
+    @Inject(ANIMATIONS_TOKEN) public ANIMATIONS_TOKEN: Animations = {},
+    private location: Location
+    ) {
+    this.location.replaceState('/');
+    this.STATES = STATES_TOKEN;
+    this.ANIMATIONS = ANIMATIONS_TOKEN;
+   }
 
+  ngOnInit(): void {
+    this.STATES = {
+      control: {
+        jumpPressed: false,
+        jumpCount: 0,
+        jumpLength: 40,
+        jumpHeight: 0,
+        squat: false,
+        squatCount: 0,
+        squatLength: 35,
+        squatHeight: 0,
+        xpos: 0
+      },
+      speed: 2.5,
+      animation: true,
+      play: false,
+      end: false,
+      startAnim: false,
+      score: 0,
+      coins: 0
+    };
+    const STATES = this.STATES;
     function getRandomInt(min: number, max: number) {
       min = Math.ceil(min);
       max = Math.floor(max);
       return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
     }
 
-    const audioObj = new Audio(`assets/audio/audio_${getRandomInt(1, 3)}.mp3`);
-    audioObj.onended = function() {
-      audioObj.play();
-    };
+    // const audioObj = new Audio(`assets/audio/audio_${getRandomInt(1, 3)}.mp3`);
+    // audioObj.onended = function() {
+    //   audioObj.play();
+    // };
+    const audioManager = new AudioService();
+    this.AUDIO = audioManager;
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
 
-    const stats = new STATS();
-    stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    domScene.appendChild(stats.dom);
+    // const stats = new STATS();
+    // stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+    // domScene.appendChild(stats.dom);
 
     const clock = new THREE.Clock();
-    const scene = new THREE.Scene();
+    this.SCENE = new THREE.Scene();
+    const scene = this.SCENE;
     scene.fog = new THREE.Fog('lightblue', 10, 30);
     scene.background =  new THREE.Color('lightblue');
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 
     const env = new EnvironementService(scene);
-    const playerManager = new PlayerService(camera);
+    const playerManager = new PlayerService(camera, STATES);
     const enemyManager = new EnemyService(scene);
+    this.ANIMATIONS.playerAnimations = playerManager.playerActions;
+    const animationManager = new AnimationService(this.ANIMATIONS, STATES);
 
     const endGame = document.createElement('div');
     endGame.className = 'end-game';
     endGame.style.color = 'green';
     endGame.textContent = 'PRESS SPACE TO START!';
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
 
 
-    const endManager = new EndGameService(endGame, STATES, audioManager, animationManager);
->>>>>>> Stashed changes
+    const endManager = new EndGameService(endGame, STATES, audioManager, animationManager, this.userManager);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.RENDERER = new THREE.WebGLRenderer({ antialias: false });
+    const renderer = this.RENDERER;
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -137,9 +189,11 @@ export class GameComponent implements OnInit {
 
     function keyRightHandler(e: { keyCode: number; }){
       if(e.keyCode == 38){
+        if (STATES.control.jumpPressed === false) audioManager.jumpPlay();
         STATES.control.jumpPressed = true;
       }
       if(e.keyCode === 40){
+        if (STATES.control.squat === false) audioManager.rollPlay();
         STATES.control.squat = true;
       }
       if(e.keyCode == 39){
@@ -151,8 +205,8 @@ export class GameComponent implements OnInit {
         if (STATES.play === false && STATES.end === false) {
           endGame.style.display = 'none';
           setTimeout(() => {
-            //audioObj.play();
-          }, 700);
+            audioManager.playBackground();
+          }, 800);
           STATES.startAnim = true;
         }
       }
@@ -163,75 +217,62 @@ export class GameComponent implements OnInit {
       }
     }
 
-    function pauseGame() {
-      // STATES.startAnim === true ? STATES.startAnim = false : STATES.startAnim = true;
-      STATES.startAnim = false;
-      // STATES.play = false;
-      console.log("ok")
-    }
-
-    // const menuBtn = document.querySelector(".main__menu");
-
-    // menuBtn.addEventListener("click", function (e) {
-    //   pauseGame();
-    // })
     // function getRandomInt(min: number, max: number) {
     //   min = Math.ceil(min);
     //   max = Math.floor(max);
     //   return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
     // }
 
-    function animate() {
-      stats.begin();
+    this.animate = () => {
+      const delta = clock.getDelta();
+      const deltak = delta * 50;
+      // stats.begin();
       if (STATES.startAnim) {
-        if (camera.position.x > 0 || camera.position.z < 5) {
-          if (camera.position.z < 5) camera.position.z += 0.05;
-          if (camera.position.x > 0) camera.position.x -= 0.1;
+        if (camera.position.x > 0 || camera.position.z < 6) {
+          if (camera.position.z < 6) camera.position.z += 0.06 * deltak;
+          if (camera.position.x > 0) camera.position.x -= 0.1 * deltak;
           camera.lookAt(cameraTarget);
         } else {
           camera.position.x = 0;
-          camera.position.z = 5;
+          camera.position.z = 6;
           camera.rotation.y = 0;
           camera.rotation.z = 0;
           STATES.startAnim = false;
           STATES.play = true;
+          animationManager.changeAnimationTo('run');
         }
       }
 
       if (STATES.play) {
-        playerManager.playerAction.setDuration(STATES.speed ** -1);
-        env.MoveEnv(STATES.speed);
-        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endGame, STATES, audioObj);
-        playerManager.setPlayerPos(playerManager.player, STATES);
+        playerManager.playerActions[0].setDuration(STATES.speed ** -1);
+        env.MoveEnv(STATES.speed, deltak);
+        enemyManager.moveEnemies(STATES.speed, playerManager.cube, endManager, STATES, audioManager, deltak);
+        playerManager.setPlayerPos(playerManager.player, STATES, animationManager, deltak);
 
-        STATES.speed += 0.002 * (STATES.speed ** ( -1 * STATES.speed));
-        STATES.score += 0.01;
+        STATES.speed += 0.01 * (STATES.speed ** ( -1 * STATES.speed)) * deltak;
+        STATES.score += 0.01 * STATES.speed * deltak;
         domScore.textContent = `${Math.round(STATES.score)}`;
-        const delta = clock.getDelta();
-        if ( playerManager.mixer ) playerManager.mixer.update( delta );
       }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-      stats.end();
-=======
-=======
->>>>>>> Stashed changes
 
       if ( playerManager.mixer && STATES.animation ) playerManager.mixer.update( delta );
 
       // stats.end();
 
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
-      requestAnimationFrame( animate );
+      this.REQANIMFRAME =  requestAnimationFrame( this.animate );
 
       renderer.render( scene, camera );
     }
-    animate();
+    this.animate();
+  }
+
+  ngOnDestroy() {
+    cancelAnimationFrame(this.REQANIMFRAME);
+    if (this.AUDIO) this.AUDIO.pauseBackground();
+    this.RENDERER = null;
+    this.SCENE = null;
+    this.elementRef.nativeElement.remove();
   }
 
 }

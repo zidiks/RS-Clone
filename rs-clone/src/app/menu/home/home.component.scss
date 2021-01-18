@@ -1,0 +1,24 @@
+.home {
+    perspective: 500px;
+    transform-style: preserve-3d;
+    .menu-links {
+        transform-origin: left;
+        transition: .4s;
+        transform: rotateY(40deg);
+        display: flex;
+        flex-direction: column;
+        .menu-link {
+            text-shadow: 1px 1px 1px black;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2rem;
+            color: black;
+            margin: 0.5rem 0;
+            text-decoration: none;
+            transition: .3s;
+        }
+        .menu-active-link {
+            color: gold !important;
+            transform: scale(1.1);
+        }
+    }
+}

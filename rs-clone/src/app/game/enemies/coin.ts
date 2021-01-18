@@ -1,3 +1,4 @@
+import { state } from '@angular/animations';
 import * as THREE from 'three';
 
 interface enemiesProts {
@@ -7,20 +8,21 @@ interface enemiesProts {
 export class Coin {
   hitBox: THREE.Mesh
   object: THREE.Group = new THREE.Group;
+  collision: boolean = false;
   constructor(
     public prototypes: enemiesProts
   ) {
     this.object.name = 'Coin';
     const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> = new THREE.Mesh(
-      new THREE.BoxGeometry(0.3, 0.3, 0.1),
+      new THREE.BoxGeometry(0.5, 0.5, 0.3),
       new THREE.MeshPhongMaterial({ color: 0xff0000 })
     );
 
     this.hitBox = enemyBox;
-    enemyBox.position.y = -1.2;
+    enemyBox.position.y = -1.0;
     enemyBox.position.z += 0.05;
     enemyBox.position.z = 0;
-    enemyBox.visible = true;
+    enemyBox.visible = false;
     this.object.add(prototypes['coin'].clone());
     this.object.add(enemyBox);
   }
@@ -41,16 +43,15 @@ export class Coin {
     return box1.intersectsBox(box2);
   }
 
-  checkCollisions(player: any, endGame: any, states: any, audio: any, wayMap: any) {
-    if (this.detectCollisionPlayer(player)) {
-      // endGame.style.display = 'flex';
-      // endGame.textContent = 'GAME OVER!';
-      // endGame.style.color = 'red';
-
-      // audio.pause();
-      // console.log(wayMap);
-      // states.play = false;
-      // states.end = true;
+  checkCollisions(player: any, endGame: any, states: any, audioManager: any) {
+    if (!this.collision) {
+      if (this.detectCollisionPlayer(player)) {
+        this.collision = true;
+        audioManager.coinPlay();
+        states.score += 5;
+        states.coins += 1;
+        this.object.visible = false;
+      }
     }
   }
 }

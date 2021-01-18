@@ -1,23 +1,41 @@
-import { Component, OnInit } from '@angular/core';
-import { Animations, States, STATES_TOKEN } from '../game/game.component';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import * as THREE from 'three';
+import { Mesh } from 'three';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { User } from '../user';
+import { AudioService } from './audio.service';
+import { globalProps } from './globalprops';
+import { UserService} from './user.service';
+
+export const audioManager = new AudioService();
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent implements OnInit {
-<<<<<<< Updated upstream
-=======
+
+export class MenuComponent implements OnInit, OnDestroy {
   audioManager: AudioService = audioManager;
-  constructor() {
+  public user: User | undefined;
+  constructor(
+    public userManager: UserService
+  ) {
+    this.userManager.getUser().subscribe(data => {
+      if (data) globalProps.coins = data.coins;
+      this.user = data;
+    });
   }
 
   ngOnInit(): void {
+    const Hi = <HTMLDivElement>document.getElementById('hi');
+    if (globalProps.hiScreen) {
+      audioManager.playBg();
+      Hi.style.display = 'none';
+    }
     const clock = new THREE.Clock();
     const domScene = <HTMLDivElement>document.getElementById('menu-background');
     const domHi = <HTMLDivElement>document.getElementById('hi-play');
-    const Hi = <HTMLDivElement>document.getElementById('hi');
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog('lightblue', 10, 30);
     scene.background =  new THREE.Color('lightblue');
@@ -46,15 +64,12 @@ export class MenuComponent implements OnInit {
     domHi.addEventListener('click', () => {
       audioManager.playBg();
       Hi.style.display = 'none';
-    })
+      globalProps.hiScreen = true;
+    });
 
->>>>>>> Stashed changes
 
-  constructor() { }
+    let mixer: any;
 
-<<<<<<< Updated upstream
-  ngOnInit(): void {
-=======
     const loader = new FBXLoader();
     loader.load( 'assets/player-menu.fbx', ( object ) => {
       mixer = new THREE.AnimationMixer( object );
@@ -75,9 +90,9 @@ export class MenuComponent implements OnInit {
       scene.add(object);
     } );
 
+    
 
-
-    function animate() {
+    function animate() {  
       const delta = clock.getDelta();
       if (mixer) mixer.update( delta );
 
@@ -86,18 +101,10 @@ export class MenuComponent implements OnInit {
       renderer.render( scene, camera );
     }
     animate();
->>>>>>> Stashed changes
+  }
+
+  ngOnDestroy() {
+    audioManager.pauseAll();
   }
 
 }
-// console.log(STATES_TOKEN)
-// if (States.play === false) {
-//   console.log('tut')
-// }
-// export function mainMenu() {
-//   const wrapper = document.createElement("div");
-//   wrapper.classList.add("wrapper");
-//   document.body.appendChild(wrapper);
-// }
-
-// mainMenu()

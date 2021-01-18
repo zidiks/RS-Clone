@@ -75,24 +75,20 @@ export class TrainEnemy {
     return box1.intersectsBox(box2);
   }
 
-  checkCollisions(player: any, endGame: any, states: any, audio: any, wayMap: any) {
+  checkCollisions(player: any, endGame: any, states: any, audioManager: any) {
     if (this.detectCollisionPlayer(player, this.hitBox)) {
-      endGame.style.display = 'flex';
-      endGame.textContent = 'GAME OVER!';
-      endGame.style.color = 'red';
-      audio.pause();
-      console.log(wayMap);
-      states.play = false;
-      states.end = true;
+      endGame.endFunc();
     }
     if (this.detectCollisionPlayer(player, this.hitBox2)) {
       if (states.control.xpos < 1) {
         states.control.xpos += 1;
+        audioManager.sideTrainPlay();
       }
     }
     if (this.detectCollisionPlayer(player, this.hitBox3)) {
       if (states.control.xpos > -1) {
         states.control.xpos -= 1;
+        audioManager.sideTrainPlay();
       }
     }
   }

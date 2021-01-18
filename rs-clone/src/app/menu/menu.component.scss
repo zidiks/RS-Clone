@@ -1,26 +1,76 @@
-menu {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  background: url("https://images.wallpaperscraft.ru/image/tonnel_metro_podzemnyj_149680_1920x1080.jpg") center center/cover no-repeat;
+.menu-outer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 999;
+    #logo {
+        background-image: url('../../assets/UI/logo.png');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 10rem;
+        height: 4rem;
+        z-index: 1000;
+    }
+    .menu-inner {
+        width: 70%;
+        height: 70%;
+        display: flex;
+        align-items: center;
+        z-index: 1000;
+    }
+    .stats{
+        z-index: 1000;
+        margin: 1rem 0;
+        background: rgba($color: #000000, $alpha: 0.3);
+        color: white;
+        padding: 0.5rem;
+        border-radius: 10px;
+        #coins {
+            color: gold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-family: Arial, Helvetica, sans-serif;
+            .coin-icon {
+                background-image: url('../../assets/UI/money.svg');
+                width: 1.5rem;
+                height: 1.5rem;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: 100% auto;
+                margin-right: 0.5rem;
+            }
+        }
+    }
 }
-
-.wrapper{
-  width: 500px;
-  height: 400px;
-  background: rgb(87, 87, 87);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+#menu-background {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 0;
 }
-
-.main-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 10px 0;
-  color: white;
-  font-size: 1.5em;
-  text-decoration: none;
+#hi {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    z-index: 1100;
+    #hi-play {
+        cursor: pointer;
+    }
 }

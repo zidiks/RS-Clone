@@ -124,14 +124,14 @@ export class EnvironementService {
     );
   }
 
-  MoveEnv(speed: number) {
+  MoveEnv(speed: number, delta: any) {
     this.inMove.forEach(enemy => {
       if (enemy.obj.position.z >= 80) {
         enemy.obj.position.z = 0;
         enemy.initedNext = false;
         this.Queue.push(this.inMove.shift());
       } else {
-        enemy.obj.position.z += 0.05 * speed;
+        enemy.obj.position.z += 0.05 * speed * delta;
       }
       if ((enemy.obj.position.z) >= 18 && enemy.initedNext === false && this.Queue[0] !== undefined) {
         //this.inMove.push(this.Queue.shift());

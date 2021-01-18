@@ -92,7 +92,7 @@ export class EnemyService {
         mtl: 'assets/enemy/1/coin.mtl',
         obj: 'assets/enemy/1/coin.obj',
         posY: -0.65,
-        shadow: true,
+        shadow: false,
         size: 1,
         boxSize: [1.6, 2.6, 0.1],
         hitBoxVisible: false
@@ -123,7 +123,7 @@ export class EnemyService {
           const  enemy = new THREE.Group();
           const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> = new THREE.Mesh(
             new THREE.BoxGeometry(1.6, 1.6, 0.1),
-            new THREE.MeshPhongMaterial( { color: 0xff0000 } )
+            new THREE.MeshPhongMaterial( { color: 0xbd914f } )
           );
           enemyBox.position.y = -1.2;
           enemyBox.position.z += 0.05;
@@ -131,27 +131,23 @@ export class EnemyService {
           enemyBox.visible = el.hitBoxVisible;
           const mtlLoader = new MTLLoader();
           mtlLoader.load( el.mtl, ( materials ) => {
-
             materials.preload();
             const objLoader = new OBJLoader();
             objLoader.setMaterials( materials );
             objLoader.load( el.obj,  ( object ) => {
-
-                //object.position.set(element.pos[0], element.pos[1], element.pos[2]);
                 object.traverse((child) => {
                   if (child instanceof THREE.Mesh) {
                       if (el.shadow) child.castShadow = true;
                       child.receiveShadow = true;
+                      if (el.type === 'coin') {
+                        child.material.emissive.set('yellow');
+                        child.material.emissiveIntensity = 0.7;
+                      }
                   }
                   object.position.y = -2;
                   object.position.z = 0;
                   enemy.add(object);
                   enemy.add(enemyBox);
-                  // //clone
-                  // const clone = new THREE.Group();
-                  // clone.add(enemy.clone());
-                  // clone.position.z -= 10;
-                  // this.Scene.add(clone);
                 });
                 if (index === arr.length-1) {
                   this.enemiesProts[el.type] = enemy;
@@ -166,9 +162,6 @@ export class EnemyService {
     promise.then((e) => {
       this.generateStartWay(10);
       console.log(this.enemiesProts);
-      // const newEn = new BoardLowEnemy(this.enemiesProts);
-      // this.Scene.add(newEn.object);
-      // newEn.checkCollisions();
     })
     .catch(e => {
       throw new Error(e);
@@ -199,7 +192,6 @@ export class EnemyService {
       this.wayMap.push(wayLine);
       this.lastPos = wayPos;
     }
-    console.log('wayMap: ', this.wayMap);
 
     this.wayMap.forEach((el, bindex) => {
       const enemiesLine: EnemiesLine = {
@@ -228,7 +220,6 @@ export class EnemyService {
       }
     });
 
-    console.log('Queue: ', this.Queue);
     const domLoading = <HTMLDivElement>document.getElementById('game-loading');
     setTimeout(() => {
       domLoading.style.display = 'none';
@@ -304,7 +295,6 @@ export class EnemyService {
     this.lastPos = wayPos;
 
     this.wayMap.push(wayLine);
-    console.log(wayLine);
 
     const enemiesLine = line;
     wayLine.forEach((item, index) => {
@@ -326,13 +316,11 @@ export class EnemyService {
             enemiesLine.enemies.push(newEnemy);
             enemiesLine.line.add(newEnemy.object);
             newEnemy.object.position.x = (index - 1) * 2;
-            console.log(index);
           } else if (rand === 1) {
             const newEnemy = new BoardHiEnemy(this.enemiesProts);
             enemiesLine.enemies.push(newEnemy);
             enemiesLine.line.add(newEnemy.object);
             newEnemy.object.position.x = (index - 1) * 2;
-            console.log('boardHi:', index);
           } else if (rand === 2) {
             const newCoin = new Coin(this.enemiesProts);
             enemiesLine.enemies.push(newCoin);
@@ -395,11 +383,12 @@ export class EnemyService {
     return box1.intersectsBox(box2);
   }
 
-  moveEnemies(speed:number, playerCube:any, endGame: any, states: any, audio: any) {
+  moveEnemies(speed:number, playerCube:any, endGame: any, STATES: any, audioManager: any, delta:any) {
     for (let ind = this.inMove.length-1; ind >= 0; ind--) {
       let el = this.inMove[ind];
       el.enemies.forEach((element: any) => {
-        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, states, audio, this.wayMap);
+        if (element.object.name === 'Coin') element.object.rotation.y += 0.04;
+        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, STATES, audioManager);
         });
         if (el.line.position.z > 25) {
           let obj = this.inMove[ind];
@@ -410,7 +399,7 @@ export class EnemyService {
           obj.enemies = [];
           this.generateNewWay(this.inMove.shift());
         } else {
-          el.line.position.z += 0.05 * speed;
+          el.line.position.z += 0.05 * speed * delta;
         }
         if ((el.line.position.z) > -34 && el.initedNext === false && this.Queue[0] !== undefined) {
           el.initedNext = true;

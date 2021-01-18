@@ -1,6 +1,7 @@
 <div id="game-scene"></div>
 <div id="game-menu">
     <span id="game-score">00000</span>
-    <a class="main__menu" routerLink="/">Menu</a>
+    <div id="coins" *ngIf="STATES"><div class="coin-icon"></div> {{ STATES.coins }} </div>
+    <a routerLink="/">Menu</a>
 </div>
 <div id="game-loading"></div>

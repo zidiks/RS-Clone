@@ -31,7 +31,7 @@ export class BoardHiEnemy {
       new THREE.MeshPhongMaterial( { color: color, emissive: color, emissiveIntensity: 1 } )
     );
     this.hitBox = enemyBox;
-    enemyBox.position.y = 0.6;
+    enemyBox.position.y = 0.4;
     enemyBox.position.z += 0.05;
     enemyBox.position.z = 0;
     enemyBox.visible = false;
@@ -59,15 +59,9 @@ export class BoardHiEnemy {
     return box1.intersectsBox(box2);
   }
 
-  checkCollisions(player: any, endGame: any, states: any, audio: any, wayMap: any) {
+  checkCollisions(player: any, endManager: any, states: any) {
     if (this.detectCollisionPlayer(player)) {
-      endGame.style.display = 'flex';
-      endGame.textContent = 'GAME OVER!';
-      endGame.style.color = 'red';
-      audio.pause();
-      console.log(wayMap);
-      states.play = false;
-      states.end = true;
+      endManager.endFunc();
     }
   }
 }
