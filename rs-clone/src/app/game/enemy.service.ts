@@ -401,7 +401,7 @@ export class EnemyService {
         } else {
           el.line.position.z += 0.05 * speed * delta;
         }
-        if ((el.line.position.z) > -34 && el.initedNext === false && this.Queue[0] !== undefined) {
+      if ((el.line.position.z) > -34 && el.initedNext === false && this.Queue[0] !== undefined) {
           el.initedNext = true;
           this.inMove.push(this.Queue.shift());
         }
