@@ -225,16 +225,16 @@ export class GameComponent implements OnInit, OnDestroy {
         if (STATES.speed < 3 &&
           STATES.force === true &&
           STATES.forceDuration !== 0) {
-          STATES.speed += 1;
+          STATES.speed += 2;
           setTimeout(() => {
             STATES.forceDuration = 0;
             STATES.force = false;
             STATES.speed = 2.5;
-          }, 1000);
+          }, 1500);
           setTimeout(() => {
             STATES.forceDuration = 1;
             STATES.force = true;
-          }, 1000);
+          }, 2000);
         }
       }
     }
