@@ -5,4 +5,5 @@ export interface User {
     displayName: string;
     emailVerified: boolean;
     coins: number;
+    highScore: number;
 }

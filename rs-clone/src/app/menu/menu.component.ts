@@ -22,7 +22,10 @@ export class MenuComponent implements OnInit, OnDestroy {
     public userManager: UserService
   ) {
     this.userManager.getUser().subscribe(data => {
-      if (data) globalProps.coins = data.coins;
+      if (data) {
+        globalProps.coins = data.coins;
+        globalProps.highScore = data.highScore;
+      }
       this.user = data;
     });
   }

@@ -14,6 +14,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { AuthService } from './auth.service';
 import { MeComponent } from './menu/me/me.component';
+import { ShopComponent } from './menu/shop/shop.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { MeComponent } from './menu/me/me.component';
     SignUpComponent,
     SignInComponent,
     WelcomeComponent,
-    MeComponent
+    MeComponent,
+    ShopComponent
   ],
   imports: [
     BrowserModule,

@@ -10,6 +10,7 @@ import { InjectionToken } from '@angular/core';
 import { AnimationService } from './animation.service';
 import { AudioService } from './audio.service';
 import { UserService } from '../menu/user.service';
+import { globalProps } from '../menu/globalprops';
 
 export interface States {
   control: {
@@ -75,6 +76,7 @@ export class GameComponent implements OnInit, OnDestroy {
   AUDIO: AudioService | undefined = undefined;
   animate: any;
   REQANIMFRAME: any;
+  newScore: boolean = false;
   constructor(
     public userManager: UserService,
     private elementRef: ElementRef,
@@ -123,6 +125,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.AUDIO = audioManager;
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
+    const hScore = <HTMLDivElement>document.getElementById('newScore');
 
     // const stats = new STATS();
     // stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -251,7 +254,12 @@ export class GameComponent implements OnInit, OnDestroy {
 
         STATES.speed += 0.01 * (STATES.speed ** ( -1 * STATES.speed)) * deltak;
         STATES.score += 0.01 * STATES.speed * deltak;
-        domScore.textContent = `${Math.round(STATES.score)}`;
+        const stringScore = `${Math.round(STATES.score)}`;
+        domScore.textContent = (stringScore.length < 5 ? '0'.repeat(5-stringScore.length) : '') + stringScore;
+        if (!this.newScore && (globalProps.highScore < STATES.score)) {
+          this.newScore = true;
+          hScore.style.display = 'block';
+        }  
       }
 
 

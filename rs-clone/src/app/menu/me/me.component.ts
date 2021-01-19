@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { audioManager} from '../menu.component';
 import { AuthService } from '../../auth.service';
 
@@ -7,7 +7,7 @@ import { AuthService } from '../../auth.service';
   templateUrl: './me.component.html',
   styleUrls: ['./me.component.scss']
 })
-export class MeComponent implements OnInit {
+export class MeComponent implements OnInit, OnDestroy {
   menuLinks: HTMLDListElement[] | undefined;
   activeLink = 0;
   moveMenu = (e: any) => {

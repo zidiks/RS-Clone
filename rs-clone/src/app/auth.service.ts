@@ -65,9 +65,12 @@ export class AuthService {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     let userData: User;
     let coins = 0;
+    let highScore = 0;
     userRef.ref.get().then(doc => {
       if (doc.exists) {
-        coins = doc.data().coins;
+        const data = doc.data();
+        coins = data.coins;
+        highScore = data.highScore;
       }
     }).then(() => {
       userData = {
@@ -75,7 +78,8 @@ export class AuthService {
         email: user.email,
         displayName: user.displayName,
         emailVerified: true,
-        coins: coins
+        coins: coins,
+        highScore: highScore
       }
     }).then(() => {
       userRef.set(userData, {

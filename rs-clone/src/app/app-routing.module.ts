@@ -8,10 +8,12 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 
 import { AuthGuard } from "./auth.guard";
 import { MeComponent } from './menu/me/me.component';
+import { ShopComponent } from './menu/shop/shop.component';
 
 const itemRoutes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'me', component: MeComponent }
+  { path: 'me', component: MeComponent },
+  { path: 'shop', component: ShopComponent }
 ];
 
 const routes: Routes = [

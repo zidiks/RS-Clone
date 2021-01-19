@@ -28,4 +28,9 @@ export class UserService {
     const id:string = JSON.parse(localStorage.getItem('user') || '{ }').uid;
     this.usersCollection.doc<User>(id).update({ coins: value });
   }
+
+  setScore(value: number) {
+    const id:string = JSON.parse(localStorage.getItem('user') || '{ }').uid;
+    this.usersCollection.doc<User>(id).update({ highScore: value });
+  }
 }

@@ -29,6 +29,8 @@
         color: white;
         padding: 0.5rem;
         border-radius: 10px;
+        display: flex;
+        flex-direction: row;
         #coins {
             color: gold;
             display: flex;
@@ -43,6 +45,16 @@
                 background-position: center;
                 background-repeat: no-repeat;
                 background-size: 100% auto;
+                margin-right: 0.5rem;
+            }
+            .crown-icon {
+                background-image: url('../../assets/UI/crown.svg');
+                width: 1.7rem;
+                height: 1.7rem;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: 100% auto;
+                margin-left: 1.2rem;
                 margin-right: 0.5rem;
             }
         }

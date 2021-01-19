@@ -40,6 +40,7 @@ export class EndGameService {
     setTimeout(() => {
       this.states.animation = false;
     }, 710);
-    this.userManager.setCoins(globalProps.coins + this.states.coins)
+    this.userManager.setCoins(globalProps.coins + this.states.coins);
+    if (globalProps.highScore < this.states.score )  this.userManager.setScore(Math.round(this.states.score));
   }
 }
