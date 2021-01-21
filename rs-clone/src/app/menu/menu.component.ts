@@ -46,7 +46,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+domScene.appendChild(renderer.domElement);
 
 scene.fog = new THREE.Fog("lightblue", 15, 25);
 scene.background = new THREE.Color("lightblue");
