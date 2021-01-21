@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as THREE from 'three';
 import { Mesh } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { User } from '../user';
 import { AudioService } from './audio.service';
 import { globalProps } from './globalprops';
@@ -33,24 +35,145 @@ export class MenuComponent implements OnInit, OnDestroy {
       audioManager.playBg();
       Hi.style.display = 'none';
     }
-    const clock = new THREE.Clock();
     const domScene = <HTMLDivElement>document.getElementById('menu-background');
     const domHi = <HTMLDivElement>document.getElementById('hi-play');
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog('lightblue', 10, 30);
-    scene.background =  new THREE.Color('lightblue');
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-    const renderer = new THREE.WebGLRenderer({ antialias: false });
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.shadowMap.enabled = false;
-    domScene.appendChild( renderer.domElement );
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-    scene.add(ambientLight);
+    THREE.Cache.enabled = true;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-    const light = new THREE.DirectionalLight( 0xffffff, 0.8 );
-    light.position.set(2, 10, 15);
-    scene.add(light);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+scene.fog = new THREE.Fog("lightblue", 15, 25);
+scene.background = new THREE.Color("lightblue");
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+scene.add(ambientLight);
+
+{
+  const loader = new THREE.TextureLoader();
+  const texture = loader.load(
+    "assets/menu/images/CCMaY.jpg",
+    () => {
+      const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+      rt.fromEquirectangularTexture(renderer, texture);
+      scene.background = rt;
+    },
+  );
+}
+
+const light = new THREE.DirectionalLight(0xffffff, 0.7);
+light.position.set(8, 15, 7);
+light.castShadow = true;
+light.shadow.camera.top = 30;
+light.shadow.camera.right = 20;
+light.shadow.camera.bottom = -10;
+light.shadow.camera.left = -20;
+light.shadow.camera.near = 0.1;
+light.shadow.camera.far = 2000;
+light.shadow.mapSize.width = window.innerWidth * 2;
+light.shadow.mapSize.height = window.innerHeight * 2;
+scene.add(light);
+
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+cube.position.y -= 0;
+cube.receiveShadow = true;
+cube.castShadow = true;
+cube.visible = false;
+scene.add(cube);
+
+camera.position.y += 1;
+
+const clock = new THREE.Clock();
+let angle = 10;
+const angularSpeed = THREE.Math.degToRad(20);
+let delta = 10;
+const radius = 3;
+
+function envRender(objSrc, mtlSrc, ...position) {
+  const mtlLoader = new MTLLoader();
+  mtlLoader.load(mtlSrc, (materials) => {
+    materials.preload();
+
+    const objLoader = new OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.load(objSrc, (object) => {
+      object.position.set(...position);
+      object.traverse((child) => {
+        child.receiveShadow = true;
+        child.castShadow = true;
+      });
+      scene.add(object);
+    }, () => console.log("load..."), () => console.log("err!"));
+  });
+}
+
+envRender("assets/menu/models/sity_3.vox.obj", "assets/menu/models/sity_3.vox.mtl", 0, -1, 0);
+envRender("assets/menu/models/sity_1.vox.obj", "assets/menu/models/sity_1.vox.mtl", 19, -1, 0);
+envRender("assets/menu/models/train/train.vox.obj", "assets/menu/models/train/train.vox.mtl", 9, -1, -7);
+
+let mixer;
+
+const loader = new FBXLoader();
+loader.load("assets/menu/models/player-menu.fbx", (object) => {
+  mixer = new THREE.AnimationMixer(object);
+  const playerAction = mixer.clipAction(object.animations[0]);
+
+  object.traverse((child) => {
+    if (child instanceof Mesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
+
+  object.scale.set(0.9, 0.9, 0.9);
+  object.position.y -= 0.5;
+  object.position.z = 0;
+  object.rotation.y += 90;
+  playerAction.play();
+
+  scene.add(object);
+});
+
+function render() {
+  delta = clock.getDelta();
+  requestAnimationFrame(render);
+  camera.position.x = Math.cos(angle) * radius;
+  camera.position.z = Math.sin(angle) * radius;
+  angle += angularSpeed * delta;
+  if (mixer) mixer.update( delta );
+  camera.lookAt(cube.position);
+
+  renderer.render(scene, camera);
+}
+render();
+
+
+
+    // const clock = new THREE.Clock();
+    // const domScene = <HTMLDivElement>document.getElementById('menu-background');
+    // const domHi = <HTMLDivElement>document.getElementById('hi-play');
+    // const scene = new THREE.Scene();
+    // scene.fog = new THREE.Fog('lightblue', 10, 30);
+    // scene.background =  new THREE.Color('lightblue');
+    // const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+    // const renderer = new THREE.WebGLRenderer({ antialias: false });
+    // renderer.setSize( window.innerWidth, window.innerHeight );
+    // renderer.shadowMap.enabled = false;
+    // domScene.appendChild( renderer.domElement );
+
+    // const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+    // scene.add(ambientLight);
+
+    // const light = new THREE.DirectionalLight( 0xffffff, 0.8 );
+    // light.position.set(2, 10, 15);
+    // scene.add(light);
 
     // const floor = new THREE.Mesh(
     //   new THREE.PlaneGeometry(10, 100, 10, 10),
@@ -68,39 +191,39 @@ export class MenuComponent implements OnInit, OnDestroy {
     });
 
 
-    let mixer: any;
+    // let mixer: any;
 
-    const loader = new FBXLoader();
-    loader.load( 'assets/player-menu.fbx', ( object ) => {
-      mixer = new THREE.AnimationMixer( object );
-      let playerAction = mixer.clipAction( object.animations[ 0 ] );
+    // const loader = new FBXLoader();
+    // loader.load( 'assets/player-menu.fbx', ( object ) => {
+    //   mixer = new THREE.AnimationMixer( object );
+    //   let playerAction = mixer.clipAction( object.animations[ 0 ] );
 
-      object.traverse( function ( child ) {
-        if ( child instanceof Mesh ) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-        }
-      });
+    //   object.traverse( function ( child ) {
+    //     if ( child instanceof Mesh ) {
+    //       child.castShadow = true;
+    //       child.receiveShadow = true;
+    //     }
+    //   });
 
-      object.scale.set(1, 1, 1);
-      object.position.y -= 1.1;
-      object.position.z = -3;
-      playerAction.play();
+    //   object.scale.set(1, 1, 1);
+    //   object.position.y -= 1.1;
+    //   object.position.z = -3;
+    //   playerAction.play();
 
-      scene.add(object);
-    } );
+    //   scene.add(object);
+    // } );
 
-    
 
-    function animate() {  
-      const delta = clock.getDelta();
-      if (mixer) mixer.update( delta );
 
-      requestAnimationFrame( animate );
+    // function animate() {
+    //   const delta = clock.getDelta();
+    //   if (mixer) mixer.update( delta );
 
-      renderer.render( scene, camera );
-    }
-    animate();
+    //   requestAnimationFrame( animate );
+
+    //   renderer.render( scene, camera );
+    // }
+    // animate();
   }
 
   ngOnDestroy() {
