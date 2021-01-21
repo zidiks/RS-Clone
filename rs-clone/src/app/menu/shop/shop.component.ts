@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { audioManager} from '../menu.component';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { audioManager, MenuComponent} from '../menu.component';
 import { AuthService } from '../../auth.service';
+import { SkinService } from '../skin.service';
 
 @Component({
   selector: 'app-shop',
@@ -18,16 +19,22 @@ export class ShopComponent implements OnInit, OnDestroy {
       color: 'orange'
     },
     {
-      name: 'panda',
+      name: 'cosmo',
       price: 1500,
-      model: 'assets/player.fbx',
-      color: 'green'
+      model: 'assets/skins/cosmo.fbx',
+      color: 'violet'
     }
   ];
   currentSkin: number = 0;
   activeSkin: number = 0;
   boughtSkins: Array<Object> = [0];
   skinName: any;
+
+  constructor(
+    public authService: AuthService,
+    public skinManager: SkinService
+  ) { }
+
   moveMenu = (e: any) => {
     if (this.menuLinks) {
       if (e.key == 'ArrowDown' || e.key == 'ArrowUp') {
@@ -59,11 +66,9 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   renderCurrSkin() {
     this.skinName.style.color = this.shopSkins[this.currentSkin].color;
+    this.skinManager.showSkin(this.shopSkins[this.currentSkin].model);
+    
   }
-
-  constructor(
-    public authService: AuthService
-  ) { }
 
   ngOnInit(): void {
     this.skinName = <HTMLDivElement>document.getElementById('skin-name');
@@ -73,6 +78,7 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     document.removeEventListener('keydown', this.moveMenu, false);
+    this.skinManager.showSkin(this.shopSkins[this.activeSkin].model);
   }
 
 }

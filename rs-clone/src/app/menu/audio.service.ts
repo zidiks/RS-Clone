@@ -21,7 +21,7 @@ export class AudioService {
   }
 
   playBg() {
-     //this.audioList[0].play();
+     this.audioList[0].play();
   }
 
   pauseBg() {

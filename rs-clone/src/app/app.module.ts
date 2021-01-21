@@ -15,6 +15,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { AuthService } from './auth.service';
 import { MeComponent } from './menu/me/me.component';
 import { ShopComponent } from './menu/shop/shop.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ShopComponent } from './menu/shop/shop.component';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    RouterModule
   ],
   providers: [AuthService, AngularFirestore],
   bootstrap: [AppComponent]

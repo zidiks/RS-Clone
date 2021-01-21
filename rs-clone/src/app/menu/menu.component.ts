@@ -1,13 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import * as THREE from 'three';
 import { Mesh } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { User } from '../user';
 import { AudioService } from './audio.service';
 import { globalProps } from './globalprops';
+import { ShopComponent } from './shop/shop.component';
+import { SkinService } from './skin.service';
 import { UserService} from './user.service';
 
 export const audioManager = new AudioService();
+
+interface mix {
+  [key:string]: THREE.AnimationMixer
+}
 
 @Component({
   selector: 'app-menu',
@@ -18,8 +24,13 @@ export const audioManager = new AudioService();
 export class MenuComponent implements OnInit, OnDestroy {
   audioManager: AudioService = audioManager;
   public user: User | undefined;
+  mixer: mix | undefined = {};
+  skin: THREE.Group = new THREE.Group();
+  playerAction: any;
+  scene: any;
   constructor(
-    public userManager: UserService
+    public userManager: UserService,
+    public skinManager: SkinService
   ) {
     this.userManager.getUser().subscribe(data => {
       if (data) {
@@ -39,9 +50,9 @@ export class MenuComponent implements OnInit, OnDestroy {
     const clock = new THREE.Clock();
     const domScene = <HTMLDivElement>document.getElementById('menu-background');
     const domHi = <HTMLDivElement>document.getElementById('hi-play');
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog('lightblue', 10, 30);
-    scene.background =  new THREE.Color('lightblue');
+    this.scene = new THREE.Scene();
+    this.scene.fog = new THREE.Fog('lightblue', 10, 30);
+    this.scene.background =  new THREE.Color('lightblue');
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
     const renderer = new THREE.WebGLRenderer({ antialias: false });
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -49,11 +60,13 @@ export class MenuComponent implements OnInit, OnDestroy {
     domScene.appendChild( renderer.domElement );
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-    scene.add(ambientLight);
+    this.scene.add(ambientLight);
 
     const light = new THREE.DirectionalLight( 0xffffff, 0.8 );
     light.position.set(2, 10, 15);
-    scene.add(light);
+    this.scene.add(light);
+
+    this.scene.add(this.skin);
 
     // const floor = new THREE.Mesh(
     //   new THREE.PlaneGeometry(10, 100, 10, 10),
@@ -69,39 +82,21 @@ export class MenuComponent implements OnInit, OnDestroy {
       Hi.style.display = 'none';
       globalProps.hiScreen = true;
     });
-
-
-    let mixer: any;
-
-    const loader = new FBXLoader();
-    loader.load( 'assets/player-menu.fbx', ( object ) => {
-      mixer = new THREE.AnimationMixer( object );
-      let playerAction = mixer.clipAction( object.animations[ 0 ] );
-
-      object.traverse( function ( child ) {
-        if ( child instanceof Mesh ) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-        }
-      });
-
-      object.scale.set(1, 1, 1);
-      object.position.y -= 1.1;
-      object.position.z = -3;
-      playerAction.play();
-
-      scene.add(object);
-    } );
-
     
+    
+    this.skinManager.setSkinTarget(this.skin, this.mixer);
 
-    function animate() {  
+    this.skinManager.showSkin('/assets/player.fbx');
+
+    const animate = () => {  
       const delta = clock.getDelta();
-      if (mixer) mixer.update( delta );
+      if (this.mixer && this.mixer.target) {
+        this.mixer.target.update( delta );
+      }
 
       requestAnimationFrame( animate );
 
-      renderer.render( scene, camera );
+      renderer.render( this.scene, camera );
     }
     animate();
   }
