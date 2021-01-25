@@ -53,7 +53,7 @@ export class AudioService {
   }
 
   playBackground() {
-    //this.gameBachground.play();
+    // this.gameBachground.play();
   }
 
   pauseBackground() {

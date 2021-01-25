@@ -25,6 +25,8 @@ export interface States {
     xpos: number
   },
   speed: number,
+  force: boolean,
+  forceDuration: number,
   animation: boolean,
   play: boolean,
   end: boolean,
@@ -58,6 +60,8 @@ export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken'
         xpos: 0
       },
       speed: 2.5,
+      force: true,
+      forceDuration: 1,
       animation: true,
       play: false,
       end: false,
@@ -105,6 +109,8 @@ export class GameComponent implements OnInit, OnDestroy {
         xpos: 0
       },
       speed: 2.5,
+      force: true,
+      forceDuration: 1,
       animation: true,
       play: false,
       end: false,
@@ -136,7 +142,7 @@ export class GameComponent implements OnInit, OnDestroy {
     const clock = new THREE.Clock();
     this.SCENE = new THREE.Scene();
     const scene = this.SCENE;
-    scene.fog = new THREE.Fog('lightblue', 10, 30);
+    scene.fog = new THREE.Fog('lightblue', 15, 30);
     scene.background =  new THREE.Color('lightblue');
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 
@@ -224,6 +230,22 @@ export class GameComponent implements OnInit, OnDestroy {
       if(e.keyCode == 37){
         if (STATES.control.xpos > -1) {
           STATES.control.xpos -= 1;
+        }
+      }
+      if (e.keyCode === 16) {
+        if (STATES.speed < 3 &&
+          STATES.force === true &&
+          STATES.forceDuration !== 0) {
+          STATES.speed += 2;
+          setTimeout(() => {
+            STATES.forceDuration = 0;
+            STATES.force = false;
+            STATES.speed = 2.5;
+          }, 1500);
+          setTimeout(() => {
+            STATES.forceDuration = 1;
+            STATES.force = true;
+          }, 2000);
         }
       }
     }

@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { BoardLowEnemy } from './enemies/board-low';
 import { BoardHiEnemy } from './enemies/board-hi';
 import { Coin } from './enemies/coin';
+import { Hole } from './enemies/hole';
 import { TrainEnemy } from './enemies/train';
 
 interface EnemiesLine {
@@ -67,6 +68,16 @@ export class EnemyService {
   ) {
     this.makePrototypes(
       [
+        {
+        type: 'hole',
+        mtl: 'assets/enemy/1/hole.mtl',
+        obj: 'assets/enemy/1/hole.obj',
+        posY: -1.65,
+        shadow: true,
+        size: 1,
+        boxSize: [1.6, 1.5, 0.1],
+        hitBoxVisible: false
+        },
         {
         type: 'board',
         mtl: 'assets/enemy/1/lowboard-1.mtl',
@@ -309,7 +320,7 @@ export class EnemyService {
 
           break;
         case 'O':
-          let rand = this.getRandomInt(0, 4);
+          let rand = this.getRandomInt(0, 5);
           if (rand === 0) {
             const newEnemy = new BoardLowEnemy(this.enemiesProts);
             enemiesLine.enemies.push(newEnemy);
@@ -325,6 +336,11 @@ export class EnemyService {
             enemiesLine.enemies.push(newCoin);
             enemiesLine.line.add(newCoin.object);
             newCoin.object.position.x = (index - 1) * 2;
+          } else if (rand === 3) {
+            const newHole = new Hole(this.enemiesProts);
+            enemiesLine.enemies.push(newHole);
+            enemiesLine.line.add(newHole.object);
+            newHole.object.position.x = (index - 1) * 2;
           }
           break;
         default:
@@ -369,7 +385,7 @@ export class EnemyService {
         } else {
           el.line.position.z += 0.05 * speed * delta;
         }
-        if ((el.line.position.z) > -34 && el.initedNext === false && this.Queue[0] !== undefined) {
+      if ((el.line.position.z) > -34 && el.initedNext === false && this.Queue[0] !== undefined) {
           el.initedNext = true;
           this.inMove.push(this.Queue.shift());
         }
