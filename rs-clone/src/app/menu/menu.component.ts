@@ -1,14 +1,11 @@
-import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as THREE from 'three';
-import { Mesh } from 'three';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { User } from '../user';
 import { AudioService } from './audio.service';
 import { globalProps } from './globalprops';
-import { ShopComponent } from './shop/shop.component';
 import { SkinService } from './skin.service';
 import { UserService} from './user.service';
 
@@ -65,7 +62,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 THREE.Cache.enabled = true;
 const scene = this.scene;
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: false });
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setSize(window.innerWidth, window.innerHeight);
