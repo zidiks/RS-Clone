@@ -23,7 +23,7 @@ export class EnvironementService {
     public inMove: Array<any> = []
   ) {
     for(let i = 0; i < this.ENV_LENGHT; i++) {
-      let id = this.getRandomInt(1, 4);
+      let id = this.getRandomInt(1, 5);
       this.GenerateEnv(
         [
           {
@@ -64,7 +64,7 @@ export class EnvironementService {
 
     const floor = new THREE.Mesh(
       new THREE.PlaneGeometry(10, 100, 10, 10),
-      new THREE.MeshPhongMaterial( { color: 0xFFE89F } )
+      new THREE.MeshLambertMaterial( { color: 0xFFE89F } )
     );
     floor.rotation.x = -(Math.PI / 2);
     floor.position.y -= 2;
@@ -86,6 +86,7 @@ export class EnvironementService {
     let inMov = this.inMove;
     // url = "assets/untitled.mtl";
     let group = new THREE.Group;
+    console.log(grouppObjs)
     grouppObjs.forEach(element => {
       mtlLoader.load( element.mtl, function( materials ) {
 
@@ -93,8 +94,7 @@ export class EnvironementService {
 
         const objLoader = new OBJLoader();
         objLoader.setMaterials( materials );
-        objLoader.load( element.obj, function ( object ) {
-
+        objLoader.load(element.obj, function (object) {
             object.position.set(element.pos[0], element.pos[1], element.pos[2]);
             object.traverse(function(child) {
               if (child instanceof THREE.Mesh) {
@@ -124,14 +124,14 @@ export class EnvironementService {
     );
   }
 
-  MoveEnv(speed: number) {
+  MoveEnv(speed: number, delta: any) {
     this.inMove.forEach(enemy => {
       if (enemy.obj.position.z >= 80) {
         enemy.obj.position.z = 0;
         enemy.initedNext = false;
         this.Queue.push(this.inMove.shift());
       } else {
-        enemy.obj.position.z += 0.05 * speed;
+        enemy.obj.position.z += 0.05 * speed * delta;
       }
       if ((enemy.obj.position.z) >= 18 && enemy.initedNext === false && this.Queue[0] !== undefined) {
         //this.inMove.push(this.Queue.shift());

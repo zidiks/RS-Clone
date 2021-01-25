@@ -1,0 +1,17 @@
+<div class="shop">
+    <div id="shop-links" class="shop-links">
+        <a routerLink="../" class="shop-link shop-active-link">Back</a>
+        <div class="shop-content">
+            <span id="skin-name"> {{ shopSkins[currentSkin].name }} </span>
+            <div class="skin-slide">
+                <span class="slide-btn shop-link" (click)="prevSkin()" > &#8249; </span>
+                <span class="slide-price"> <div *ngIf="shopSkins[currentSkin].price > 0" class="coin-icon"></div> {{ shopSkins[currentSkin].price > 0 ? shopSkins[currentSkin].price : 'FREE' }} </span>
+                <span class="slide-btn shop-link" (click)="nextSkin()" > &#8250; </span>
+            </div>
+            <div class="skin-action">
+                <span *ngIf="currentSkin !== globalProps.activeSkin && globalProps.boughtSkins.includes(currentSkin)" class="action-btn shop-link" (click)="userManager.setActive(currentSkin)"> use </span>
+                <span *ngIf="!globalProps.boughtSkins.includes(currentSkin)" class="action-btn shop-link" (click)="userManager.setBuy(currentSkin, shopSkins[currentSkin].price)"> buy </span>
+            </div>
+        </div>
+    </div>
+</div>
