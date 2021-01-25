@@ -92,7 +92,7 @@ camera.position.y += 1;
 
 const clock = new THREE.Clock();
 let angle = 10;
-const angularSpeed = THREE.Math.degToRad(20);
+const angularSpeed = THREE.MathUtils.degToRad(20);
 let delta = 10;
 const radius = 3;
 
