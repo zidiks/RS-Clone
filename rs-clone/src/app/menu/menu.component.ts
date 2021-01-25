@@ -29,6 +29,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   playerAction: any;
   scene = new THREE.Scene();
   RESIZER: any;
+  REQANIMFRAME: any;
   constructor(
     public router: Router,
     public userManager: UserService,
@@ -183,7 +184,7 @@ const render = () => {
 
   camera.lookAt(cube.position);
 
-  requestAnimationFrame(render);
+  this.REQANIMFRAME = requestAnimationFrame(render);
 
   renderer.render(scene, camera);
 }
@@ -199,6 +200,7 @@ render();
   }
 
   ngOnDestroy() {
+    cancelAnimationFrame(this.REQANIMFRAME);
     audioManager.pauseAll();
     window.removeEventListener( 'resize', this.RESIZER, false );
   }

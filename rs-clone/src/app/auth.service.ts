@@ -64,7 +64,7 @@ export class AuthService {
   SetUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     let userData: User;
-    let coins = 99999;
+    let coins = 1500;
     let highScore = 0;
     let boughtSkins = [0];
     let activeSkin = 0;

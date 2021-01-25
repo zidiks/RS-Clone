@@ -11,7 +11,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
-
+  REQANIMFRAME: any;
   constructor() { }
 
   ngOnInit(): void {
@@ -60,12 +60,16 @@ export class WelcomeComponent implements OnInit {
     const animate = () => {  
       const delta = clock.getDelta();
 
-      requestAnimationFrame( animate );
+      this.REQANIMFRAME = requestAnimationFrame( animate );
       if (model) model.rotation.y += 0.005;
       controls.update();
       renderer.render( scene, camera );
     }
     animate();
+  }
+
+  ngOnDestroy() {
+    cancelAnimationFrame(this.REQANIMFRAME);
   }
 
 }
