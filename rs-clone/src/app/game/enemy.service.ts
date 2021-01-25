@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import * as THREE from 'three';
+import { log } from 'three';
 
 interface EnemiesLine {
   line: THREE.Group,
@@ -35,6 +36,7 @@ interface LoadedObjEnemy {
 export class EnemyService {
   wayMap: Array<Array<Boolean>> = [];
   lastPos: number | undefined;
+  money: THREE.Object3D | undefined = undefined;
   enemiesProts:  enemiesProts = {
   }
 
@@ -114,6 +116,31 @@ export class EnemyService {
     });
     promise.then((e) => {
       this.generateStartWay(20);
+      //
+      const mtlLoader = new MTLLoader();
+      mtlLoader.load( 'assets/enemy/2-money/money.vox.mtl', ( materials ) => {
+
+        materials.preload();
+        const objLoader = new OBJLoader();
+        objLoader.setMaterials( materials );
+        objLoader.load( 'assets/enemy/2-money/money.vox.obj',  ( object ) => {
+
+            //object.position.set(element.pos[0], element.pos[1], element.pos[2]);
+            object.traverse((child) => {
+              if (child instanceof THREE.Mesh) {
+                  /*if (el.shadow)*/ child.castShadow = true;
+                  child.receiveShadow = true;
+              }
+              object.position.y = -2;
+              object.position.z = 0;
+              this.money = object;
+              this.Scene.add(object);
+            });
+
+        }, () => console.log('load...'), () => console.log('err')
+        );
+      });
+      //
     })
     .catch(e => {
       throw new Error(e);
@@ -223,6 +250,7 @@ export class EnemyService {
   }
 
   moveEnemies(speed:number, playerCube:any, endGame: any, states: any) {
+    if (this.money) this.money.rotation.y += Math.PI / 24;
     for (let ind = this.inMove.length-1; ind >= 0; ind--) {
       let el = this.inMove[ind];
       el.hitBoxes.forEach((element: any) => {
