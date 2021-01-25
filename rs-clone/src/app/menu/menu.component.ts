@@ -96,7 +96,7 @@ const angularSpeed = THREE.Math.degToRad(20);
 let delta = 10;
 const radius = 3;
 
-function envRender(objSrc, mtlSrc, ...position) {
+function envRender(objSrc: string, mtlSrc: string, ...position:[]) {
   const mtlLoader = new MTLLoader();
   mtlLoader.load(mtlSrc, (materials) => {
     materials.preload();
@@ -118,7 +118,7 @@ envRender("assets/menu/models/sity_3.vox.obj", "assets/menu/models/sity_3.vox.mt
 envRender("assets/menu/models/sity_1.vox.obj", "assets/menu/models/sity_1.vox.mtl", 19, -1, 0);
 envRender("assets/menu/models/train/train.vox.obj", "assets/menu/models/train/train.vox.mtl", 9, -1, -7);
 
-let mixer;
+let mixer: any;
 
 const loader = new FBXLoader();
 loader.load("assets/menu/models/player-menu.fbx", (object) => {
