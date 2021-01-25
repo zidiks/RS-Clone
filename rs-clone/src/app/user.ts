@@ -6,4 +6,6 @@ export interface User {
     emailVerified: boolean;
     coins: number;
     highScore: number;
+    boughtSkins: any;
+    activeSkin: number;
 }

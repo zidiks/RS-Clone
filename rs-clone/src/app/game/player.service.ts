@@ -4,6 +4,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { Camera, Mesh } from 'three';
 import { STATES_TOKEN } from './game.component';
 import { state } from '@angular/animations';
+import { globalProps } from '../menu/globalprops';
 
 interface States {
   control: {
@@ -35,7 +36,7 @@ export class PlayerService {
   playerActions: THREE.AnimationAction[] = new Array();
   cube: any = new THREE.Mesh(
     new THREE.BoxGeometry(0.4, 1.6 , 0.2),
-    new THREE.MeshPhongMaterial( { color: 0x00ff00 } )
+    new THREE.MeshBasicMaterial( { color: 0x00ff00 } )
   );
   camera: THREE.PerspectiveCamera;
   states: States;
@@ -53,22 +54,22 @@ export class PlayerService {
     this.player.position.y += 0.1;
 
     const loader = new FBXLoader();
-    loader.load( 'assets/player.fbx', ( object ) => {
+    loader.load( `assets/skins/${globalProps.activeSkin}/run.fbx`, ( object ) => {
       this.mixer = new THREE.AnimationMixer( object );
       let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
       this.playerActions.push(playerAction);
 
-      loader.load( 'assets/player-roll.fbx', (object) => {
+      loader.load( 'assets/skins/0/roll.fbx', (object) => {
         let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
         playerAction.setDuration(STATES_TOKEN.control.squatLength / 38);
         this.playerActions.push(playerAction);
 
-        loader.load( 'assets/player-fall.fbx', (object) => {
+        loader.load( 'assets/skins/0/fall.fbx', (object) => {
           let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
           playerAction.setLoop( THREE.LoopOnce );
           this.playerActions.push(playerAction);
           
-          loader.load( 'assets/player-idle.fbx', (object) => {
+          loader.load( 'assets/skins/0/idle.fbx', (object) => {
             let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
             this.playerActions.push(playerAction);
             this.playerActions[3].play();
@@ -83,7 +84,7 @@ export class PlayerService {
         }
       });
 
-      object.scale.set(1, 1, 1);
+      object.scale.set(0.25, 0.25, 0.25);
       object.position.y -= 2;
       object.rotation.y += Math.PI;
 

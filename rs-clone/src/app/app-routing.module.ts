@@ -9,6 +9,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { AuthGuard } from "./auth.guard";
 import { MeComponent } from './menu/me/me.component';
 import { ShopComponent } from './menu/shop/shop.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 const itemRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: '', component: MenuComponent, children: itemRoutes, canActivate: [AuthGuard] },
   { path: 'login', component: SignInComponent },
   { path: 'register', component: SignUpComponent },
+  { path: 'welcome', component: WelcomeComponent },
 ];
 
 @NgModule({

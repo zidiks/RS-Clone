@@ -3,6 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { Observable } from 'rxjs';
 import { User } from '../user';
 import { map, take } from 'rxjs/operators';
+import { globalProps } from './globalprops';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +33,23 @@ export class UserService {
   setScore(value: number) {
     const id:string = JSON.parse(localStorage.getItem('user') || '{ }').uid;
     this.usersCollection.doc<User>(id).update({ highScore: value });
+  }
+
+  setBuy(value: number, price: number) {
+    if (globalProps.coins >= price) {
+      const id:string = JSON.parse(localStorage.getItem('user') || '{ }').uid;
+      globalProps.boughtSkins.push(value);
+      console.log(globalProps.boughtSkins);
+      this.usersCollection.doc<User>(id).update({ coins: globalProps.coins - price });
+      this.usersCollection.doc<User>(id).update({ boughtSkins: globalProps.boughtSkins });
+      alert('Еу! Новый скин :)');
+    } else {
+      alert('Не хватает денег :(');
+    }
+  }
+
+  setActive(value: number) {
+    const id:string = JSON.parse(localStorage.getItem('user') || '{ }').uid;
+    this.usersCollection.doc<User>(id).update({ activeSkin: value });
   }
 }

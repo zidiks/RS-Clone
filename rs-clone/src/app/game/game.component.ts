@@ -77,6 +77,8 @@ export class GameComponent implements OnInit, OnDestroy {
   animate: any;
   REQANIMFRAME: any;
   newScore: boolean = false;
+  RESIZER: any;
+  keyRightHandler: any;
   constructor(
     public userManager: UserService,
     private elementRef: ElementRef,
@@ -155,9 +157,17 @@ export class GameComponent implements OnInit, OnDestroy {
     this.RENDERER = new THREE.WebGLRenderer({ antialias: false });
     const renderer = this.RENDERER;
     renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.enabled = false;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     //renderer.setPixelRatio( 0.5 );
+
+    this.RESIZER = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+    }
+
+    window.addEventListener( 'resize', this.RESIZER, false );
 
     domScene.appendChild( renderer.domElement );
     domScene.appendChild( endGame );
@@ -188,9 +198,7 @@ export class GameComponent implements OnInit, OnDestroy {
     cameraTarget.y -= 0;
     camera.lookAt(cameraTarget);
 
-    document.addEventListener("keydown", keyRightHandler, false);
-
-    function keyRightHandler(e: { keyCode: number; }){
+    this.keyRightHandler = (e: { keyCode: number; }) => {
       if(e.keyCode == 38){
         if (STATES.control.jumpPressed === false) audioManager.jumpPlay();
         STATES.control.jumpPressed = true;
@@ -220,6 +228,8 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     }
 
+    document.addEventListener("keydown", this.keyRightHandler, false);
+
     // function getRandomInt(min: number, max: number) {
     //   min = Math.ceil(min);
     //   max = Math.floor(max);
@@ -229,6 +239,9 @@ export class GameComponent implements OnInit, OnDestroy {
     this.animate = () => {
       const delta = clock.getDelta();
       const deltak = delta * 50;
+
+      this.REQANIMFRAME = requestAnimationFrame( this.animate );
+
       // stats.begin();
       if (STATES.startAnim) {
         if (camera.position.x > 0 || camera.position.z < 6) {
@@ -267,9 +280,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
       // stats.end();
 
-
-      this.REQANIMFRAME =  requestAnimationFrame( this.animate );
-
       renderer.render( scene, camera );
     }
     this.animate();
@@ -277,6 +287,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     cancelAnimationFrame(this.REQANIMFRAME);
+    window.removeEventListener( 'resize', this.RESIZER, false );
+    document.removeEventListener("keydown", this.keyRightHandler, false);
     if (this.AUDIO) this.AUDIO.pauseBackground();
     this.RENDERER = null;
     this.SCENE = null;

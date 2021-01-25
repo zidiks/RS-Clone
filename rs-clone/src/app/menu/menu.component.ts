@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import * as THREE from 'three';
 import { Mesh } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
@@ -28,20 +29,29 @@ export class MenuComponent implements OnInit, OnDestroy {
   skin: THREE.Group = new THREE.Group();
   playerAction: any;
   scene: any;
+  RESIZER: any;
   constructor(
+    public router: Router,
     public userManager: UserService,
     public skinManager: SkinService
   ) {
+    this.skinManager.setSkinTarget(this.skin, this.mixer);
     this.userManager.getUser().subscribe(data => {
       if (data) {
         globalProps.coins = data.coins;
         globalProps.highScore = data.highScore;
+        globalProps.boughtSkins = data.boughtSkins;
+          if (globalProps.activeSkin !== data.activeSkin) {
+            globalProps.activeSkin = data.activeSkin;
+            this.skinManager.showSkin(`/assets/skins/${globalProps.activeSkin}/menu.fbx`);
+          }
       }
       this.user = data;
     });
   }
 
   ngOnInit(): void {
+    this.router.navigate(['']);
     const Hi = <HTMLDivElement>document.getElementById('hi');
     if (globalProps.hiScreen) {
       audioManager.playBg();
@@ -59,11 +69,20 @@ export class MenuComponent implements OnInit, OnDestroy {
     renderer.shadowMap.enabled = false;
     domScene.appendChild( renderer.domElement );
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+    this.RESIZER = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      console.log('resizew!');
+    }
+
+    window.addEventListener( 'resize', this.RESIZER, false );
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     this.scene.add(ambientLight);
 
-    const light = new THREE.DirectionalLight( 0xffffff, 0.8 );
-    light.position.set(2, 10, 15);
+    const light = new THREE.DirectionalLight( 0xffffff, 0.6 );
+    light.position.set(3, 1, 15);
     this.scene.add(light);
 
     this.scene.add(this.skin);
@@ -82,11 +101,8 @@ export class MenuComponent implements OnInit, OnDestroy {
       Hi.style.display = 'none';
       globalProps.hiScreen = true;
     });
-    
-    
-    this.skinManager.setSkinTarget(this.skin, this.mixer);
 
-    this.skinManager.showSkin('/assets/player.fbx');
+    this.skinManager.showSkin(`/assets/skins/${globalProps.activeSkin}/menu.fbx`);
 
     const animate = () => {  
       const delta = clock.getDelta();
@@ -103,6 +119,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     audioManager.pauseAll();
+    window.removeEventListener( 'resize', this.RESIZER, false );
   }
 
 }

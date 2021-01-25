@@ -121,9 +121,9 @@ export class EnemyService {
     let promise = new Promise((resolve, reject) => {
       arr.forEach((el, index) => {
           const  enemy = new THREE.Group();
-          const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> = new THREE.Mesh(
+          const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial> = new THREE.Mesh(
             new THREE.BoxGeometry(1.6, 1.6, 0.1),
-            new THREE.MeshPhongMaterial( { color: 0xbd914f } )
+            new THREE.MeshBasicMaterial( { color: 0xbd914f } )
           );
           enemyBox.position.y = -1.2;
           enemyBox.position.z += 0.05;
@@ -161,7 +161,6 @@ export class EnemyService {
     });
     promise.then((e) => {
       this.generateStartWay(10);
-      console.log(this.enemiesProts);
     })
     .catch(e => {
       throw new Error(e);
@@ -331,37 +330,6 @@ export class EnemyService {
         default:
           break;
       }
-
-
-      // if (item === 'TB' || item === 'TE') {
-
-      // } else if (item === 'TH' ) {
-      //   const newEnemy = new TrainEnemy(this.enemiesProts);
-      //   if (this.trainMap[index].allLength > this.trainMap[index].lenght) newEnemy.object.position.z += 6;
-      //   enemiesLine.enemies.push(newEnemy);
-      //   enemiesLine.line.add(newEnemy.object);
-      //   enemiesLine.line.position.x = (index - 1) * 2;
-      // } else if (item === 'B') {
-      //   // false board
-      //   // const newCoin = new Coin(this.enemiesProts);
-      //   // enemiesLine.enemies.push(newCoin);
-      //   // enemiesLine.line.add(newCoin.object);
-      //   // enemiesLine.line.position.x = (index - 1) * 2;
-
-      // } else if (item === 'O') {
-      //   let rand = this.getRandomInt(0, 2);
-      //   if (rand === 0) {
-      //     const newEnemy = new BoardLowEnemy(this.enemiesProts);
-      //     enemiesLine.enemies.push(newEnemy);
-      //     enemiesLine.line.add(newEnemy.object);
-      //     enemiesLine.line.position.x = (index - 1) * 2;
-      //   } else if (rand === 1) {
-      //     const newEnemy = new BoardHiEnemy(this.enemiesProts);
-      //     enemiesLine.enemies.push(newEnemy);
-      //     enemiesLine.line.add(newEnemy.object);
-      //     enemiesLine.line.position.x = (index - 1) * 2;
-      //   }
-      // }
     });
     this.lastWayLine = wayLine;
     enemiesLine.line.position.z = -40;
@@ -388,7 +356,7 @@ export class EnemyService {
       let el = this.inMove[ind];
       el.enemies.forEach((element: any) => {
         if (element.object.name === 'Coin') element.object.rotation.y += 0.04;
-        if (el.line.position.z > -6) element.checkCollisions(playerCube, endGame, STATES, audioManager);
+        if (el.line.position.z > -5 && el.line.position.z < 15) element.checkCollisions(playerCube, endGame, STATES, audioManager);
         });
         if (el.line.position.z > 25) {
           let obj = this.inMove[ind];

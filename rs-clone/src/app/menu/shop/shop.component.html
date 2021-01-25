@@ -9,8 +9,8 @@
                 <span class="slide-btn shop-link" (click)="nextSkin()" > &#8250; </span>
             </div>
             <div class="skin-action">
-                <span *ngIf="currentSkin !== activeSkin && boughtSkins.includes(currentSkin)" class="action-btn shop-link"> use </span>
-                <span *ngIf="!boughtSkins.includes(currentSkin)" class="action-btn shop-link"> buy </span>
+                <span *ngIf="currentSkin !== globalProps.activeSkin && globalProps.boughtSkins.includes(currentSkin)" class="action-btn shop-link" (click)="userManager.setActive(currentSkin)"> use </span>
+                <span *ngIf="!globalProps.boughtSkins.includes(currentSkin)" class="action-btn shop-link" (click)="userManager.setBuy(currentSkin, shopSkins[currentSkin].price)"> buy </span>
             </div>
         </div>
     </div>

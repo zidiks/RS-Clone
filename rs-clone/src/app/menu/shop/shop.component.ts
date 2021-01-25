@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { audioManager, MenuComponent} from '../menu.component';
 import { AuthService } from '../../auth.service';
 import { SkinService } from '../skin.service';
+import { globalProps } from '../globalprops';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-shop',
@@ -13,26 +15,34 @@ export class ShopComponent implements OnInit, OnDestroy {
   activeLink = 0;
   shopSkins = [
     {
-      name: 'woodcutter',
+      name: 'bobby',
       price: 0,
-      model: 'assets/player.fbx',
-      color: 'orange'
+      model: 'assets/skins/0/menu.fbx',
+      color: 'red'
     },
     {
-      name: 'cosmo',
+      name: 'batman',
       price: 1500,
-      model: 'assets/skins/cosmo.fbx',
-      color: 'violet'
+      model: 'assets/skins/1/menu.fbx',
+      color: 'black'
+    },
+    {
+      name: 'skeleton',
+      price: 2500,
+      model: 'assets/skins/2/menu.fbx',
+      color: 'white'
     }
   ];
   currentSkin: number = 0;
-  activeSkin: number = 0;
-  boughtSkins: Array<Object> = [0];
+  globalProps = globalProps;
+  activeSkin: number = globalProps.activeSkin;
+  boughtSkins: Array<Object> = globalProps.boughtSkins;
   skinName: any;
 
   constructor(
     public authService: AuthService,
-    public skinManager: SkinService
+    public skinManager: SkinService,
+    public userManager: UserService
   ) { }
 
   moveMenu = (e: any) => {
@@ -67,18 +77,19 @@ export class ShopComponent implements OnInit, OnDestroy {
   renderCurrSkin() {
     this.skinName.style.color = this.shopSkins[this.currentSkin].color;
     this.skinManager.showSkin(this.shopSkins[this.currentSkin].model);
-    
   }
 
   ngOnInit(): void {
+    this.currentSkin = globalProps.activeSkin;
     this.skinName = <HTMLDivElement>document.getElementById('skin-name');
     this.menuLinks = Array.prototype.slice.call(<HTMLDivElement><unknown>document.getElementsByClassName('shop-link'));
     document.addEventListener('keydown', this.moveMenu, false);
+    this.renderCurrSkin();
   }
 
   ngOnDestroy() {
     document.removeEventListener('keydown', this.moveMenu, false);
-    this.skinManager.showSkin(this.shopSkins[this.activeSkin].model);
+    if (this.currentSkin !== globalProps.activeSkin) this.skinManager.showSkin(this.shopSkins[globalProps.activeSkin].model);
   }
 
 }

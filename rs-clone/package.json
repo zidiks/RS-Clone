@@ -27,6 +27,7 @@
     "stats.js": "^0.17.0",
     "three": "^0.124.0",
     "three-fps-counter": "^0.2.0",
+    "three-orbitcontrols": "^2.110.3",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },

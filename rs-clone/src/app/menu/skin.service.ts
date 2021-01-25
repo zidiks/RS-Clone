@@ -24,14 +24,11 @@ export class SkinService {
 
   showSkin(path: string) {
    if (this.skinTarget) {
-    this.skinTarget.clear();
     const loader = new FBXLoader();
     loader.load( path, ( object ) => {
       this.mixerTarget.target = new THREE.AnimationMixer( object );
-      loader.load( 'assets/player-menu.fbx', (object) => {
-        this.playerAction = this.mixerTarget.target.clipAction( object.animations[ 0 ] );
-        this.playerAction.play();
-      });
+      this.playerAction = this.mixerTarget.target.clipAction( object.animations[ 0 ] );
+      this.playerAction.play();
 
       object.traverse( function ( child ) {
         if ( child instanceof Mesh ) {
@@ -40,10 +37,10 @@ export class SkinService {
         }
       });
 
-      object.scale.set(1, 1, 1);
+      object.scale.set(0.25, 0.25, 0.25);
       object.position.y -= 1.1;
       object.position.z = -3;
-
+      this.skinTarget.clear();
       this.skinTarget.add(object);
     } );
    }

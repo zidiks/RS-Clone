@@ -64,7 +64,7 @@ export class EnvironementService {
 
     const floor = new THREE.Mesh(
       new THREE.PlaneGeometry(10, 100, 10, 10),
-      new THREE.MeshPhongMaterial( { color: 0xFFE89F } )
+      new THREE.MeshLambertMaterial( { color: 0xFFE89F } )
     );
     floor.rotation.x = -(Math.PI / 2);
     floor.position.y -= 2;
