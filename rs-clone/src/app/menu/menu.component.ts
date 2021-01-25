@@ -96,7 +96,7 @@ const angularSpeed = THREE.MathUtils.degToRad(20);
 let delta = 10;
 const radius = 3;
 
-function envRender(objSrc: string, mtlSrc: string, ...position:[]) {
+function envRender(objSrc: string, mtlSrc: string, ...position: number[]) {
   const mtlLoader = new MTLLoader();
   mtlLoader.load(mtlSrc, (materials) => {
     materials.preload();
@@ -104,7 +104,7 @@ function envRender(objSrc: string, mtlSrc: string, ...position:[]) {
     const objLoader = new OBJLoader();
     objLoader.setMaterials(materials);
     objLoader.load(objSrc, (object) => {
-      object.position.set(...position);
+      object.position.set(position[0], position[1], position[2]);
       object.traverse((child) => {
         child.receiveShadow = true;
         child.castShadow = true;
