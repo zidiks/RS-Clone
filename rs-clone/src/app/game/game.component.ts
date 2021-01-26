@@ -96,6 +96,7 @@ export class GameComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit(): void {
+    THREE.Cache.enabled = true;
     this.STATES = {
       control: {
         jumpPressed: false,
