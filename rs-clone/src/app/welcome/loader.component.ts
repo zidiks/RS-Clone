@@ -103,8 +103,6 @@ export class LoaderComponent implements OnInit {
       renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
-      // const container = document.createElement("div");
-      // container.classList.add("container");
       container.appendChild(renderer.domElement);
 
       window.addEventListener("resize", onWindowResize, false);
@@ -133,6 +131,9 @@ export class LoaderComponent implements OnInit {
       setTimeout(() => {
         update("assets/loader/loading.svg", -10, 10, 100);
       }, 8000);
+      setTimeout(() => {
+        document.location.href = '/';
+      }, 20000);
     }
 
     function onWindowResize() {
