@@ -12,6 +12,7 @@ import { environment } from '../environments/environment';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { LoaderComponent } from './welcome/loader.component';
 import { AuthService } from './auth.service';
 import { MeComponent } from './menu/me/me.component';
 import { ShopComponent } from './menu/shop/shop.component';
@@ -26,6 +27,7 @@ import { RouterModule } from '@angular/router';
     SignUpComponent,
     SignInComponent,
     WelcomeComponent,
+    LoaderComponent,
     MeComponent,
     ShopComponent
   ],

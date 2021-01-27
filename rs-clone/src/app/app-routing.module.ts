@@ -10,6 +10,7 @@ import { AuthGuard } from "./auth.guard";
 import { MeComponent } from './menu/me/me.component';
 import { ShopComponent } from './menu/shop/shop.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { LoaderComponent } from './welcome/loader.component';
 
 const itemRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'login', component: SignInComponent },
   { path: 'register', component: SignUpComponent },
   { path: 'welcome', component: WelcomeComponent },
+  { path: 'loader', component: LoaderComponent },
 ];
 
 @NgModule({
