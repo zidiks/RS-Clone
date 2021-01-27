@@ -15,6 +15,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   domOptions: domOptions = {};
   menuLinks: HTMLDListElement[] | undefined;
   activeLink = 0;
+  GP = globalProps;
   moveMenu = (e: any) => {
     if (this.menuLinks) {
       if (e.key == 'ArrowDown' || e.key == 'ArrowUp') {
@@ -27,15 +28,41 @@ export class OptionsComponent implements OnInit, OnDestroy {
       }
       this.menuLinks[this.activeLink].classList.add('options-active-link');
       audioManager.playLink();
+      } else if ((this.activeLink === 4 || this.activeLink === 1) && (e.key == 'ArrowRight' || e.key == 'ArrowLeft')) {
+        if (this.activeLink === 4) {
+          if (e.key == 'ArrowRight') {
+            if (globalProps.options.quality + 0.1 > 1) globalProps.options.quality = 0.1; else globalProps.options.quality = ((globalProps.options.quality * 100) + 10) / 100;
+            saveOptions();
+          }
+          if (e.key == 'ArrowLeft') {
+            if (globalProps.options.quality - 0.1 < 0.1) globalProps.options.quality = 1; else globalProps.options.quality = ((globalProps.options.quality * 100) - 10) / 100;
+            saveOptions();
+          }
+        }
+        if (this.activeLink === 1) {
+          if (e.key == 'ArrowRight') {
+            if (globalProps.options.volume + 0.1 > 1) globalProps.options.volume = 0; else globalProps.options.volume = ((globalProps.options.volume * 100) + 10) / 100;
+            saveOptions();
+            audioManager.setVolume();
+          }
+          if (e.key == 'ArrowLeft') {
+            if (globalProps.options.volume - 0.1 < 0) globalProps.options.volume = 1; else globalProps.options.volume = ((globalProps.options.volume * 100) - 10) / 100;
+            saveOptions();
+            audioManager.setVolume();
+          }
+        }
+      } else if (this.activeLink !== 5 && (e.key == 'ArrowRight' || e.key == 'ArrowLeft')) {
+        this.menuLinks[this.activeLink].click();
       } else {
         if(e.key == 'Enter'){
           this.menuLinks[this.activeLink].click();
         }
       }
     }
-  }
+  };
 
-  constructor() {
+  constructor(
+  ) {
   }
 
   changeShadows() {

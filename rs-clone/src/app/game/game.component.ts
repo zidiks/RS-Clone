@@ -11,6 +11,7 @@ import { AnimationService } from './animation.service';
 import { AudioService } from './audio.service';
 import { UserService } from '../menu/user.service';
 import { globalProps } from '../menu/globalprops';
+import { audioManager } from '../menu/menu.component';
 
 export interface States {
   control: {
@@ -119,26 +120,15 @@ export class GameComponent implements OnInit, OnDestroy {
       score: 0,
       coins: 0
     };
-    const STATES = this.STATES;
-    function getRandomInt(min: number, max: number) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
-    }
 
-    // const audioObj = new Audio(`assets/audio/audio_${getRandomInt(1, 3)}.mp3`);
-    // audioObj.onended = function() {
-    //   audioObj.play();
-    // };
+    const STATES = this.STATES;
     const audioManager = new AudioService();
     this.AUDIO = audioManager;
+    this.AUDIO.setVolume();
+
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
     const hScore = <HTMLDivElement>document.getElementById('newScore');
-
-    // const stats = new STATS();
-    // stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    // domScene.appendChild(stats.dom);
 
     const clock = new THREE.Clock();
     this.SCENE = new THREE.Scene();
@@ -158,7 +148,6 @@ export class GameComponent implements OnInit, OnDestroy {
     endGame.style.color = 'green';
     endGame.textContent = 'PRESS SPACE TO START!';
 
-
     const endManager = new EndGameService(endGame, STATES, audioManager, animationManager, this.userManager);
 
     this.RENDERER = new THREE.WebGLRenderer({ antialias: globalProps.options.antialiasing });
@@ -166,7 +155,7 @@ export class GameComponent implements OnInit, OnDestroy {
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = globalProps.options.shadows;
     renderer.shadowMap.type = THREE.PCFShadowMap;
-    //renderer.setPixelRatio( 0.5 );
+    renderer.setPixelRatio( globalProps.options.quality );
 
     this.RESIZER = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -312,7 +301,7 @@ export class GameComponent implements OnInit, OnDestroy {
     cancelAnimationFrame(this.REQANIMFRAME);
     window.removeEventListener( 'resize', this.RESIZER, false );
     document.removeEventListener("keydown", this.keyRightHandler, false);
-    if (this.AUDIO) this.AUDIO.pauseBackground();
+    if (this.AUDIO) this.AUDIO.pauseAll();
     this.RENDERER = null;
     this.SCENE = null;
     this.elementRef.nativeElement.remove();

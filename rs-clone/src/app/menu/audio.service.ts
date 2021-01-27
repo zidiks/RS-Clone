@@ -36,4 +36,10 @@ export class AudioService {
       el.pause();
     })
   }
+
+  setVolume() {
+    this.audioList.forEach(el => {
+      el.volume = globalProps.options.volume;
+    })
+  }
 }
