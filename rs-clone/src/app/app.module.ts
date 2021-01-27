@@ -16,6 +16,8 @@ import { AuthService } from './auth.service';
 import { MeComponent } from './menu/me/me.component';
 import { ShopComponent } from './menu/shop/shop.component';
 import { RouterModule } from '@angular/router';
+import { NotfoundComponent } from './notfound/notfound.component';
+import { OptionsComponent } from './menu/options/options.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { RouterModule } from '@angular/router';
     SignInComponent,
     WelcomeComponent,
     MeComponent,
-    ShopComponent
+    ShopComponent,
+    NotfoundComponent,
+    OptionsComponent
   ],
   imports: [
     BrowserModule,

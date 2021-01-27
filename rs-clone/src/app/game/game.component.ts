@@ -161,10 +161,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
     const endManager = new EndGameService(endGame, STATES, audioManager, animationManager, this.userManager);
 
-    this.RENDERER = new THREE.WebGLRenderer({ antialias: false });
+    this.RENDERER = new THREE.WebGLRenderer({ antialias: globalProps.options.antialiasing });
     const renderer = this.RENDERER;
     renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.shadowMap.enabled = false;
+    renderer.shadowMap.enabled = globalProps.options.shadows;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     //renderer.setPixelRatio( 0.5 );
 

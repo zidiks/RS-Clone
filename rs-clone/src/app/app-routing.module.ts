@@ -10,11 +10,13 @@ import { AuthGuard } from "./auth.guard";
 import { MeComponent } from './menu/me/me.component';
 import { ShopComponent } from './menu/shop/shop.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { OptionsComponent } from './menu/options/options.component';
 
 const itemRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'me', component: MeComponent },
-  { path: 'shop', component: ShopComponent }
+  { path: 'shop', component: ShopComponent },
+  { path: 'options', component: OptionsComponent }
 ];
 
 const routes: Routes = [
@@ -22,7 +24,7 @@ const routes: Routes = [
   { path: '', component: MenuComponent, children: itemRoutes, canActivate: [AuthGuard] },
   { path: 'login', component: SignInComponent },
   { path: 'register', component: SignUpComponent },
-  { path: 'welcome', component: WelcomeComponent },
+  { path: 'welcome', component: WelcomeComponent }
 ];
 
 @NgModule({

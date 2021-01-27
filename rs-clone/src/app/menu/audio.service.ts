@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { audioManager } from './menu.component';
+import { globalProps } from './globalprops';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +16,14 @@ export class AudioService {
   }
 
   playLink() {
-    this.audioList[1].currentTime = 0;
-    this.audioList[1].play();
+    if (globalProps.options.sound) {
+      this.audioList[1].currentTime = 0;
+      this.audioList[1].play();
+    }
   }
 
   playBg() {
-     this.audioList[0].play();
+     if (globalProps.options.sound) this.audioList[0].play();
   }
 
   pauseBg() {

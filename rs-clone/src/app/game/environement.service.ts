@@ -86,7 +86,6 @@ export class EnvironementService {
     let inMov = this.inMove;
     // url = "assets/untitled.mtl";
     let group = new THREE.Group;
-    console.log(grouppObjs)
     grouppObjs.forEach(element => {
       mtlLoader.load( element.mtl, function( materials ) {
 

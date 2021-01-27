@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { globalProps } from '../menu/globalprops';
 import { States, STATES_TOKEN } from './game.component';
 
 @Injectable({
@@ -27,33 +28,41 @@ export class AudioService {
   }
 
   sideTrainPlay() {
-    this.sideTrainSound.currentTime = 0;
-    this.sideTrainSound.play();
+    if (globalProps.options.sound) {
+      this.sideTrainSound.currentTime = 0;
+      this.sideTrainSound.play();
+    }
   }
 
   deathPlay() {
-    this.deathSound.play()
+    if (globalProps.options.sound) this.deathSound.play()
   }
 
   rollPlay() {
-    this.rollSound.currentTime = 0;
-    setTimeout(() => {
-      this.rollSound.play();
-    }, 100);
+    if (globalProps.options.sound) {
+      this.rollSound.currentTime = 0;
+      setTimeout(() => {
+        this.rollSound.play();
+      }, 100);
+    }
   }
 
   jumpPlay() {
-    this.jumpSound.currentTime = 0;
-    this.jumpSound.play();
+    if (globalProps.options.sound) {
+      this.jumpSound.currentTime = 0;
+      this.jumpSound.play();
+    }
   }
 
   coinPlay() {
-    this.coinSound.currentTime = 0;
-    this.coinSound.play();
+    if (globalProps.options.sound) {
+      this.coinSound.currentTime = 0;
+      this.coinSound.play();
+    }
   }
 
   playBackground() {
-    this.gameBachground.play();
+    if (globalProps.options.sound) this.gameBachground.play();
   }
 
   pauseBackground() {
