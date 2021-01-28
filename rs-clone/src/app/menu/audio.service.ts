@@ -23,6 +23,7 @@ export class AudioService {
   }
 
   playBg() {
+    this.setVolume();
      if (globalProps.options.sound) this.audioList[0].play();
   }
 

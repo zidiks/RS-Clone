@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { audioManager} from '../menu.component';
+import { audioManager, MenuComponent} from '../menu.component';
 
 @Component({
   selector: 'app-home',
@@ -29,6 +29,7 @@ export class HomeComponent implements OnInit {
     }
   }
   constructor(
+    public AllMenu: MenuComponent
   ) {
     
    }
@@ -36,7 +37,9 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.linksBox = <HTMLDivElement>document.getElementById('menu-links');
     const domName= <HTMLDivElement>document.getElementById('p-name');
-    domName.textContent = JSON.parse(localStorage.getItem('user') || '{}').displayName;
+    const playerName = this.AllMenu.user?.displayName || 'No Name';
+    console.log(playerName);
+    //if (playerName !== null) domName.textContent = playerName;
     this.menuLinks = Array.prototype.slice.call(<HTMLDivElement><unknown>document.getElementsByClassName('menu-link'));
     document.addEventListener('keydown', this.moveMenu, false);
   }

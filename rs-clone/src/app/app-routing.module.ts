@@ -11,6 +11,7 @@ import { MeComponent } from './menu/me/me.component';
 import { ShopComponent } from './menu/shop/shop.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OptionsComponent } from './menu/options/options.component';
+import { VerifyComponent } from './verify/verify.component';
 
 const itemRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,7 +25,8 @@ const routes: Routes = [
   { path: '', component: MenuComponent, children: itemRoutes, canActivate: [AuthGuard] },
   { path: 'login', component: SignInComponent },
   { path: 'register', component: SignUpComponent },
-  { path: 'welcome', component: WelcomeComponent }
+  { path: 'welcome', component: WelcomeComponent },
+  { path: 'verify-email-address', component: VerifyComponent }
 ];
 
 @NgModule({

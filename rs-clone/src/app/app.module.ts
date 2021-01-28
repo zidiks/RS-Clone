@@ -18,6 +18,7 @@ import { ShopComponent } from './menu/shop/shop.component';
 import { RouterModule } from '@angular/router';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { OptionsComponent } from './menu/options/options.component';
+import { VerifyComponent } from './verify/verify.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { OptionsComponent } from './menu/options/options.component';
     MeComponent,
     ShopComponent,
     NotfoundComponent,
-    OptionsComponent
+    OptionsComponent,
+    VerifyComponent
   ],
   imports: [
     BrowserModule,
