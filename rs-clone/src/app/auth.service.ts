@@ -129,7 +129,7 @@ export class AuthService {
     return this.AuthLogin(new firebase.auth.GoogleAuthProvider());
   }
 
-   // Sign in with Google
+   // Sign in with GitHub
    GithubAuth() {
     return this.AuthLogin(new firebase.auth.GithubAuthProvider());
   }
@@ -138,10 +138,16 @@ export class AuthService {
   AuthLogin(provider: any) {
     return this.afAuth.signInWithPopup(provider)
     .then((result) => {
+      if (result.user?.emailVerified) {
+        console.log(result.user);
+        setTimeout(() => {
+          this.router.navigate(['']);
+        }, 300);
+      } else {
+        console.log(result.user);
+        this.SendVerificationMail();
+      }
       this.SetUserData(result.user);
-      setTimeout(() => {
-        this.router.navigate(['']);
-      }, 300);
     }).catch((error) => {
       window.alert(error)
     })
