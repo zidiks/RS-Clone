@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AlertService } from 'src/app/alert.service';
 import { globalProps, saveOptions } from '../globalprops';
 import { audioManager} from '../menu.component';
 
@@ -62,6 +63,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   };
 
   constructor(
+    public alertManager: AlertService
   ) {
   }
 

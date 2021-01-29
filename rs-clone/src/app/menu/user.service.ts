@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { User } from '../user';
 import { map, take } from 'rxjs/operators';
 import { globalProps } from './globalprops';
+import { AlertService } from '../alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ import { globalProps } from './globalprops';
 export class UserService {
   public usersCollection: AngularFirestoreCollection<User>;
   constructor(
-    public afs: AngularFirestore
+    public afs: AngularFirestore,
+    public alertManager: AlertService
   ) {
     this.usersCollection = afs.collection<User>('users');
   }
@@ -42,9 +44,21 @@ export class UserService {
       console.log(globalProps.boughtSkins);
       this.usersCollection.doc<User>(id).update({ coins: globalProps.coins - price });
       this.usersCollection.doc<User>(id).update({ boughtSkins: globalProps.boughtSkins });
-      alert('Еу! Новый скин :)');
+      this.alertManager.showAlert('You have purchased a new skin!', 
+      {
+        cb: () => {
+          this.alertManager.hideAlert();
+        },
+        label: 'OK'
+      })
     } else {
-      alert('Не хватает денег :(');
+      this.alertManager.showAlert('Need more coins :(',
+      {
+        cb: () => {
+          this.alertManager.hideAlert();
+        },
+        label: 'OK'
+      })
     }
   }
 

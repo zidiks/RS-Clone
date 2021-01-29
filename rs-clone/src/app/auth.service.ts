@@ -121,7 +121,35 @@ export class AuthService {
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return (user.uid && user !== null && user.emailVerified !== false) ? true : false;
+    return (user.uid && user !== null) ? true : false;
+  }
+
+  isVerified() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    let verified = false;
+    userRef.ref.get().then(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        verified = doc.data().emailVerified; 
+        console.log('verif: ', data);
+      }
+    })
+    return (verified === false) ? false : true;
+  }
+
+  setVerifiedStatus() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    userRef.ref.get().then(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        data.emailVerified = true;
+        this.SetUserData(data);
+        user.emailVerified = true;
+        localStorage.setItem('user', JSON.stringify(user));
+      }
+    })
   }
 
    // Sign in with Google
