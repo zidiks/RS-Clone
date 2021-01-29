@@ -1,4 +1,5 @@
 import { Component, ElementRef, Inject, OnDestroy, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 import { Location } from '@angular/common';
 import * as THREE from 'three';
 import * as STATS from 'stats.js';
@@ -84,6 +85,7 @@ export class GameComponent implements OnInit, OnDestroy {
   RESIZER: any;
   keyRightHandler: any;
   constructor(
+    public router: Router,
     public userManager: UserService,
     private elementRef: ElementRef,
     @Inject(STATES_TOKEN) public STATES_TOKEN: States,
@@ -159,7 +161,7 @@ export class GameComponent implements OnInit, OnDestroy {
     endGame.textContent = 'PRESS SPACE TO START!';
 
 
-    const endManager = new EndGameService(endGame, STATES, audioManager, animationManager, this.userManager);
+    const endManager = new EndGameService(this.router, endGame, STATES, audioManager, animationManager, this.userManager);
 
     this.RENDERER = new THREE.WebGLRenderer({ antialias: false });
     const renderer = this.RENDERER;
@@ -295,7 +297,7 @@ export class GameComponent implements OnInit, OnDestroy {
         if (!this.newScore && (globalProps.highScore < STATES.score)) {
           this.newScore = true;
           hScore.style.display = 'block';
-        }  
+        }
       }
 
 

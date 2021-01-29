@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 
@@ -10,7 +11,7 @@ import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 
 export class LoaderComponent implements OnInit {
   REQANIMFRAME: any;
-  constructor() { }
+  constructor(public route: Router) { }
 
   ngOnInit(): void {
     let userData: any;
@@ -18,6 +19,7 @@ export class LoaderComponent implements OnInit {
     let scene: any;
     let camera: any;
     let guiData: any;
+    let loading: boolean = true;
 
     function loadSVG(url: string) {
       scene = new THREE.Scene();
@@ -94,7 +96,8 @@ export class LoaderComponent implements OnInit {
       });
     }
 
-    function init() {
+    const init = () => {
+
       const container = document.getElementById("container");
 
       camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
@@ -103,11 +106,12 @@ export class LoaderComponent implements OnInit {
       renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
-      container.appendChild(renderer.domElement);
+      container?.appendChild(renderer.domElement);
 
       window.addEventListener("resize", onWindowResize, false);
 
       guiData = {
+        // currentURL: "assets/loader/Threejs-logot.svg",
         currentURL: "assets/loader/Threejs-logot.svg",
         drawFillShapes: true,
         drawStrokes: true,
@@ -115,25 +119,60 @@ export class LoaderComponent implements OnInit {
         strokesWireframe: true,
       };
 
-      loadSVG(guiData.currentURL);
+      const changeSvg = {
+        three: {
+          url: "assets/loader/Threejs-logot.svg",
+          position: [0, 0, 200]
+        },
+        angular: {
+          url: "assets/loader/angular.svg",
+          position: [-35, 40, 90]
+        },
+        firebase: {
+          url: "assets/loader/firebase.svg",
+          position: [-10, 10, 100]
+        },
+        loading: {
+          url: "assets/loader/loading.svg",
+          position: [-10, 10, 100]
+        }
+      }
+
+
+      // for (let key in changeSvg) {
+      //   (() => {
+      //     setTimeout(() => {
+      //     console.log(changeSvg[key].url);
+      //     loadSVG(changeSvg[key].url);
+      //   }, 3000);
+      //   })();
+
+      // }
+      // loadSVG(guiData.currentURL);
 
       const update = (url: string, ...position: any[]) => {
-        setTimeout(() => {
+        // setTimeout(() => {
           guiData.currentURL = url;
           camera.position.set(...position);
           loadSVG(guiData.currentURL);
-        }, 5000);
+        // }, 3000);
       };
-      update("assets/loader/angular.svg", -35, 40, 90);
+      setTimeout(() => {
+        loadSVG(guiData.currentURL);
+      }, 0);
+      setTimeout(() => {
+        update("assets/loader/angular.svg", -35, 40, 90);
+      }, 3000);
       setTimeout(() => {
         update("assets/loader/firebase.svg", -10, 10, 100);
-      }, 4000);
+      }, 5000);
       setTimeout(() => {
+        loading = false;
         update("assets/loader/loading.svg", -10, 10, 100);
-      }, 8000);
+      }, 7000);
       setTimeout(() => {
-        document.location.href = '/';
-      }, 20000);
+        this.route.navigate(['/']);
+      }, 9000);
     }
 
     function onWindowResize() {
@@ -147,12 +186,11 @@ export class LoaderComponent implements OnInit {
 
     function render() {
       renderer.render(scene, camera);
-      camera.position.z += 1;
+      if (loading) camera.position.z += 5;
     }
 
     function animate() {
       requestAnimationFrame(animate);
-      // camera.position.z += 0.01;
       render();
     }
     animate();

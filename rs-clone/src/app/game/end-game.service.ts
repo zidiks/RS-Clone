@@ -1,3 +1,4 @@
+import {Router} from '@angular/router';
 import { Inject, Injectable } from '@angular/core';
 import { Animations, States, STATES_TOKEN } from './game.component';
 import { AnimationService } from './animation.service';
@@ -14,12 +15,13 @@ export class EndGameService {
   animationManager: AnimationService;
 
   constructor(
+    public route: Router,
     DOMel: HTMLDivElement,
     @Inject(STATES_TOKEN) public STATES_TOKEN: States,
     audio: AudioService,
     animationManager: AnimationService,
     public userManager: UserService
-  ) { 
+  ) {
     this.endGame = DOMel;
     this.audio = audio;
     this.states = STATES_TOKEN;
@@ -41,6 +43,7 @@ export class EndGameService {
       this.states.animation = false;
     }, 710);
     this.userManager.setCoins(globalProps.coins + this.states.coins);
-    if (globalProps.highScore < this.states.score )  this.userManager.setScore(Math.round(this.states.score));
+    if (globalProps.highScore < this.states.score) this.userManager.setScore(Math.round(this.states.score));
+    this.route.navigate(['/']);
   }
 }
