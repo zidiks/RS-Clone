@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import {Router} from '@angular/router';
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
@@ -11,7 +12,12 @@ import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 
 export class LoaderComponent implements OnInit {
   REQANIMFRAME: any;
-  constructor(public route: Router) { }
+  constructor(
+    public route: Router,
+    private location: Location
+  ) {
+    this.location.replaceState('/');
+    }
 
   ngOnInit(): void {
     let userData: any;
