@@ -5,6 +5,7 @@ import { Camera, Mesh } from 'three';
 import { STATES_TOKEN } from './game.component';
 import { state } from '@angular/animations';
 import { globalProps } from '../menu/globalprops';
+import { LoadObserverService } from './load-observer.service';
 
 interface States {
   control: {
@@ -41,6 +42,7 @@ export class PlayerService {
   camera: THREE.PerspectiveCamera;
   states: States;
   constructor(
+    public loadObserver: LoadObserverService,
     camera: THREE.PerspectiveCamera,
     @Inject(STATES_TOKEN) public STATES_TOKEN: States
   ) {
@@ -58,6 +60,7 @@ export class PlayerService {
       this.mixer = new THREE.AnimationMixer( object );
       let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
       this.playerActions.push(playerAction);
+      this.loadObserver.activatePoint(20);
 
       loader.load( 'assets/skins/0/roll.fbx', (object) => {
         let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
@@ -73,6 +76,7 @@ export class PlayerService {
             let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
             this.playerActions.push(playerAction);
             this.playerActions[3].play();
+            this.loadObserver.activatePoint(10);
           });
         });
       });

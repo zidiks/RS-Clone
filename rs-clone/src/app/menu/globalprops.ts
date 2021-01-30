@@ -21,7 +21,8 @@ interface globalProps {
             label: string
         }>,
         message: string
-    }
+    },
+    loadImg: Array<HTMLImageElement>;
 }
 
 export const globalProps: globalProps = {
@@ -47,7 +48,8 @@ export const globalProps: globalProps = {
             label: 'test btn'
         }],
         message: 'Test message'
-    }
+    },
+    loadImg: []
 }
 
 const options = localStorage.getItem('options');

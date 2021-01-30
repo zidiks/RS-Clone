@@ -95,9 +95,23 @@
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: 1001;
-    background-image: url('../../assets/UI/loading.svg');
+    z-index: 2000;
+    //background-image: url('../../assets/UI/loading-screen.png');
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-color: #add8e6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    .loading-box {
+        width: 70%;
+        height: 2rem;
+        border: 5px solid black;
+        margin-bottom: 2rem;
+        background: linear-gradient(to right, rgb(90, 184, 247) 20%, white 20% 80%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Press Start 2P', cursive;
+    }
 }

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import * as THREE from 'three';
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { AlertService } from '../alert.service';
+import { AuthService } from '../auth.service';
 import { User } from '../user';
 import { AudioService } from './audio.service';
 import { globalProps } from './globalprops';
@@ -33,7 +35,9 @@ export class MenuComponent implements OnInit, OnDestroy {
   constructor(
     public router: Router,
     public userManager: UserService,
-    public skinManager: SkinService
+    public skinManager: SkinService,
+    public alertManager: AlertService,
+    public authManager: AuthService
   ) {
     this.skinManager.setSkinTarget(this.skin, this.mixer);
     this.userManager.getUser().subscribe(data => {
@@ -41,10 +45,27 @@ export class MenuComponent implements OnInit, OnDestroy {
         globalProps.coins = data.coins;
         globalProps.highScore = data.highScore;
         globalProps.boughtSkins = data.boughtSkins;
-          if (globalProps.activeSkin !== data.activeSkin) {
-            globalProps.activeSkin = data.activeSkin;
-            this.skinManager.showSkin(`/assets/skins/${globalProps.activeSkin}/menu.fbx`);
-          }
+        if (globalProps.activeSkin !== data.activeSkin) {
+          globalProps.activeSkin = data.activeSkin;
+          this.skinManager.showSkin(`/assets/skins/${globalProps.activeSkin}/menu.fbx`);
+        }
+        if (data.emailVerified !== true && JSON.parse(localStorage.getItem('user') || '{}').uid) {
+          this.alertManager.showAlert('Please, verify E-mail.',
+          {
+            cb: () => {
+              this.authManager.SendVerificationMail();
+              this.router.navigate(['/verify-email-address']);
+              this.alertManager.hideAlert();
+            },
+            label: 'verify'
+          },
+          {
+            cb: () => {
+              this.alertManager.hideAlert();
+            },
+            label: 'skip'
+          })
+        }
       }
       this.user = data;
     });

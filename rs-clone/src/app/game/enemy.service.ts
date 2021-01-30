@@ -7,6 +7,7 @@ import { BoardHiEnemy } from './enemies/board-hi';
 import { Coin } from './enemies/coin';
 import { Hole } from './enemies/hole';
 import { TrainEnemy } from './enemies/train';
+import { LoadObserverService } from './load-observer.service';
 
 interface EnemiesLine {
   line: THREE.Group,
@@ -62,6 +63,7 @@ export class EnemyService {
   lastWayLine: Array<string> = [];
 
   constructor(
+    public loadObserver: LoadObserverService,
     public Scene: THREE.Scene,
     public Queue: Array<any> = [],
     public inMove: Array<any> = []
@@ -229,11 +231,7 @@ export class EnemyService {
         this.Scene.add(enemiesLine.line);
       }
     });
-
-    const domLoading = <HTMLDivElement>document.getElementById('game-loading');
-    setTimeout(() => {
-      domLoading.style.display = 'none';
-    }, 1000);
+    this.loadObserver.activatePoint(40);
   }
 
   generateNewWay(line: EnemiesLine) {

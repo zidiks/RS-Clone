@@ -31,9 +31,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/@loadingio/loading-bar/dist/loading-bar.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/@loadingio/loading-bar/dist/loading-bar.js"
+            ]
           },
           "configurations": {
             "production": {

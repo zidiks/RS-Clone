@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import * as THREE from 'three';
+import { LoadObserverService } from './load-observer.service';
 
 interface LoadedObj {
   mtl: string,
@@ -15,8 +16,10 @@ interface LoadedObj {
 })
 export class EnvironementService {
   ENV_LENGHT:number = 20;
+  ENV_CURR: number = 0;
 
   constructor(
+    public loadObserver: LoadObserverService,
     public Scene: THREE.Scene,
     public Preload: Map<number, THREE.Group> = new Map,
     public Queue: Array<any> = [],
@@ -86,16 +89,16 @@ export class EnvironementService {
     let inMov = this.inMove;
     // url = "assets/untitled.mtl";
     let group = new THREE.Group;
-    grouppObjs.forEach(element => {
-      mtlLoader.load( element.mtl, function( materials ) {
+    grouppObjs.forEach((element, index) => {
+      mtlLoader.load( element.mtl, ( materials ) => {
 
         materials.preload();
 
         const objLoader = new OBJLoader();
         objLoader.setMaterials( materials );
-        objLoader.load(element.obj, function (object) {
+        objLoader.load(element.obj,  (object) => {
             object.position.set(element.pos[0], element.pos[1], element.pos[2]);
-            object.traverse(function(child) {
+            object.traverse((child)  => {
               if (child instanceof THREE.Mesh) {
                 if (element.shadow) {
                   child.castShadow = true;
@@ -104,6 +107,10 @@ export class EnvironementService {
             }
             });
             group.add(object);
+            if (index === grouppObjs.length-1) {
+              this.ENV_CURR++;
+              if (this.ENV_CURR === this.ENV_LENGHT) this.loadObserver.activatePoint(30);
+            }
         }, () => console.log('load...'), () => console.log('err!') );
       });
     });

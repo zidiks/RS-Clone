@@ -9,7 +9,7 @@ export class AnimationService {
   playerAnimations: THREE.AnimationAction[];
   constructor(
     @Inject(ANIMATIONS_TOKEN) public ANIMATIONS_TOKEN: Animations,
-    @Inject(STATES_TOKEN) public STATES_TOKEN: States
+    @Inject(STATES_TOKEN) public STATES_TOKEN: States,
   ) {
     this.playerAnimations = ANIMATIONS_TOKEN.playerAnimations;
    }

@@ -12,6 +12,7 @@ import { AudioService } from './audio.service';
 import { UserService } from '../menu/user.service';
 import { globalProps } from '../menu/globalprops';
 import { audioManager } from '../menu/menu.component';
+import { LoadObserverService } from './load-observer.service';
 
 export interface States {
   control: {
@@ -33,7 +34,9 @@ export interface States {
   end: boolean,
   startAnim: boolean,
   score: number,
-  coins: number
+  coins: number,
+  loaded: boolean,
+  loadProgress: number
 }
 
 export interface Animations {
@@ -68,7 +71,9 @@ export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken'
       end: false,
       startAnim: false,
       score: 0,
-      coins: 0
+      coins: 0,
+      loaded: false,
+      loadProgress: 0
     } },
     { provide: ANIMATIONS_TOKEN, useValue: {} }
   ]
@@ -84,7 +89,9 @@ export class GameComponent implements OnInit, OnDestroy {
   newScore: boolean = false;
   RESIZER: any;
   keyRightHandler: any;
+  loadedImgs = globalProps.loadImg;
   constructor(
+    public loadObserver: LoadObserverService,
     public userManager: UserService,
     private elementRef: ElementRef,
     @Inject(STATES_TOKEN) public STATES_TOKEN: States,
@@ -118,9 +125,11 @@ export class GameComponent implements OnInit, OnDestroy {
       end: false,
       startAnim: false,
       score: 0,
-      coins: 0
+      coins: 0,
+      loaded: false,
+      loadProgress: 0
     };
-
+    this.loadObserver.setStates(this.STATES);
     const STATES = this.STATES;
     const audioManager = new AudioService();
     this.AUDIO = audioManager;
@@ -137,9 +146,9 @@ export class GameComponent implements OnInit, OnDestroy {
     scene.background =  new THREE.Color('lightblue');
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 
-    const env = new EnvironementService(scene);
-    const playerManager = new PlayerService(camera, STATES);
-    const enemyManager = new EnemyService(scene);
+    const env = new EnvironementService(this.loadObserver, scene);
+    const playerManager = new PlayerService(this.loadObserver, camera, STATES);
+    const enemyManager = new EnemyService(this.loadObserver, scene);
     this.ANIMATIONS.playerAnimations = playerManager.playerActions;
     const animationManager = new AnimationService(this.ANIMATIONS, STATES);
 
