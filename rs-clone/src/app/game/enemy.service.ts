@@ -168,7 +168,7 @@ export class EnemyService {
                 } else {
                   this.enemiesProts[el.type] = enemy;
                 }
-            }, () => console.log('load...'), () => reject());
+            }, () => console.log('load...'), (e) => console.log('Error loading 3d environment model: ', e));
           });
       });
     });
