@@ -147,7 +147,7 @@ export class GameComponent implements OnInit, OnDestroy {
     const scene = this.SCENE;
     scene.fog = new THREE.Fog('lightblue', 15, 30);
     scene.background =  new THREE.Color('lightblue');
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 30);
 
     const env = new EnvironementService(this.loadObserver, scene);
     const playerManager = new PlayerService(this.loadObserver, camera, STATES);
