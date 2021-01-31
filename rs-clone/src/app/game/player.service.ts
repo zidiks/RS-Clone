@@ -62,7 +62,7 @@ export class PlayerService {
       this.playerActions.push(playerAction);
       this.loadObserver.activatePoint(20);
 
-      loader.load( 'assets/skins/0/roll.fbx', (object) => {
+      loader.load( 'assets/skins/0/roll2.fbx', (object) => {
         let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
         playerAction.setDuration(STATES_TOKEN.control.squatLength / 38);
         this.playerActions.push(playerAction);
@@ -76,7 +76,12 @@ export class PlayerService {
             let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
             this.playerActions.push(playerAction);
             this.playerActions[3].play();
-            this.loadObserver.activatePoint(10);
+
+            loader.load( 'assets/skins/0/jump.fbx', (object) => {
+              let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
+              this.playerActions.push(playerAction);
+              this.loadObserver.activatePoint(10);
+            });
           });
         });
       });
@@ -112,13 +117,11 @@ export class PlayerService {
     if(states.control.squat){
       states.control.squatCount += 1 * delta;
       this.cube.position.y = -2;
+      if (target.position.y > 0) states.control.jumpHeight -= 0.1;
       if (!this.rollLock) { 
         animationManager.changeAnimationTo('roll');
         this.rollLock = true;
       }
-      // this.playerActions[0].stop();
-      // this.playerActions[0].reset();
-      // this.playerActions[1].play();
     }
     if(states.control.squatCount>states.control.squatLength){
       states.control.squatCount=0;
@@ -139,6 +142,7 @@ export class PlayerService {
       states.control.jumpCount=0;
       states.control.jumpPressed=false;
       states.control.jumpHeight=0;
+      animationManager.changeAnimationTo('run');
     }
     target.position.y = states.control.jumpHeight;
   }

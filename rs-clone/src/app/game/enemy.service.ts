@@ -31,9 +31,7 @@ interface LoadedObjEnemy {
   obj: string,
   posY: number,
   shadow: boolean,
-  size: number,
-  boxSize: Array<number>,
-  hitBoxVisible: boolean
+  size: number
 }
 
 @Injectable({
@@ -76,9 +74,7 @@ export class EnemyService {
         obj: 'assets/enemy/1/hole.obj',
         posY: -1.65,
         shadow: true,
-        size: 1,
-        boxSize: [1.6, 1.5, 0.1],
-        hitBoxVisible: false
+        size: 1
         },
         {
         type: 'board',
@@ -86,9 +82,7 @@ export class EnemyService {
         obj: 'assets/enemy/1/lowboard-1.obj',
         posY: -1.65,
         shadow: true,
-        size: 1,
-        boxSize: [1.6, 1.5, 0.1],
-        hitBoxVisible: false
+        size: 1
         },
         {
         type: 'boardHi',
@@ -96,9 +90,7 @@ export class EnemyService {
         obj: 'assets/enemy/1/hiboard.obj',
         posY: -0.65,
         shadow: true,
-        size: 1,
-        boxSize: [1.6, 2.6, 0.1],
-        hitBoxVisible: false
+        size: 1
         },
         {
         type: 'coin',
@@ -106,9 +98,7 @@ export class EnemyService {
         obj: 'assets/enemy/1/coin.obj',
         posY: -0.65,
         shadow: false,
-        size: 1,
-        boxSize: [1.6, 2.6, 0.1],
-        hitBoxVisible: false
+        size: 1
         },
         {
         type: 'train',
@@ -116,9 +106,7 @@ export class EnemyService {
         obj: 'assets/enemy/train/train.vox.obj',
         posY: -0.65,
         shadow: true,
-        size: 2,
-        boxSize: [1.6, 1.6, 0.1],
-        hitBoxVisible: false
+        size: 2
         }
       ]
     )
@@ -134,14 +122,6 @@ export class EnemyService {
     let promise = new Promise((resolve, reject) => {
       arr.forEach((el, index) => {
           const  enemy = new THREE.Group();
-          const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial> = new THREE.Mesh(
-            new THREE.BoxGeometry(1.6, 1.6, 0.1),
-            new THREE.MeshBasicMaterial( { color: 0xbd914f } )
-          );
-          enemyBox.position.y = -1.2;
-          enemyBox.position.z += 0.05;
-          enemyBox.position.z = 0;
-          enemyBox.visible = el.hitBoxVisible;
           const mtlLoader = new MTLLoader();
           mtlLoader.load( el.mtl, ( materials ) => {
             materials.preload();
@@ -160,7 +140,6 @@ export class EnemyService {
                   object.position.y = -2;
                   object.position.z = 0;
                   enemy.add(object);
-                  enemy.add(enemyBox);
                 });
                 if (index === arr.length-1) {
                   this.enemiesProts[el.type] = enemy;

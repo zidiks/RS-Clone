@@ -207,10 +207,17 @@ export class GameComponent implements OnInit, OnDestroy {
       if(e.keyCode == 38){
         if (STATES.control.jumpPressed === false) audioManager.jumpPlay();
         STATES.control.jumpPressed = true;
+        playerManager.cube.position.y = -1;
+        STATES.control.squat = false;
+        STATES.control.squatCount = 0;
+        animationManager.changeAnimationTo('jump');
+        playerManager.rollLock = false;
       }
       if(e.keyCode === 40){
         if (STATES.control.squat === false) audioManager.rollPlay();
         STATES.control.squat = true;
+        STATES.control.jumpPressed = false;
+        STATES.control.jumpCount=0;
       }
       if(e.keyCode == 39){
         if (STATES.control.xpos < 1) {
