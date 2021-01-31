@@ -19,6 +19,7 @@ import { RouterModule } from '@angular/router';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { OptionsComponent } from './menu/options/options.component';
 import { VerifyComponent } from './verify/verify.component';
+import { LeaderBoardComponent } from './menu/leader-board/leader-board.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { VerifyComponent } from './verify/verify.component';
     ShopComponent,
     NotfoundComponent,
     OptionsComponent,
-    VerifyComponent
+    VerifyComponent,
+    LeaderBoardComponent
   ],
   imports: [
     BrowserModule,

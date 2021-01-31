@@ -12,12 +12,14 @@ import { ShopComponent } from './menu/shop/shop.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OptionsComponent } from './menu/options/options.component';
 import { VerifyComponent } from './verify/verify.component';
+import { LeaderBoardComponent } from './menu/leader-board/leader-board.component';
 
 const itemRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'me', component: MeComponent },
   { path: 'shop', component: ShopComponent },
-  { path: 'options', component: OptionsComponent }
+  { path: 'options', component: OptionsComponent },
+  { path: 'leaders', component: LeaderBoardComponent }
 ];
 
 const routes: Routes = [

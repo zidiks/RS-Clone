@@ -18,7 +18,7 @@ export class EndGameService {
     @Inject(STATES_TOKEN) public STATES_TOKEN: States,
     audio: AudioService,
     animationManager: AnimationService,
-    public userManager: UserService
+    public userManager: UserService,
   ) { 
     this.endGame = DOMel;
     this.audio = audio;
@@ -45,6 +45,9 @@ export class EndGameService {
       this.animationManager.changeAnimationTo(name);
     }, 10);
     this.userManager.setCoins(globalProps.coins + this.states.coins);
-    if (globalProps.highScore < this.states.score )  this.userManager.setScore(Math.round(this.states.score));
+    if (globalProps.highScore < this.states.score )  {
+      this.userManager.setScore(Math.round(this.states.score));
+      this.userManager.setResult(Math.round(this.states.score));
+    }
   }
 }

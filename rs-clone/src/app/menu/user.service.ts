@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { User } from '../user';
+import { Leader, User } from '../user';
 import { map, take } from 'rxjs/operators';
 import { globalProps } from './globalprops';
 import { AlertService } from '../alert.service';
@@ -25,6 +25,36 @@ export class UserService {
         return user;
       })
     );
+  }
+
+  getLeaders(size: number) {
+     return  this.afs.collection('leaders-board', ref => ref.orderBy('score', 'desc').limit(size)).snapshotChanges().pipe(
+      map(leaders => leaders.map(a => {
+        const data = a.payload.doc.data();
+        const id = a.payload.doc.id;
+        return { id, ...(data as object) };
+      }))
+    );
+  }
+
+  setResult(newScore: number) {
+    const user = JSON.parse(localStorage.getItem('user') || '{ }');
+    const uid = user.uid;
+    const name = user.displayName;
+    const data: Leader = {
+      uid: uid,
+      score: newScore,
+      name: name
+    }
+    this.afs.doc(`leaders-board/${uid}`)
+  .update(data)
+  .then(() => {
+
+  })
+  .catch((error) => {
+    this.afs.doc(`leaders-board/${uid}`)
+      .set(data);
+  });
   }
 
   setCoins(value: number) {
