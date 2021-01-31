@@ -44,7 +44,7 @@ export class Hole {
 
   checkCollisions(player: any, endGame: any, states: any) {
     if (this.detectCollisionPlayer(player)) {
-      endGame.endFunc();
+      endGame.endFunc('hole');
     }
   }
 }

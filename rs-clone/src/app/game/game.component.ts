@@ -36,7 +36,8 @@ export interface States {
   score: number,
   coins: number,
   loaded: boolean,
-  loadProgress: number
+  loadProgress: number,
+  hole: boolean
 }
 
 export interface Animations {
@@ -73,7 +74,8 @@ export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken'
       score: 0,
       coins: 0,
       loaded: false,
-      loadProgress: 0
+      loadProgress: 0,
+      hole: false
     } },
     { provide: ANIMATIONS_TOKEN, useValue: {} }
   ]
@@ -127,7 +129,8 @@ export class GameComponent implements OnInit, OnDestroy {
       score: 0,
       coins: 0,
       loaded: false,
-      loadProgress: 0
+      loadProgress: 0,
+      hole: false
     };
     this.loadObserver.setStates(this.STATES);
     const STATES = this.STATES;
@@ -287,6 +290,10 @@ export class GameComponent implements OnInit, OnDestroy {
         }
       }
 
+      if (STATES.hole) {
+        if (playerManager.player.position.y > -2) playerManager.player.position.y -= 0.2 * deltak; else STATES.hole = false;
+      }
+
       if (STATES.play) {
         playerManager.playerActions[0].setDuration(STATES.speed ** -1);
         env.MoveEnv(STATES.speed, deltak);
@@ -301,6 +308,8 @@ export class GameComponent implements OnInit, OnDestroy {
           this.newScore = true;
           hScore.style.display = 'block';
         }  
+      } else {
+        if (playerManager.player.position.y > 0.15) playerManager.player.position.y -= 0.18 * deltak;
       }
 
 

@@ -37,6 +37,9 @@ export class AnimationService {
         case 'jump':
           this.currentAnimation = this.playerAnimations[4];
           break;
+        case 'hole':
+          this.currentAnimation = this.playerAnimations[4];
+          break;
         default:
           this.currentAnimation = this.playerAnimations[3];
           break;

@@ -70,6 +70,7 @@ export class PlayerService {
         loader.load( 'assets/skins/0/fall.fbx', (object) => {
           let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
           playerAction.setLoop( THREE.LoopOnce );
+          playerAction.clampWhenFinished = true;
           this.playerActions.push(playerAction);
           
           loader.load( 'assets/skins/0/idle.fbx', (object) => {
@@ -80,7 +81,14 @@ export class PlayerService {
             loader.load( 'assets/skins/0/jump.fbx', (object) => {
               let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
               this.playerActions.push(playerAction);
-              this.loadObserver.activatePoint(10);
+
+              loader.load( 'assets/skins/0/hole.fbx', (object) => {
+                let playerAction = this.mixer.clipAction( object.animations[ 0 ] );
+                playerAction.setLoop( THREE.LoopOnce );
+                playerAction.clampWhenFinished = true;
+                this.playerActions.push(playerAction);
+                this.loadObserver.activatePoint(10);
+              });
             });
           });
         });

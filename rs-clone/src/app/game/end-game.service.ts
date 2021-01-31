@@ -26,20 +26,24 @@ export class EndGameService {
     this.animationManager = animationManager;
   }
 
-  endFunc() {
+  endFunc(name: string = 'hit') {
+    if (name === 'hole') {
+      this.states.hole = true;
+      setTimeout(() => {
+        this.audio.holePlay();
+      }, 200);
+    } else {
+      this.audio.deathPlay();
+    }
     this.endGame.style.display = 'flex';
     this.endGame.textContent = 'GAME OVER!';
     this.endGame.style.color = 'red';
     this.audio.pauseBackground();
-    this.audio.deathPlay();
     this.states.play = false;
     this.states.end = true;
     setTimeout(() => {
-      this.animationManager.changeAnimationTo('hit');
+      this.animationManager.changeAnimationTo(name);
     }, 10);
-    setTimeout(() => {
-      this.states.animation = false;
-    }, 710);
     this.userManager.setCoins(globalProps.coins + this.states.coins);
     if (globalProps.highScore < this.states.score )  this.userManager.setScore(Math.round(this.states.score));
   }
