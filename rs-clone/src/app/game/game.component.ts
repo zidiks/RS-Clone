@@ -283,7 +283,7 @@ export class GameComponent implements OnInit, OnDestroy {
           animationManager.changeAnimationTo('run');
         }
       }
-
+        console.log(STATES.coins)
       if (STATES.play) {
         playerManager.playerActions[0].setDuration(STATES.speed ** -1);
         env.MoveEnv(STATES.speed, deltak);
