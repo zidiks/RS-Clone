@@ -1,3 +1,4 @@
+import {Router} from '@angular/router';
 import { Inject, Injectable } from '@angular/core';
 import { Animations, States, STATES_TOKEN } from './game.component';
 import { AnimationService } from './animation.service';
@@ -14,12 +15,13 @@ export class EndGameService {
   animationManager: AnimationService;
 
   constructor(
+    public route: Router,
     DOMel: HTMLDivElement,
     @Inject(STATES_TOKEN) public STATES_TOKEN: States,
     audio: AudioService,
     animationManager: AnimationService,
-    public userManager: UserService,
-  ) { 
+    public userManager: UserService
+  ) {
     this.endGame = DOMel;
     this.audio = audio;
     this.states = STATES_TOKEN;
@@ -36,8 +38,7 @@ export class EndGameService {
       this.audio.deathPlay();
     }
     this.endGame.style.display = 'flex';
-    this.endGame.textContent = 'GAME OVER!';
-    this.endGame.style.color = 'red';
+    this.endGame.style.background = 'url("../../assets/UI/stop.png") center center no-repeat';
     this.audio.pauseBackground();
     this.states.play = false;
     this.states.end = true;
@@ -49,5 +50,8 @@ export class EndGameService {
       this.userManager.setScore(Math.round(this.states.score));
       this.userManager.setResult(Math.round(this.states.score));
     }
+    setTimeout(() => {
+      this.route.navigate(['/']);
+    }, 3000);
   }
 }

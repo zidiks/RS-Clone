@@ -71,7 +71,6 @@ export class UserService {
     if (globalProps.coins >= price) {
       const id:string = JSON.parse(localStorage.getItem('user') || '{ }').uid;
       globalProps.boughtSkins.push(value);
-      console.log(globalProps.boughtSkins);
       this.usersCollection.doc<User>(id).update({ coins: globalProps.coins - price });
       this.usersCollection.doc<User>(id).update({ boughtSkins: globalProps.boughtSkins });
       this.alertManager.showAlert('You have purchased a new skin!', 
