@@ -30,8 +30,6 @@ export class EndGameService {
 
   endFunc() {
     this.endGame.style.display = 'flex';
-    // this.endGame.textContent = 'GAME OVER!';
-    // this.endGame.style.color = 'red';
     this.endGame.style.background = 'url("../../assets/UI/stop.png") center center no-repeat';
     this.audio.pauseBackground();
     this.audio.deathPlay();
