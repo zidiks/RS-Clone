@@ -13,13 +13,15 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { OptionsComponent } from './menu/options/options.component';
 import { VerifyComponent } from './verify/verify.component';
 import { LeaderBoardComponent } from './menu/leader-board/leader-board.component';
+import { EndStatsComponent } from './menu/end-stats/end-stats.component';
 
 const itemRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'me', component: MeComponent },
   { path: 'shop', component: ShopComponent },
   { path: 'options', component: OptionsComponent },
-  { path: 'leaders', component: LeaderBoardComponent }
+  { path: 'leaders', component: LeaderBoardComponent },
+  { path: 'end-stats', component: EndStatsComponent }
 ];
 
 const routes: Routes = [

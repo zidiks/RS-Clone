@@ -191,7 +191,7 @@ export class GameComponent implements OnInit, OnDestroy {
     light.shadow.camera.bottom = - 10;
     light.shadow.camera.left = -20;
     light.shadow.camera.near = 0.1;
-    light.shadow.camera.far = 2000;
+    light.shadow.camera.far = 30;
     light.shadow.mapSize.width = window.innerWidth * 2;
     light.shadow.mapSize.height = window.innerHeight * 2;
     scene.add(light);
@@ -261,12 +261,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
     document.addEventListener("keydown", this.keyRightHandler, false);
 
-    // function getRandomInt(min: number, max: number) {
-    //   min = Math.ceil(min);
-    //   max = Math.floor(max);
-    //   return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
-    // }
-
     this.animate = () => {
       const delta = clock.getDelta();
       const deltak = delta * 50;
@@ -328,6 +322,7 @@ export class GameComponent implements OnInit, OnDestroy {
     document.removeEventListener("keydown", this.keyRightHandler, false);
     if (this.AUDIO) this.AUDIO.pauseAll();
     this.RENDERER = null;
+    this.SCENE.clear();
     this.SCENE = null;
     this.elementRef.nativeElement.remove();
   }
