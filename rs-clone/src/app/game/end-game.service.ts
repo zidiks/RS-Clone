@@ -30,8 +30,9 @@ export class EndGameService {
 
   endFunc() {
     this.endGame.style.display = 'flex';
-    this.endGame.textContent = 'GAME OVER!';
-    this.endGame.style.color = 'red';
+    // this.endGame.textContent = 'GAME OVER!';
+    // this.endGame.style.color = 'red';
+    this.endGame.style.background = 'url("../../assets/UI/stop.png") center center no-repeat';
     this.audio.pauseBackground();
     this.audio.deathPlay();
     this.states.play = false;
@@ -44,6 +45,8 @@ export class EndGameService {
     }, 710);
     this.userManager.setCoins(globalProps.coins + this.states.coins);
     if (globalProps.highScore < this.states.score) this.userManager.setScore(Math.round(this.states.score));
-    this.route.navigate(['/']);
+    setTimeout(() => {
+      this.route.navigate(['/']);
+    }, 3000);
   }
 }

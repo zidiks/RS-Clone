@@ -157,8 +157,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
     const endGame = document.createElement('div');
     endGame.className = 'end-game';
-    endGame.style.color = 'green';
-    endGame.textContent = 'PRESS SPACE TO START!';
+    // endGame.style.color = 'green';
+    // endGame.textContent = 'PRESS SPACE TO START!';
+    endGame.style.background = 'url("../../assets/UI/start.png") center center no-repeat';
+
 
 
     const endManager = new EndGameService(this.router, endGame, STATES, audioManager, animationManager, this.userManager);
