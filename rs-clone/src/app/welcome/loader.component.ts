@@ -101,9 +101,6 @@ export class LoaderComponent implements OnInit {
         scene.add(group);
       });
     }
-
-    const init = () => {
-
       const container = document.getElementById("container");
 
       camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
@@ -117,7 +114,6 @@ export class LoaderComponent implements OnInit {
       window.addEventListener("resize", onWindowResize, false);
 
       guiData = {
-        // currentURL: "assets/loader/Threejs-logot.svg",
         currentURL: "assets/loader/Threejs-logot.svg",
         drawFillShapes: true,
         drawStrokes: true,
@@ -125,47 +121,14 @@ export class LoaderComponent implements OnInit {
         strokesWireframe: true,
       };
 
-      const changeSvg = {
-        three: {
-          url: "assets/loader/Threejs-logot.svg",
-          position: [0, 0, 200]
-        },
-        angular: {
-          url: "assets/loader/angular.svg",
-          position: [-35, 40, 90]
-        },
-        firebase: {
-          url: "assets/loader/firebase.svg",
-          position: [-10, 10, 100]
-        },
-        loading: {
-          url: "assets/loader/loading.svg",
-          position: [-10, 10, 100]
-        }
-      }
-
-
-      // for (let key in changeSvg) {
-      //   (() => {
-      //     setTimeout(() => {
-      //     console.log(changeSvg[key].url);
-      //     loadSVG(changeSvg[key].url);
-      //   }, 3000);
-      //   })();
-
-      // }
-      // loadSVG(guiData.currentURL);
-
       const update = (url: string, ...position: any[]) => {
-        // setTimeout(() => {
           guiData.currentURL = url;
           camera.position.set(...position);
           loadSVG(guiData.currentURL);
-        // }, 3000);
-      };
-      setTimeout(() => {
-        loadSVG(guiData.currentURL);
-      }, 0);
+    };
+
+    loadSVG(guiData.currentURL);
+
       setTimeout(() => {
         update("assets/loader/angular.svg", -35, 40, 90);
       }, 3000);
@@ -179,7 +142,6 @@ export class LoaderComponent implements OnInit {
       setTimeout(() => {
         this.route.navigate(['/']);
       }, 9000);
-    }
 
     function onWindowResize() {
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -188,19 +150,14 @@ export class LoaderComponent implements OnInit {
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
-    init();
-
-    function render() {
-      renderer.render(scene, camera);
+    const animate = () => {
+      requestAnimationFrame( animate );
       if (loading) camera.position.z += 5;
-    }
-
-    function animate() {
-      requestAnimationFrame(animate);
-      render();
+      renderer.render( scene, camera );
     }
     animate();
   }
+
   ngOnDestroy() {
     cancelAnimationFrame(this.REQANIMFRAME);
   }

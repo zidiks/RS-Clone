@@ -51,7 +51,7 @@ export class EndGameService {
       this.userManager.setResult(Math.round(this.states.score));
     }
     setTimeout(() => {
-      this.route.navigate(['/']);
+      this.route.navigate(['end-stats']);
     }, 3000);
   }
 }
