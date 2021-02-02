@@ -19,7 +19,9 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.pload(
       "assets/UI/loading-screen.png",
-      "assets/UI/stop.png");
+      "assets/UI/stop.png",
+      "assets/UI/loading-screen-2.png"
+    );
   }
   
   pload(...args: any[]):void {

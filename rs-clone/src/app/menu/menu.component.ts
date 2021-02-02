@@ -10,6 +10,7 @@ import { AudioService } from './audio.service';
 import { globalProps } from './globalprops';
 import { SkinService } from './skin.service';
 import { UserService} from './user.service';
+import { LoadObserverService } from './load-observer.service';
 
 export const audioManager = new AudioService();
 
@@ -32,7 +33,14 @@ export class MenuComponent implements OnInit, OnDestroy {
   scene = new THREE.Scene();
   RESIZER: any;
   REQANIMFRAME: any;
+  lastLoad: any;
+  STATES = {
+    loaded: false,
+    loadProgress: 0
+  };
+  loadedImgs = globalProps.loadImg;
   constructor(
+    public loadObserver: LoadObserverService,
     public router: Router,
     public userManager: UserService,
     public skinManager: SkinService,
@@ -73,6 +81,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.router.navigate(['']);
+    this.loadObserver.setStates(this.STATES);
     const Hi = <HTMLDivElement>document.getElementById('hi');
     if (globalProps.hiScreen) {
       audioManager.playBg();
@@ -104,6 +113,10 @@ window.addEventListener( 'resize', this.RESIZER, false );
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
 scene.add(ambientLight);
 
+setTimeout(() => {
+  this.loadObserver.activatePoint(20);
+}, 2000);
+
 {
   const loader = new THREE.TextureLoader();
   const texture = loader.load(
@@ -112,6 +125,7 @@ scene.add(ambientLight);
       const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
       rt.fromEquirectangularTexture(renderer, texture);
       scene.background = rt;
+      this.loadObserver.activatePoint(20);
     },
   );
 }
@@ -148,7 +162,7 @@ const angularSpeed = THREE.MathUtils.degToRad(20);
 let delta = 10;
 const radius = 3;
 
-function envRender(objSrc: string, mtlSrc: string, ...position: number[]) {
+    const envRender = (objSrc: string, mtlSrc: string, ...position: number[]) => {
   const mtlLoader = new MTLLoader();
   mtlLoader.load(mtlSrc, (materials) => {
     materials.preload();
@@ -162,6 +176,7 @@ function envRender(objSrc: string, mtlSrc: string, ...position: number[]) {
         child.castShadow = true;
       });
       scene.add(object);
+      this.loadObserver.activatePoint(20);
     }, () => console.log("load..."), () => console.log("err!"));
   });
 }
