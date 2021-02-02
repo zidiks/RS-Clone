@@ -36,27 +36,51 @@ export class AuthService {
   SignIn(email: string, password: string) {
     return this.afAuth.signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
-        });
-        this.SetUserData(result.user);
+        if (result.user)  {
+          const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${result.user.uid}`);
+          const userData = Object.assign({}, result.user);
+          userRef.ref.get().then(doc => {
+            if (doc.exists) {
+              const data = doc.data();
+              userData.displayName = data.displayName;
+              console.log(userData);
+              this.SetUserData(userData);
+              setTimeout(() => {
+                this.router.navigate(['']);
+              }, 300);
+            }
+          })
+        }        
       }).catch((error) => {
         window.alert(error.message)
       })
   }
 
   // Sign up with email/password
-  SignUp(email: string, password: string) {
+  SignUp(email: string, password: string, displayName: string) {
     return this.afAuth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign 
         up and returns promise */
-        this.SetUserData(result.user);
-        window.alert('ready!');
+        if (result.user) {
+          this.SendVerificationMail();
+          const userData = Object.assign({}, result.user);
+          userData.displayName = displayName;
+          this.SetUserData(userData);
+        }
       }).catch((error) => {
         window.alert(error.message)
       })
   }
+
+
+    // Send email verfificaiton when new user sign up
+    SendVerificationMail() {
+      return this.afAuth.currentUser.then(u => { if (u) u.sendEmailVerification() })
+      .then(() => {
+        this.router.navigate(['verify-email-address']);
+      })
+    }
 
   /* Setting up user data when sign in with username/password, 
   sign up with username/password and sign in with social auth  
@@ -64,7 +88,7 @@ export class AuthService {
   SetUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     let userData: User;
-    let coins = 99999;
+    let coins = 1500;
     let highScore = 0;
     let boughtSkins = [0];
     let activeSkin = 0;
@@ -81,7 +105,7 @@ export class AuthService {
         uid: user.uid,
         email: user.email,
         displayName: user.displayName,
-        emailVerified: true,
+        emailVerified: user.emailVerified,
         coins: coins,
         highScore: highScore,
         boughtSkins: boughtSkins,
@@ -97,7 +121,35 @@ export class AuthService {
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return (user.uid && user !== null && user.emailVerified !== false) ? true : false;
+    return (user.uid && user !== null) ? true : false;
+  }
+
+  isVerified() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    let verified = false;
+    userRef.ref.get().then(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        verified = doc.data().emailVerified; 
+        console.log('verif: ', data);
+      }
+    })
+    return (verified === false) ? false : true;
+  }
+
+  setVerifiedStatus() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    userRef.ref.get().then(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        data.emailVerified = true;
+        this.SetUserData(data);
+        user.emailVerified = true;
+        localStorage.setItem('user', JSON.stringify(user));
+      }
+    })
   }
 
    // Sign in with Google
@@ -105,7 +157,7 @@ export class AuthService {
     return this.AuthLogin(new firebase.auth.GoogleAuthProvider());
   }
 
-   // Sign in with Google
+   // Sign in with GitHub
    GithubAuth() {
     return this.AuthLogin(new firebase.auth.GithubAuthProvider());
   }
@@ -114,10 +166,16 @@ export class AuthService {
   AuthLogin(provider: any) {
     return this.afAuth.signInWithPopup(provider)
     .then((result) => {
+      if (result.user?.emailVerified) {
+        console.log(result.user);
+        setTimeout(() => {
+          this.router.navigate(['']);
+        }, 300);
+      } else {
+        console.log(result.user);
+        this.SendVerificationMail();
+      }
       this.SetUserData(result.user);
-      setTimeout(() => {
-        this.router.navigate(['']);
-      }, 300);
     }).catch((error) => {
       window.alert(error)
     })

@@ -11,4 +11,8 @@
    </div>
    
 </div>
-<div id="game-loading"></div>
+<div *ngIf="!STATES.loaded" id="game-loading" [style.background-image]="'url(' + loadedImgs[0].src + ')'">
+    <div class="loading-box" [style.background]="'linear-gradient(to right, rgb(90, 184, 247)' +  STATES.loadProgress + '%, white ' + STATES.loadProgress + '% 100%)'">
+        <div id="loading-progress"> {{ STATES.loadProgress }}% </div>
+    </div>
+</div>

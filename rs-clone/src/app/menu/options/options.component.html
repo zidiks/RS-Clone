@@ -1,0 +1,10 @@
+<div class="options">
+    <div id="options-links" class="options-links">
+        <a class="options-link options-active-link" (click)="changeSound()">Sound: <span id="o-sound">on</span></a>
+        <a class="options-link">Volume: <span>&#8249; {{ GP.options.volume * 100 }}% &#8250;</span></a>
+        <a class="options-link" (click)="changeShadows()">Shadows: <span id="o-shadows">off</span></a>
+        <a class="options-link" (click)="changeAntialiasing()">Antialiasing: <span id="o-antialiasing">off</span></a>
+        <a class="options-link">Quality: <span>&#8249; {{ GP.options.quality * 100 }}% &#8250;</span></a>
+        <a routerLink="../" class="options-link">Back</a>
+    </div>
+</div>

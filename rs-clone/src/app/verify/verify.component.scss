@@ -1,0 +1,40 @@
+.displayTable {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    h3 {
+        font-family: 'Press Start 2P', cursive;
+        text-align: center;
+        margin: 2rem 0rem;
+    }
+    .displayTableCell {
+        border: 2px solid black;
+        box-shadow: 5px 5px 1px black;
+        padding: 2rem;
+        .authBlock {
+            p {
+                margin-top: 0;
+            }
+        }
+        .btn {
+            display: block;
+            margin: 0.5rem 0;
+            outline: none;
+            border: 2px solid black;
+            box-shadow: 3px 3px 1px black;
+            padding: 5px;
+            background: none !important;
+            font-family: 'Press Start 2P', cursive;
+        }
+        .btn:hover {
+           transform: scale(0.95);
+           box-shadow: none;
+           cursor: pointer;
+        }
+        .redirectToLogin {
+            padding-top: 0.5rem;
+        }
+    }
+}

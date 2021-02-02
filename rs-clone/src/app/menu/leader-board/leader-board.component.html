@@ -1,0 +1,6 @@
+<div class="leaders">
+    <div id="ledaders-links" class="leaders-links">
+        <a routerLink="../" class="leaders-link leaders-active-link">Back</a>
+        <a *ngFor="let item of leadersData; let i = index" [attr.data-index]="i" class="leaders-link"> {{i+1}}.{{ (item.name.length>18)? (item.name | slice:0:18)+'..':(item.name) }} ({{ item.score }}) </a>
+    </div>
+</div>

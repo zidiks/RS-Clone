@@ -9,3 +9,9 @@ export interface User {
     boughtSkins: any;
     activeSkin: number;
 }
+
+export interface Leader {
+    uid: string;
+    score: number;
+    name: string;
+}

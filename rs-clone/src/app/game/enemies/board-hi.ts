@@ -31,9 +31,8 @@ export class BoardHiEnemy {
       new THREE.MeshPhongMaterial( { color: color, emissive: color, emissiveIntensity: 1 } )
     );
     this.hitBox = enemyBox;
-    enemyBox.position.y = 0.4;
-    enemyBox.position.z += 0.05;
-    enemyBox.position.z = 0;
+    enemyBox.position.y = 0.3;
+    enemyBox.position.z = -0.3;
     enemyBox.visible = false;
     this.object.add(prototypes['boardHi'].clone());
     this.blinklight1.position.set(-0.6, -0.35, 0);

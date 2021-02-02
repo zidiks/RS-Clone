@@ -31,9 +31,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/@loadingio/loading-bar/dist/loading-bar.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/@loadingio/loading-bar/dist/loading-bar.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -54,7 +57,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",

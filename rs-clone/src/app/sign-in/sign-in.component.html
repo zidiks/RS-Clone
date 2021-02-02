@@ -1,10 +1,9 @@
 <div class="displayTable">
+    <h3>Sign In</h3>
     <div class="displayTableCell">
-  
-      <div class="authBlock">
-        <h3>Sign In</h3>
+      <div class="Table-login-1">
         <div class="formGroup">
-          <input type="text" class="formControl" placeholder="Username" #userName required>
+          <input type="text" class="formControl" placeholder="E-mail" #userName required>
         </div>
   
         <div class="formGroup">
@@ -13,28 +12,26 @@
   
         <!-- Calling SignIn Api from AuthService -->
         <div class="formGroup">
-          <input type="button" class="btn btnPrimary" value="Log in" (click)="authService.SignIn(userName.value, userPassword.value)">
+          <input type="button" class="btn" value="Log in" (click)="authService.SignIn(userName.value, userPassword.value)">
         </div>
-  
-        <div class="formGroup">
-          <span class="or"><span class="orInner">Or</span></span>
-        </div>
-  
-        <!-- Calling GoogleAuth Api from AuthService -->
-        <div class="formGroup">
-          <button type="button" class="btn googleBtn" (click)="authService.GoogleAuth()">
-            <i class="fab fa-google-plus-g"></i>
-            Log in with Google
-          </button>
-        </div>
-  
-        <div class="forgotPassword">
-          <span routerLink="/forgot-password">Forgot Password?</span>
+
+        <div class="redirectToLogin">
+          <span>Don't have an account?</span>
+          <button class="btn" routerLink="/register">Sign Up</button>
         </div>
       </div>
-  
-      <div class="redirectToLogin">
-        <span>Don't have an account?<span class="redirect" routerLink="/register-user"> Sign Up</span></span>
+
+      <div class="Table-login-2">
+        <!-- Calling GoogleAuth Api from AuthService -->
+        <span>Login with prividers:</span>
+        <div class="formGroup">
+          <button type="button" class="btn serv-btn" (click)="authService.GoogleAuth()">
+            <i class="bi-google"></i>
+          </button>
+          <button type="button" class="btn serv-btn" (click)="authService.GithubAuth()">
+            <i class="bi-github"></i>
+          </button>
+        </div>
       </div>
   
     </div>

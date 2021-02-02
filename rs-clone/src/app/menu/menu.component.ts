@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import * as THREE from 'three';
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { AlertService } from '../alert.service';
+import { AuthService } from '../auth.service';
 import { User } from '../user';
 import { AudioService } from './audio.service';
 import { globalProps } from './globalprops';
@@ -29,10 +31,13 @@ export class MenuComponent implements OnInit, OnDestroy {
   playerAction: any;
   scene = new THREE.Scene();
   RESIZER: any;
+  REQANIMFRAME: any;
   constructor(
     public router: Router,
     public userManager: UserService,
-    public skinManager: SkinService
+    public skinManager: SkinService,
+    public alertManager: AlertService,
+    public authManager: AuthService
   ) {
     this.skinManager.setSkinTarget(this.skin, this.mixer);
     this.userManager.getUser().subscribe(data => {
@@ -40,10 +45,27 @@ export class MenuComponent implements OnInit, OnDestroy {
         globalProps.coins = data.coins;
         globalProps.highScore = data.highScore;
         globalProps.boughtSkins = data.boughtSkins;
-          if (globalProps.activeSkin !== data.activeSkin) {
-            globalProps.activeSkin = data.activeSkin;
-            this.skinManager.showSkin(`/assets/skins/${globalProps.activeSkin}/menu.fbx`);
-          }
+        if (globalProps.activeSkin !== data.activeSkin) {
+          globalProps.activeSkin = data.activeSkin;
+          this.skinManager.showSkin(`/assets/skins/${globalProps.activeSkin}/menu.fbx`);
+        }
+        if (data.emailVerified !== true && JSON.parse(localStorage.getItem('user') || '{}').uid) {
+          this.alertManager.showAlert('Please, verify E-mail.',
+          {
+            cb: () => {
+              this.authManager.SendVerificationMail();
+              this.router.navigate(['/verify-email-address']);
+              this.alertManager.hideAlert();
+            },
+            label: 'verify'
+          },
+          {
+            cb: () => {
+              this.alertManager.hideAlert();
+            },
+            label: 'skip'
+          })
+        }
       }
       this.user = data;
     });
@@ -75,7 +97,6 @@ this.RESIZER = () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize( window.innerWidth, window.innerHeight );
-  console.log('resizew!');
 }
 
 window.addEventListener( 'resize', this.RESIZER, false );
@@ -151,27 +172,6 @@ envRender("assets/menu/models/train/train.vox.obj", "assets/menu/models/train/tr
 
 let mixer: any;
 
-// const loader = new FBXLoader();
-// loader.load("assets/menu/models/player-menu.fbx", (object) => {
-//   mixer = new THREE.AnimationMixer(object);
-//   const playerAction = mixer.clipAction(object.animations[0]);
-
-//   object.traverse((child) => {
-//     if (child instanceof Mesh) {
-//       child.castShadow = true;
-//       child.receiveShadow = true;
-//     }
-//   });
-
-//   object.scale.set(0.9, 0.9, 0.9);
-//   object.position.y -= 0.5;
-//   object.position.z = 0;
-//   object.rotation.y += 90;
-//   playerAction.play();
-
-//   scene.add(object);
-// });
-
 const render = () => {
   delta = clock.getDelta();
   camera.position.x = Math.cos(angle) * radius;
@@ -183,7 +183,7 @@ const render = () => {
 
   camera.lookAt(cube.position);
 
-  requestAnimationFrame(render);
+  this.REQANIMFRAME = requestAnimationFrame(render);
 
   renderer.render(scene, camera);
 }
@@ -199,6 +199,7 @@ render();
   }
 
   ngOnDestroy() {
+    cancelAnimationFrame(this.REQANIMFRAME);
     audioManager.pauseAll();
     window.removeEventListener( 'resize', this.RESIZER, false );
   }

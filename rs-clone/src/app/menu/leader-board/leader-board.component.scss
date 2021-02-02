@@ -1,0 +1,24 @@
+.leaders {
+    perspective: 500px;
+    transform-style: preserve-3d;
+    .leaders-links {
+        transform-origin: left;
+        transition: .4s;
+        transform: rotateY(40deg);
+        display: flex;
+        flex-direction: column;
+        .leaders-link {
+            text-shadow: 2px 2px 1px black;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.5rem;
+            color: white;
+            margin: 0.5rem 0;
+            text-decoration: none;
+            transition: .3s;
+        }
+        .leaders-active-link {
+            color: gold !important;
+            transform: scale(1.1);
+        }
+    }
+}

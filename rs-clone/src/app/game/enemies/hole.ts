@@ -14,14 +14,13 @@ export class Hole {
   ) {
     this.object.name = 'hole';
     const enemyBox: THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial> = new THREE.Mesh(
-      new THREE.BoxGeometry(1.2, 1.6, 0.1),
+      new THREE.BoxGeometry(1.2, 0.1, 1.2),
       new THREE.MeshPhongMaterial({ color: 0xff0000 })
     );
 
     this.hitBox = enemyBox;
-    enemyBox.position.y = -1.2;
-    enemyBox.position.z += 0.05;
-    enemyBox.position.z = 0;
+    enemyBox.position.y = -1.7;
+    enemyBox.position.z = -0.1;
     enemyBox.visible = false;
     this.object.add(prototypes['hole'].clone());
     this.object.add(enemyBox);
@@ -45,7 +44,7 @@ export class Hole {
 
   checkCollisions(player: any, endGame: any, states: any) {
     if (this.detectCollisionPlayer(player)) {
-      endGame.endFunc();
+      endGame.endFunc('hole');
     }
   }
 }
