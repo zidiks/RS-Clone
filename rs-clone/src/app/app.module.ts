@@ -39,7 +39,8 @@ import { EndStatsComponent } from './menu/end-stats/end-stats.component';
     OptionsComponent,
     VerifyComponent,
     LeaderBoardComponent,
-    EndStatsComponent
+    EndStatsComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
