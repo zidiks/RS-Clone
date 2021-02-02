@@ -5,6 +5,7 @@ import { AnimationService } from './animation.service';
 import { AudioService } from './audio.service';
 import { globalProps } from '../menu/globalprops';
 import { UserService } from '../menu/user.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,6 +13,7 @@ export class EndGameService {
   endGame: HTMLDivElement;
   audio: AudioService;
   states: any;
+  keyRightHandler: any;
   animationManager: AnimationService;
 
   constructor(
@@ -29,6 +31,7 @@ export class EndGameService {
   }
 
   endFunc(name: string = 'hit') {
+
     if (name === 'hole') {
       this.states.hole = true;
       setTimeout(() => {
@@ -38,7 +41,7 @@ export class EndGameService {
       this.audio.deathPlay();
     }
     this.endGame.style.display = 'flex';
-    this.endGame.style.background = 'url("../../assets/UI/stop.png") center center no-repeat';
+    this.endGame.style.background = 'url("../../assets/UI/stop.png") top center no-repeat';
     this.audio.pauseBackground();
     this.states.play = false;
     this.states.end = true;
@@ -51,7 +54,61 @@ export class EndGameService {
       this.userManager.setResult(Math.round(this.states.score));
     }
     setTimeout(() => {
-      this.route.navigate(['end-stats']);
-    }, 3000);
+      const statWrapper = document.createElement("div");
+      statWrapper.classList.add("stat-wrapper");
+      this.endGame.appendChild(statWrapper);
+
+      const stat = document.createElement("div");
+      stat.className = "end-stat";
+      statWrapper.appendChild(stat);
+
+      const resultWrapper = document.createElement("div");
+      resultWrapper.classList.add("result-wrapper");
+
+      const coinWrapper = document.createElement("div");
+      coinWrapper.classList.add("result-wrapper");
+      const coin = document.createElement("div");
+      coin.classList.add("coin-count");
+      coinWrapper.appendChild(coin);
+
+      coin.textContent = `Your got ${this.states.coins} coins`;
+      const coinLogo = document.createElement("div");
+
+      const crownWrapper = document.createElement("div");
+      const crownCount = document.createElement("div");
+      crownCount.classList.add("crown-wrapper");
+      let { score } = this.states;
+      let count:any = Math.round(score);
+      crownCount.textContent = `Your score is ${count} miles`;
+      const crownLogo = document.createElement("div");
+
+      const btnWrapper = document.createElement("div");
+      btnWrapper.classList.add("btn-wrapper");
+      const newGame = document.createElement("div");
+      newGame.classList.add("end-game-btn");
+      newGame.textContent = "Restart";
+      newGame.addEventListener("click", () => {
+        this.route.navigateByUrl('/loader', { skipLocationChange: true }).then(() => {
+        this.route.navigate(['/game']);
+      });
+      })
+
+      const about = document.createElement("div");
+      about.classList.add("end-game-btn");
+      about.textContent = "Menu";
+      about.addEventListener("click", () => {
+        this.route.navigate(['/']);
+      })
+
+      stat.appendChild(resultWrapper);
+      stat.appendChild(btnWrapper);
+
+      resultWrapper.append(coinWrapper, crownWrapper);
+      coinWrapper.append(coin, coinLogo);
+      crownWrapper.append(crownCount, crownLogo);
+
+      btnWrapper.append(newGame, about);
+    }, 500);
   }
 }
+

@@ -20,7 +20,6 @@ export class LoaderComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    let userData: any;
     let renderer: any;
     let scene: any;
     let camera: any;

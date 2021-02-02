@@ -172,27 +172,6 @@ envRender("assets/menu/models/train/train.vox.obj", "assets/menu/models/train/tr
 
 let mixer: any;
 
-// const loader = new FBXLoader();
-// loader.load("assets/menu/models/player-menu.fbx", (object) => {
-//   mixer = new THREE.AnimationMixer(object);
-//   const playerAction = mixer.clipAction(object.animations[0]);
-
-//   object.traverse((child) => {
-//     if (child instanceof Mesh) {
-//       child.castShadow = true;
-//       child.receiveShadow = true;
-//     }
-//   });
-
-//   object.scale.set(0.9, 0.9, 0.9);
-//   object.position.y -= 0.5;
-//   object.position.z = 0;
-//   object.rotation.y += 90;
-//   playerAction.play();
-
-//   scene.add(object);
-// });
-
 const render = () => {
   delta = clock.getDelta();
   camera.position.x = Math.cos(angle) * radius;

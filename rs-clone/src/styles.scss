@@ -24,3 +24,49 @@ body{
 * {
     user-select: none;
 }
+
+.stat-wrapper {
+   perspective-origin: 0 30%;
+   perspective: 300px;
+   position: absolute;
+  top: 50%;
+  left: 50%;
+  // background-color: black;
+  transform: translate(-60%, 0);
+   border-radius: 10em;
+}
+
+.end-stat {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.4rem;
+  width: 400px;
+  height: 250px;
+  border: 15px solid;
+  background-color: white;
+  color: black;
+  text-align: center;
+   border-image-slice: 1;
+   border-width: 15px;
+   border-image-source: linear-gradient(to top, #ffae00, #ff0000);
+  // border-radius: 10em;
+  transform: rotateY(-15deg);
+  display: flex;
+   flex-direction: column;
+   justify-content: space-around;
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: space-around;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.4rem;
+}
+
+.end-game-btn {
+  border: 5px solid black;
+  padding: 15px;
+}
+
+.crown-wrapper {
+  padding: 1rem 0;
+}

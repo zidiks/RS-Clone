@@ -14,6 +14,7 @@ import { UserService } from '../menu/user.service';
 import { globalProps } from '../menu/globalprops';
 import { audioManager } from '../menu/menu.component';
 import { LoadObserverService } from './load-observer.service';
+import { Camera } from 'three';
 
 export interface States {
   control: {
@@ -302,7 +303,7 @@ export class GameComponent implements OnInit, OnDestroy {
         if (!this.newScore && (globalProps.highScore < STATES.score)) {
           this.newScore = true;
           hScore.style.display = 'block';
-        }  
+        }
       } else {
         if (playerManager.player.position.y > 0.15) playerManager.player.position.y -= 0.18 * deltak;
       }

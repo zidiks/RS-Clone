@@ -31,7 +31,7 @@ const routes: Routes = [
   { path: 'login', component: SignInComponent },
   { path: 'register', component: SignUpComponent },
   { path: 'welcome', component: WelcomeComponent },
-  {path: 'loader', component: LoaderComponent},
+  { path: 'loader', component: LoaderComponent },
   { path: 'verify-email-address', component: VerifyComponent }
 ];
 
