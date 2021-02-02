@@ -27,6 +27,7 @@ export class AudioService {
     this.audioList[4] = new Audio(`assets/audio/roll.wav`);
     this.audioList[5] = new Audio(`assets/audio/side-train.wav`);
     this.audioList[6] = new Audio(`assets/audio/hole.wav`);
+    this.audioList[7] = new Audio(`assets/audio/menu/tap.wav`);
   }
 
   sideTrainPlay() {
@@ -38,6 +39,10 @@ export class AudioService {
 
   deathPlay() {
     if (globalProps.options.sound) this.audioList[2].play()
+  }
+
+  tapPlay() {
+    if (globalProps.options.sound) this.audioList[7].play()
   }
 
   holePlay() {

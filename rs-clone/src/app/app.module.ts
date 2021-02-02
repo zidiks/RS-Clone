@@ -21,7 +21,6 @@ import { NotfoundComponent } from './notfound/notfound.component';
 import { OptionsComponent } from './menu/options/options.component';
 import { VerifyComponent } from './verify/verify.component';
 import { LeaderBoardComponent } from './menu/leader-board/leader-board.component';
-import { EndStatsComponent } from './menu/end-stats/end-stats.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +38,6 @@ import { EndStatsComponent } from './menu/end-stats/end-stats.component';
     OptionsComponent,
     VerifyComponent,
     LeaderBoardComponent,
-    EndStatsComponent,
     LoaderComponent
   ],
   imports: [

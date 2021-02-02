@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
           if (this.activeLink + 1 > this.menuLinks.length - 1) this.activeLink = 0; else this.activeLink++;
         }
         if(e.key == 'ArrowUp'){
-          if (this.activeLink - 1 < 0) this.activeLink = 4; else this.activeLink--;
+          if (this.activeLink - 1 < 0) this.activeLink = this.menuLinks.length - 1; else this.activeLink--;
         }
         this.menuLinks[this.activeLink].classList.add('menu-active-link');
         audioManager.playLink();

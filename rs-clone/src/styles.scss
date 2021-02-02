@@ -19,6 +19,7 @@ body{
     justify-content: center;
     align-items: center;
     z-index: 999;
+    cursor: pointer;
 }
 
 * {
@@ -65,6 +66,13 @@ body{
 .end-game-btn {
   border: 5px solid black;
   padding: 15px;
+  cursor: pointer;
+}
+.end-game-btn:hover {
+  box-shadow: 5px 5px 1px;
+}
+.end-active-link {
+  box-shadow: 5px 5px 1px;
 }
 
 .crown-wrapper {

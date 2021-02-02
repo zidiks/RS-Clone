@@ -18,11 +18,12 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.pload(
-      "assets/UI/loading-screen.png");
+      "assets/UI/loading-screen.png",
+      "assets/UI/stop.png");
   }
   
   pload(...args: any[]):void {
-    for (var i = 0; i < args.length; i++) {
+    for (let i = 0; i < args.length; i++) {
       this.imgs[i] = new Image();
       this.imgs[i].src = args[i];
       console.log('loaded: ' + args[i]);

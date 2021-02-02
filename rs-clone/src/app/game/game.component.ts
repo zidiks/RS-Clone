@@ -83,6 +83,8 @@ export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken'
   ]
 })
 export class GameComponent implements OnInit, OnDestroy {
+  ENDOUTER: any;
+  ENDMANAGER: any;
   RENDERER: any;
   SCENE: any;
   STATES: States;
@@ -93,6 +95,8 @@ export class GameComponent implements OnInit, OnDestroy {
   newScore: boolean = false;
   RESIZER: any;
   keyRightHandler: any;
+  clickSpace: any;
+  REMOVEKEYS = () => {document.removeEventListener("keydown", this.keyRightHandler, false)};
   loadedImgs = globalProps.loadImg;
   constructor(
     public loadObserver: LoadObserverService,
@@ -144,6 +148,7 @@ export class GameComponent implements OnInit, OnDestroy {
     const domScene = <HTMLDivElement>document.getElementById('game-scene');
     const domScore = <HTMLDivElement>document.getElementById('game-score');
     const hScore = <HTMLDivElement>document.getElementById('newScore');
+    this.ENDOUTER = <HTMLDivElement>document.getElementById('end-outer');
 
     const clock = new THREE.Clock();
     this.SCENE = new THREE.Scene();
@@ -163,6 +168,7 @@ export class GameComponent implements OnInit, OnDestroy {
     endGame.style.background = 'url("../../assets/UI/start.png") center center no-repeat';
 
     const endManager = new EndGameService(this.router, endGame, STATES, audioManager, animationManager, this.userManager);
+    this.ENDMANAGER = endManager;
 
     this.RENDERER = new THREE.WebGLRenderer({ antialias: globalProps.options.antialiasing });
     const renderer = this.RENDERER;
@@ -207,6 +213,20 @@ export class GameComponent implements OnInit, OnDestroy {
     let cameraTarget = new THREE.Vector3().copy(playerManager.cube.position);
     cameraTarget.y -= 0;
     camera.lookAt(cameraTarget);
+
+    this.clickSpace = () => {
+      if (STATES.play === false && STATES.end === false) {
+        endGame.style.display = 'none';
+        setTimeout(() => {
+          audioManager.playBackground();
+        }, 800);
+        STATES.startAnim = true;
+      }
+    }
+
+    endGame.onclick = () => {
+      this.clickSpace();
+    }
 
     this.keyRightHandler = (e: { keyCode: number; }) => {
       if(e.keyCode == 38){
@@ -269,7 +289,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
       this.REQANIMFRAME = requestAnimationFrame( this.animate );
 
-      // stats.begin();
       if (STATES.startAnim) {
         if (camera.position.x > 0 || camera.position.z < 6) {
           if (camera.position.z < 6) camera.position.z += 0.06 * deltak;
@@ -311,8 +330,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
       if ( playerManager.mixer && STATES.animation ) playerManager.mixer.update( delta );
 
-      // stats.end();
-
       renderer.render( scene, camera );
     }
     this.animate();
@@ -320,8 +337,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     cancelAnimationFrame(this.REQANIMFRAME);
+    this.ENDMANAGER.removeBtn();
     window.removeEventListener( 'resize', this.RESIZER, false );
-    document.removeEventListener("keydown", this.keyRightHandler, false);
+    this.REMOVEKEYS();
     if (this.AUDIO) this.AUDIO.pauseAll();
     this.RENDERER = null;
     this.SCENE.clear();

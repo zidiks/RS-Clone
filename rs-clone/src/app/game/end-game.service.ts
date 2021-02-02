@@ -15,7 +15,28 @@ export class EndGameService {
   states: any;
   keyRightHandler: any;
   animationManager: AnimationService;
-
+  endLinks: any[] = [undefined, undefined];
+  activeLink = 0;
+  moveBtn = (e: any) => {
+    if (this.endLinks[1] !== undefined) {
+      if (e.key == 'ArrowRight' || e.key == 'ArrowLeft') {
+        this.endLinks[this.activeLink].classList.remove('end-active-link');
+        if(e.key == 'ArrowRight'){
+          if (this.activeLink + 1 > this.endLinks.length - 1) this.activeLink = 0; else this.activeLink++;
+        }
+        if(e.key == 'ArrowLeft'){
+          if (this.activeLink - 1 < 0) this.activeLink = this.endLinks.length - 1; else this.activeLink--;
+        }
+        this.endLinks[this.activeLink].classList.add('end-active-link');
+        this.audio.tapPlay();
+      } else if(e.key == 'Enter') {
+          this.endLinks[this.activeLink].click();
+      }
+    }
+  }
+  removeBtn = () => {
+    document.removeEventListener('keydown', this.moveBtn);
+  }
   constructor(
     public route: Router,
     DOMel: HTMLDivElement,
@@ -31,7 +52,7 @@ export class EndGameService {
   }
 
   endFunc(name: string = 'hit') {
-
+    document.addEventListener('keydown', this.moveBtn, false);
     if (name === 'hole') {
       this.states.hole = true;
       setTimeout(() => {
@@ -41,7 +62,7 @@ export class EndGameService {
       this.audio.deathPlay();
     }
     this.endGame.style.display = 'flex';
-    this.endGame.style.background = 'url("../../assets/UI/stop.png") top center no-repeat';
+    this.endGame.style.background = `url("${globalProps.loadImg[1].src}") top center no-repeat`;
     this.audio.pauseBackground();
     this.states.play = false;
     this.states.end = true;
@@ -86,6 +107,7 @@ export class EndGameService {
       btnWrapper.classList.add("btn-wrapper");
       const newGame = document.createElement("div");
       newGame.classList.add("end-game-btn");
+      newGame.classList.add("end-active-link");
       newGame.textContent = "Restart";
       newGame.addEventListener("click", () => {
         this.route.navigateByUrl('/loader', { skipLocationChange: true }).then(() => {
@@ -99,6 +121,8 @@ export class EndGameService {
       about.addEventListener("click", () => {
         this.route.navigate(['/']);
       })
+      this.endLinks[0] = newGame;
+      this.endLinks[1] = about;
 
       stat.appendChild(resultWrapper);
       stat.appendChild(btnWrapper);
