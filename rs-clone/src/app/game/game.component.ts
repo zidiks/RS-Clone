@@ -83,11 +83,17 @@ export const ANIMATIONS_TOKEN = new InjectionToken<Animations>('AnimationsToken'
   ]
 })
 export class GameComponent implements OnInit, OnDestroy {
+  PAUSEICON: string = 'pause';
+  PAUSESTATE: boolean = true;
   ENDOUTER: any;
   ENDMANAGER: any;
   RENDERER: any;
   SCENE: any;
   STATES: States;
+  PAUSE: Function = () => {
+    this.PAUSESTATE = !this.PAUSESTATE;
+    this.PAUSEICON = this.PAUSESTATE ? 'pause' : 'play_arrow';
+  }
   ANIMATIONS: Animations;
   AUDIO: AudioService | undefined = undefined;
   animate: any;
@@ -309,7 +315,7 @@ export class GameComponent implements OnInit, OnDestroy {
         if (playerManager.player.position.y > -2) playerManager.player.position.y -= 0.2 * deltak; else STATES.hole = false;
       }
 
-      if (STATES.play) {
+      if (STATES.play && this.PAUSESTATE) {
         playerManager.playerActions[0].setDuration(STATES.speed ** -1);
         env.MoveEnv(STATES.speed, deltak);
         enemyManager.moveEnemies(STATES.speed, playerManager.cube, endManager, STATES, audioManager, deltak);
@@ -328,7 +334,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }
 
 
-      if ( playerManager.mixer && STATES.animation ) playerManager.mixer.update( delta );
+      if ( playerManager.mixer && STATES.animation && this.PAUSESTATE ) playerManager.mixer.update( delta );
 
       renderer.render( scene, camera );
     }
