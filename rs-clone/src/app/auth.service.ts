@@ -104,7 +104,7 @@ export class AuthService {
       userData = {
         uid: user.uid,
         email: user.email,
-        displayName: user.displayName,
+        displayName: user.displayName == null ? user.email : user.displayName,
         emailVerified: user.emailVerified,
         coins: coins,
         highScore: highScore,
@@ -167,12 +167,10 @@ export class AuthService {
     return this.afAuth.signInWithPopup(provider)
     .then((result) => {
       if (result.user?.emailVerified) {
-        console.log(result.user);
         setTimeout(() => {
           this.router.navigate(['']);
         }, 300);
       } else {
-        console.log(result.user);
         this.SendVerificationMail();
       }
       this.SetUserData(result.user);

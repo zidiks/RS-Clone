@@ -40,11 +40,11 @@ export class UserService {
   setResult(newScore: number) {
     const user = JSON.parse(localStorage.getItem('user') || '{ }');
     const uid = user.uid;
-    const name = user.displayName;
+    const name = globalProps.userName;
     const data: Leader = {
       uid: uid,
       score: newScore,
-      name: name
+      name: name || user.email
     }
     this.afs.doc(`leaders-board/${uid}`)
   .update(data)

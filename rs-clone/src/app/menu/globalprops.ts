@@ -22,7 +22,8 @@ interface globalProps {
         }>,
         message: string
     },
-    loadImg: Array<HTMLImageElement>;
+    loadImg: Array<HTMLImageElement>,
+    userName: string | undefined
 }
 
 export const globalProps: globalProps = {
@@ -49,7 +50,8 @@ export const globalProps: globalProps = {
         }],
         message: 'Test message'
     },
-    loadImg: []
+    loadImg: [],
+    userName: 'No Name'
 }
 
 const options = localStorage.getItem('options');

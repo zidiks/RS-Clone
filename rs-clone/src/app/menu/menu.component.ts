@@ -76,6 +76,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         }
       }
       this.user = data;
+      globalProps.userName = this.user?.displayName || this.user?.email;
     });
   }
 
