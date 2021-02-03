@@ -235,7 +235,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }
 
     this.keyRightHandler = (e: { keyCode: number; }) => {
-      if(e.keyCode == 38){
+      if(e.keyCode == 38 && STATES.play && this.PAUSESTATE){
         if (STATES.control.jumpPressed === false) audioManager.jumpPlay();
         STATES.control.jumpPressed = true;
         playerManager.cube.position.y = -1;
@@ -244,18 +244,18 @@ export class GameComponent implements OnInit, OnDestroy {
         animationManager.changeAnimationTo('jump');
         playerManager.rollLock = false;
       }
-      if(e.keyCode === 40){
+      if(e.keyCode === 40 && STATES.play && this.PAUSESTATE){
         if (STATES.control.squat === false) audioManager.rollPlay();
         STATES.control.squat = true;
         STATES.control.jumpPressed = false;
         STATES.control.jumpCount=0;
       }
-      if(e.keyCode == 39){
+      if(e.keyCode == 39 && STATES.play && this.PAUSESTATE){
         if (STATES.control.xpos < 1) {
           STATES.control.xpos += 1;
         }
       }
-      if(e.keyCode == 32){
+      if(e.keyCode == 32 && STATES.loaded){
         if (STATES.play === false && STATES.end === false) {
           endGame.style.display = 'none';
           setTimeout(() => {
@@ -264,12 +264,12 @@ export class GameComponent implements OnInit, OnDestroy {
           STATES.startAnim = true;
         }
       }
-      if(e.keyCode == 37){
+      if(e.keyCode == 37 && STATES.play && this.PAUSESTATE){
         if (STATES.control.xpos > -1) {
           STATES.control.xpos -= 1;
         }
       }
-      if (e.keyCode === 16) {
+      if (e.keyCode === 16 && STATES.play && this.PAUSESTATE) {
         if (STATES.speed < 3 &&
           STATES.force === true &&
           STATES.forceDuration !== 0) {
