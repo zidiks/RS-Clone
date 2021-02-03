@@ -152,7 +152,9 @@ export class EnemyService {
       });
     });
     promise.then((e) => {
-      this.generateStartWay(10);
+      setTimeout(() => {
+        this.generateStartWay(10);
+      }, 200);
     })
     .catch(e => {
       throw new Error(e);
@@ -198,7 +200,6 @@ export class EnemyService {
           newEnemy.object.position.x = (index - 1) * 2;
         }
       });
-      //enemiesLine.line.position.y -= 0.8;
       if (bindex < 9) enemiesLine.initedNext = true;
       if (bindex < 10) {
         this.inMove.push(enemiesLine);
