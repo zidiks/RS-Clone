@@ -78,16 +78,14 @@ export class EnvironementService {
   getRandomInt(min: number, max: number) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
+    return Math.floor(Math.random() * (max - min)) + min;
   }
 
   GenerateEnv(grouppObjs: Array<LoadedObj>, starter: boolean, index: number) {
     let mtlLoader = new MTLLoader();
     let scene = this.Scene;
-    //let preload = this.Preload;
     let queue = this.Queue;
     let inMov = this.inMove;
-    // url = "assets/untitled.mtl";
     let group = new THREE.Group;
     grouppObjs.forEach((element, index) => {
       mtlLoader.load( element.mtl, ( materials ) => {
@@ -140,7 +138,6 @@ export class EnvironementService {
         enemy.obj.position.z += 0.05 * speed * delta;
       }
       if ((enemy.obj.position.z) >= 18 && enemy.initedNext === false && this.Queue[0] !== undefined) {
-        //this.inMove.push(this.Queue.shift());
         this.inMove.push(this.Queue.splice(this.getRandomInt(1, this.Queue.length), 1)[0]);
         enemy.initedNext = true;
       }

@@ -15,10 +15,10 @@ export class AuthService {
   userData: any;
 
   constructor(
-    public afs: AngularFirestore,   // Inject Firestore service
-    public afAuth: AngularFireAuth, // Inject Firebase auth service
+    public afs: AngularFirestore,
+    public afAuth: AngularFireAuth,
     public router: Router,  
-    public ngZone: NgZone // NgZone service to remove outside scope warning
+    public ngZone: NgZone
   ) {
     this.afAuth.authState.subscribe(user => {
       if (user) {
@@ -32,7 +32,6 @@ export class AuthService {
     })
   }
 
-  // Sign in with email/password
   SignIn(email: string, password: string) {
     return this.afAuth.signInWithEmailAndPassword(email, password)
       .then((result) => {
@@ -43,7 +42,6 @@ export class AuthService {
             if (doc.exists) {
               const data = doc.data();
               userData.displayName = data.displayName;
-              console.log(userData);
               this.SetUserData(userData);
               setTimeout(() => {
                 this.router.navigate(['']);
@@ -56,12 +54,9 @@ export class AuthService {
       })
   }
 
-  // Sign up with email/password
   SignUp(email: string, password: string, displayName: string) {
     return this.afAuth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
-        /* Call the SendVerificaitonMail() function when new user sign 
-        up and returns promise */
         if (result.user) {
           this.SendVerificationMail();
           const userData = Object.assign({}, result.user);
@@ -74,7 +69,6 @@ export class AuthService {
   }
 
 
-    // Send email verfificaiton when new user sign up
     SendVerificationMail() {
       return this.afAuth.currentUser.then(u => { if (u) u.sendEmailVerification() })
       .then(() => {
@@ -82,9 +76,6 @@ export class AuthService {
       })
     }
 
-  /* Setting up user data when sign in with username/password, 
-  sign up with username/password and sign in with social auth  
-  provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
   SetUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     let userData: User;
@@ -118,7 +109,6 @@ export class AuthService {
     })
   }
 
-  // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     return (user.uid && user !== null) ? true : false;
@@ -132,7 +122,6 @@ export class AuthService {
       if (doc.exists) {
         const data = doc.data();
         verified = doc.data().emailVerified; 
-        console.log('verif: ', data);
       }
     })
     return (verified === false) ? false : true;
@@ -152,17 +141,14 @@ export class AuthService {
     })
   }
 
-   // Sign in with Google
    GoogleAuth() {
     return this.AuthLogin(new firebase.auth.GoogleAuthProvider());
   }
 
-   // Sign in with GitHub
    GithubAuth() {
     return this.AuthLogin(new firebase.auth.GithubAuthProvider());
   }
 
-  // Auth logic to run auth providers
   AuthLogin(provider: any) {
     return this.afAuth.signInWithPopup(provider)
     .then((result) => {
@@ -178,8 +164,7 @@ export class AuthService {
       window.alert(error)
     })
   }
-
-  // Sign out 
+ 
   SignOut() {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');

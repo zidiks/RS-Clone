@@ -38,8 +38,6 @@ export class HomeComponent implements OnInit {
     this.linksBox = <HTMLDivElement>document.getElementById('menu-links');
     const domName= <HTMLDivElement>document.getElementById('p-name');
     const playerName = this.AllMenu.user?.displayName || 'No Name';
-    console.log(playerName);
-    //if (playerName !== null) domName.textContent = playerName;
     this.menuLinks = Array.prototype.slice.call(<HTMLDivElement><unknown>document.getElementsByClassName('menu-link'));
     document.addEventListener('keydown', this.moveMenu, false);
   }

@@ -37,10 +37,6 @@ export class SkinService {
         }
       });
 
-      // 
-      // object.position.y -= 1.1;
-      // object.position.z = -3;
-
       object.scale.set(0.25, 0.25, 0.25);
       object.position.y -= 0.5;
       object.position.z = 0;

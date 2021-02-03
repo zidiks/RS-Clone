@@ -33,7 +33,6 @@ export class PlayerService {
   mixer: any;
   player: any = new THREE.Group;
   rollLock: boolean = false;
-  //playerAction: any;
   playerActions: THREE.AnimationAction[] = new Array();
   cube: any = new THREE.Mesh(
     new THREE.BoxGeometry(0.4, 1.6 , 0.2),

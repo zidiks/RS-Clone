@@ -10,7 +10,6 @@
           <input type="password" class="formControl" placeholder="Password" #userPassword required>
         </div>
   
-        <!-- Calling SignIn Api from AuthService -->
         <div class="formGroup">
           <input type="button" class="btn" value="Log in" (click)="authService.SignIn(userName.value, userPassword.value)">
         </div>
@@ -22,7 +21,6 @@
       </div>
 
       <div class="Table-login-2">
-        <!-- Calling GoogleAuth Api from AuthService -->
         <span>Login with prividers:</span>
         <div class="formGroup">
           <button type="button" class="btn serv-btn" (click)="authService.GoogleAuth()">

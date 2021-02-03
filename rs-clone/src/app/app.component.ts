@@ -28,7 +28,6 @@ export class AppComponent implements OnInit {
     for (let i = 0; i < args.length; i++) {
       this.imgs[i] = new Image();
       this.imgs[i].src = args[i];
-      console.log('loaded: ' + args[i]);
     }
   }
 }

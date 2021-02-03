@@ -6,16 +6,9 @@ import { States, STATES_TOKEN } from './game.component';
   providedIn: 'root'
 })
 export class AudioService {
-  // gameBachground: HTMLAudioElement;
-  // coinSound: HTMLAudioElement;
-  // deathSound: HTMLAudioElement;
-  // jumpSound: HTMLAudioElement;
-  // rollSound: HTMLAudioElement;
-  // sideTrainSound: HTMLAudioElement;
 
   audioList: Array<HTMLAudioElement> = [];
   constructor(
-    //@Inject(STATES_TOKEN) public STATES_TOKEN: States
   ) {
     this.audioList[0] = new Audio(`assets/audio/background.mp3`);
     this.audioList[0].onended = () => {

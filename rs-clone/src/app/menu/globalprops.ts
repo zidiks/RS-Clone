@@ -57,7 +57,6 @@ export const globalProps: globalProps = {
 const options = localStorage.getItem('options');
 if (options !== null) {
     globalProps.options = JSON.parse(options);
-    console.log(globalProps.options);
 } else {
     globalProps.options = {
         shadows: false,
