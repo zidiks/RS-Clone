@@ -2,171 +2,359 @@
     width: 100%;
     height: 100%;
     .start-section {
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      .bg-video {
+        position: absolute;
+        z-index: 0;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 80vh;
         overflow: hidden;
+        opacity: 0.8;
+        background-image: url("../../assets/UI/landing-bg.svg");
+        clip-path: polygon(0% 0%, 100% 0, 100% 65%, 50% 100%, 0 65%);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: top center;
+      }
+      .start-content {
+        position: absolute;
+        z-index: 10;
+        left: 0;
+        top: 0;
         width: 100%;
         height: 100%;
-        .bg-video {
-            position: absolute;
-            z-index: 0;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 80vh;
-            overflow: hidden;
-            opacity: 0.8;
-            background-image: url('../../assets/UI/landing-bg.svg');
-            clip-path: polygon(0% 0%, 100% 0, 100% 65%, 50% 100%, 0 65%);
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: top center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: white;
+        #model {
+          width: 100%;
+          height: 100%;
+          cursor: grab;
         }
-        .start-content {
-            position: absolute;
-            z-index: 10;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            color: white;
-           #model {
-               width: 100%;
-               height: 100%;
-               cursor: grab;
-           }
-        }
-        .logo {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            margin-top: 4rem;
-            background-image: url('../../assets/UI/logo.png');
-            background-size: auto 100%;
-            background-repeat: no-repeat;
-            background-position: center;
-            height: 6rem;
-            z-index: 1000;
-        }
+      }
+      .logo {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin-top: 4rem;
+        background-image: url("../../assets/UI/logo.png");
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 6rem;
+        z-index: 1000;
+      }
     }
     .video-section {
-        width: 100%;
-        height: auto;
-        height: 80vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        iframe {
-            box-shadow: 0 0 25px black;
-            height: 70%;
-            width: 60%;
-        }
+      width: 100%;
+      height: auto;
+      height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      iframe {
+        box-shadow: 0 0 25px black;
+        height: 70%;
+        width: 60%;
+      }
     }
     .play-section {
-        width: 100%;
-        height: auto;
-        height: 30vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        p {
-            margin-top: 2rem;
-            width: 70%;
-            text-align: center;
-            font-family: 'Press Start 2P', cursive;
+      width: 100%;
+      height: auto;
+      height: 30vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      p {
+        margin-top: 2rem;
+        width: 70%;
+        text-align: center;
+        font-family: "Press Start 2P", cursive;
+        @media screen and (max-width: 768px) and (min-width: 577px) {
+          font-size: 0.8rem;
         }
-        button {
-            margin-top: 1rem;
-            border: 2px solid black;
-            padding: 1.5rem;
-            background: none;
-            outline: none;
-            font-family: 'Press Start 2P', cursive;
-            color: black;
-            font-size: 1.5rem;
-            cursor: pointer;
+        @media screen and (max-width: 577px) {
+          font-size: 0.8rem;
         }
-        button:hover {
-            box-shadow: 5px 5px 1px black;
-            transform: scale(1.05);
+      }
+      button {
+        margin-top: 1rem;
+        border: 2px solid black;
+        padding: 1.5rem;
+        background: none;
+        outline: none;
+        font-family: "Press Start 2P", cursive;
+        color: black;
+        font-size: 1.5rem;
+        cursor: pointer;
+        @media screen and (max-width: 768px) and (min-width: 577px) {
+          font-size: 0.8rem;
         }
+        @media screen and (max-width: 577px) {
+          font-size: 0.8rem;
+        }
+      }
+      button:hover {
+        box-shadow: 5px 5px 1px black;
+        transform: scale(1.05);
+      }
     }
     .feat-section {
+      width: 100%;
+      min-height: 40vh;
+      .feat-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         width: 100%;
-        min-height: 40vh;
-        .feat-box {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            width: 100%;
-            .feat-img {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                img {
-                    width: 90%;
-                    height: auto;
-                }
-            }
-            .feat-text {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-family: 'Press Start 2P', cursive;
-                color: black;
-                font-size: 1.5rem;
-                padding: 1rem 4rem;
-            }
+        @media screen and (max-width: 577px) {
+          display: flex;
+          flex-direction: column;
         }
-        .feat-invert {
-            clip-path: polygon(0% 0%, 50% 14%, 100% 0%, 100% 100%, 32% 92%, 0% 100%);
-            background-color: rgb(19, 19, 19);
-            .feat-text {
-                color: white;
-            }
+        .feat-img {
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
+        .feat-img-house {
+          width: 80%;
+          height: auto;
+          @media screen and (max-width: 577px) {
+            width: 70%;
+            margin-right: 0;
+          }
+        }
+        .feat-img-man {
+          width: 60%;
+          height: auto;
+          @media screen and (max-width: 577px) {
+            width: 40%;
+            margin-right: 0;
+            margin-bottom: 2rem;
+          }
+        }
+        .skin-text {
+          @media screen and (max-width: 577px) {
+            margin-top: 5rem;
+          }
+        }
+        .feat-text {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: "Press Start 2P", cursive;
+          color: black;
+          font-size: 1.5rem;
+          padding: 1rem 4rem;
+          @media screen and (max-width: 768px) and (min-width: 577px) {
+            font-size: 0.8rem;
+          }
+          @media screen and (max-width: 577px) {
+            font-size: 0.8rem;
+          }
+        }
+      }
+      .feat-invert {
+        clip-path: polygon(0% 0%, 50% 14%, 100% 0%, 100% 100%, 32% 92%, 0% 100%);
+        background-color: rgb(19, 19, 19);
+        .feat-text {
+          color: white;
+        }
+      }
+    }
+    .controls-section {
+      width: 100%;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-top: 3rem;
+      h2 {
+        font-family: "Press Start 2P", cursive;
+        color: black;
+        font-size: 1.5rem;
+        padding: 0rem 4rem;
+        @media screen and (max-width: 768px) and (min-width: 577px) {
+          font-size: 0.8rem;
+        }
+      }
+      .tech-logos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width: 35%;
+          height: auto;
+          margin: 0rem 2rem;
+          @media screen and (max-width: 577px) {
+            width: 35%;
+          }
+        }
+      }
     }
     .technologies-section {
-        width: 100%;
-        height: auto;
+      width: 100%;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-top: 3rem;
+      h2 {
+        font-family: "Press Start 2P", cursive;
+        color: black;
+        font-size: 1.5rem;
+        padding: 0rem 4rem;
+        @media screen and (max-width: 768px) and (min-width: 577px) {
+          font-size: 0.8rem;
+        }
+      }
+      .tech-logos {
         display: flex;
-        align-items: center;
         justify-content: center;
-        flex-direction: column;
-        margin-top: 3rem;
-        h2 {
-            font-family: 'Press Start 2P', cursive;
-            color: black;
-            font-size: 1.5rem;
-            padding: 0rem 4rem;
+        flex-direction: row;
+        @media screen and (max-width: 577px) {
+          display: flex;
+          flex-wrap: wrap;
         }
-        .tech-logos {
-            display: flex;
-            justify-content: center;
-            flex-direction: row;
-            img {
-                width: 12%;
-                height: auto;
-                margin: 0rem 2rem;
-            }
+        img {
+          width: 12%;
+          height: auto;
+          margin: 0rem 2rem;
+          @media screen and (max-width: 577px) {
+            width: 35%;
+          }
         }
+      }
     }
     .team-section {
-        width: 100%;
-        height: auto;
+      width: 100%;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-top: 3rem;
+      margin-bottom: 5rem;
+      h2 {
+        font-family: "Press Start 2P", cursive;
+        color: black;
+        font-size: 1.5rem;
+        padding: 0rem 4rem;
+      }
+      .tech-logos {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row;
+        @media screen and (max-width: 577px) {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        img {
+          width: 50%;
+          height: auto;
+          margin: 0rem 2rem;
+          @media screen and (max-width: 577px) {
+            width: 65%;
+          }
+        }
+      }
+      .team-name {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 30%;
+        @media screen and (max-width: 577px) {
+          width: 50%;
+          display: flex;
+          flex-wrap: wrap;
+          margin-bottom: 2rem;
+          max-width: 100%;
+        }
+        .feat-text {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: "Press Start 2P", cursive;
+          color: black;
+          font-size: 1rem;
+          padding-bottom: 1rem;
+          @media screen and (max-width: 768px) and (min-width: 577px) {
+            font-size: 0.8rem;
+          }
+        }
+      }
+      .dotted {
+        border: 8px dotted #000;
+      }
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+      background-color: #aeaeae;
+      padding: 1.5rem;
+      @media screen and (max-width: 577px) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .footer-logo {
+        @media screen and (max-width: 768px) and (min-width: 577px) {
+          text-align: right;
+        }
+        @media screen and (max-width: 577px) {
+          text-align: center;
+        }
+      }
+      .feat-text {
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-direction: column;
-        margin-top: 3rem;
-        h2 {
-            font-family: 'Press Start 2P', cursive;
-            color: black;
-            font-size: 1.5rem;
-            padding: 0rem 4rem;
+        font-family: "Press Start 2P", cursive;
+        color: black;
+        font-size: 1rem;
+        @media screen and (max-width: 768px) and (min-width: 577px) {
+          font-size: 0.8rem;
         }
+        @media screen and (max-width: 577px) {
+          font-size: 0.8rem;
+        }
+      }
+      img {
+        width: 100%;
+        @media screen and (max-width: 768px) and (min-width: 577px) {
+          width: 60%;
+        }
+        @media screen and (max-width: 577px) {
+          width: 60%;
+        }
+      }
+      .footer-git {
+        display: flex;
+        @media screen and (max-width: 577px) {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        a {
+          display: block;
+          color: #000;
+          text-decoration: none;
+          padding: 1rem;
+        }
+      }
     }
-}
+  }
+  

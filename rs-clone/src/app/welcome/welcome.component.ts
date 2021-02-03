@@ -66,6 +66,7 @@ export class WelcomeComponent implements OnInit {
       renderer.render( scene, camera );
     }
     animate();
+    
   }
 
   ngOnDestroy() {
