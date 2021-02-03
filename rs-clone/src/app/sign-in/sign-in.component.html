@@ -1,0 +1,37 @@
+<div class="displayTable">
+    <h3>Sign In</h3>
+    <div class="displayTableCell">
+      <div class="Table-login-1">
+        <div class="formGroup">
+          <input type="text" class="formControl" placeholder="E-mail" #userName required>
+        </div>
+  
+        <div class="formGroup">
+          <input type="password" class="formControl" placeholder="Password" #userPassword required>
+        </div>
+  
+        <div class="formGroup">
+          <input type="button" class="btn" value="Log in" (click)="authService.SignIn(userName.value, userPassword.value)">
+        </div>
+
+        <div class="redirectToLogin">
+          <span>Don't have an account?</span>
+          <button class="btn" routerLink="/register">Sign Up</button>
+        </div>
+      </div>
+
+      <div class="Table-login-2">
+        <span>Login with prividers:</span>
+        <div class="formGroup">
+          <button type="button" class="btn serv-btn" (click)="authService.GoogleAuth()">
+            <i class="bi-google"></i>
+          </button>
+          <button type="button" class="btn serv-btn" (click)="authService.GithubAuth()">
+            <i class="bi-github"></i>
+          </button>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  

@@ -1,0 +1,18 @@
+<div id="game-scene"></div>
+<div id="game-menu">
+    <div>
+        <a class="shadow-box" style="cursor: pointer;" (click)="PAUSE()"><span class="material-icons"> {{ PAUSEICON }} </span></a>
+    </div>
+   <div>
+        <div class="shadow-box">
+            <div><span id="game-score">00000</span><span id="newScore">HIGH SCORE!</span></div>
+            <div id="coins" *ngIf="STATES"><div class="coin-icon"></div> {{ STATES.coins }} </div>
+        </div>
+   </div>
+   
+</div>
+<div *ngIf="!STATES.loaded" id="game-loading" [style.background-image]="'url(' + loadedImgs[0].src + ')'">
+    <div class="loading-box" [style.background]="'linear-gradient(to right, rgb(90, 184, 247)' +  STATES.loadProgress + '%, white ' + STATES.loadProgress + '% 100%)'">
+        <div id="loading-progress"> {{ STATES.loadProgress }}% </div>
+    </div>
+</div>

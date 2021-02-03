@@ -1,0 +1,70 @@
+.displayTable {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    h3 {
+        font-family: 'Press Start 2P', cursive;
+        text-align: center;
+        margin: 2rem 0rem;
+    }
+    .displayTableCell {
+        border: 2px solid black;
+        box-shadow: 5px 5px 1px black;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        .formControl {
+            margin: 0.5rem 0;
+            outline: none;
+            border: none;
+            background: none !important;
+            border-bottom: 2px solid black;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .formControl:valid {
+            background: none !important;
+        }
+        .formControl:focus {
+            background: none !important;
+        }
+        .btn {
+            margin: 0.5rem 0;
+            outline: none;
+            border: 2px solid black;
+            box-shadow: 3px 3px 1px black;
+            padding: 5px;
+            background: none !important;
+            font-family: 'Press Start 2P', cursive;
+        }
+        .btn:hover {
+           transform: scale(0.95);
+           box-shadow: none;
+           cursor: pointer;
+        }
+        .redirectToLogin {
+            span {
+                font-family: 'Press Start 2P', cursive;
+                font-size: 0.7rem;
+            }
+            button {
+                display: block;
+            }
+            margin-top: 1rem;
+        }
+        .Table-login-1 {
+            padding: 1rem 3rem;
+        }
+        .Table-login-2 {
+            padding: 1rem 3rem;
+            span {
+                font-family: 'Press Start 2P', cursive;
+                font-size: 0.7rem;
+            }
+            .serv-btn {
+                margin-right: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+        }
+    }
+}

@@ -1,0 +1,9 @@
+<router-outlet></router-outlet>
+<div *ngIf="gP.alert.state" id="alert">
+    <div class="alert-content">
+        <div id="alert-message"> {{ gP.alert.message }} </div>
+        <div id="alert-actions">
+            <button *ngFor="let item of gP.alert.actions" (click)="item.cb()"> {{ item.label }} </button>
+        </div>
+    </div>
+</div>

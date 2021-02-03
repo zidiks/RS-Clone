@@ -1,0 +1,116 @@
+#game-scene {
+    width: 100%;
+    height: 100%;
+}
+
+#game-menu {
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: calc(100% - 2rem);
+    padding: 1rem;
+    border-radius: 10px;
+    div  {
+        position: relative;
+        .shadow-box {
+            background: rgba($color: #000000, $alpha: 0.3);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+        }
+        a {
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #game-score {
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        #newScore {
+            display: none;
+            position: absolute;
+            font-size: 0.7rem;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 600;
+            text-shadow: 1px 1px 1px black;
+            left: -0.4rem;
+            top: 1.1rem;
+            transform: rotate(7deg);
+            color: gold;
+            z-index: 1000;
+            transition: .3s;
+	        animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1.1) rotate(7deg);
+            }
+
+            70% {
+                transform: scale(1) rotate(7deg);
+            }
+
+            100% {
+                transform: scale(1.1) rotate(7deg);
+            }
+        }
+        #coins {
+            color: gold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 5600;
+            font-family: Arial, Helvetica, sans-serif;
+            .coin-icon {
+                background-image: url('../../assets/UI/money.svg');
+                width: 1.5rem;
+                height: 1.5rem;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: 100% auto;
+                margin-right: 0.5rem;
+            }
+        }
+    }
+
+}
+#game-loading {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    .loading-box {
+        width: 70%;
+        height: 2rem;
+        border: 5px solid black;
+        margin-bottom: 2rem;
+        background: linear-gradient(to right, rgb(90, 184, 247) 20%, white 20% 80%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Press Start 2P', cursive;
+    }
+}
