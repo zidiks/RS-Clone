@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+import { withModule } from '@angular/core/testing';
+import { Object3D } from 'three';
 
 
 @Component({
@@ -12,6 +14,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 })
 export class WelcomeComponent implements OnInit {
   REQANIMFRAME: any;
+  RESIZER: any;
+  OBJECTRES: THREE.Object3D | undefined;
   constructor() { }
 
   ngOnInit(): void {
@@ -66,10 +70,20 @@ export class WelcomeComponent implements OnInit {
       renderer.render( scene, camera );
     }
     animate();
+
+    this.RESIZER = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      if (this.OBJECTRES && window.innerWidth <= 768) this.OBJECTRES.scale.set(0.5 * (window.innerWidth / 768), 0.5 * (window.innerWidth / 768), 0.5 * (window.innerWidth / 768) )
+    }
+    window.addEventListener('resize', this.RESIZER, false);
+    
   }
 
   ngOnDestroy() {
     cancelAnimationFrame(this.REQANIMFRAME);
+    window.removeEventListener('resize', this.RESIZER, false);
   }
 
 }
