@@ -1,0 +1,12 @@
+
+		<html>
+		<head>
+		<title></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<style>
+			td {mso-number-format:\@;}
+			.number0 {mso-number-format:0;}
+			.number2 {mso-number-format:Fixed;}
+		</style>
+		</head>
+		<body><table border="1"><tr><td>Название</td><td>Активность</td><td>Сортировка</td><td>Дата изменения</td><td>ID</td></tr><tr><td>Лизинг строительной техники помогает компаниям развиваться</td><td align="center">Да</td><td align="right" class="number0">500</td><td>09.02.2021 01:35:20</td><td align="right" class="number0">39</td></tr><tr><td>Четырех дверный седан.Мотор 2,5 литра. Открытие года или провал ?</td><td align="center">Да</td><td align="right" class="number0">500</td><td>25.01.2021 10:03:02</td><td align="right" class="number0">41</td></tr><tr><td>Одобрение в день обращения</td><td align="center">Да</td><td align="right" class="number0">500</td><td>19.01.2021 19:51:37</td><td align="right" class="number0">42</td></tr><tr><td>Не теряйте деньги, если машину угнали или она попала в серьезное ДТП</td><td align="center">Да</td><td align="right" class="number0">500</td><td>19.01.2021 19:48:20</td><td align="right" class="number0">40</td></tr></table></body></html>

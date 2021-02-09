@@ -1,0 +1,192 @@
+/**
+ * Layout helpers.
+ */
+
+// Stretch an element vertically based on available space
+.reveal .stretch,
+.reveal .r-stretch {
+  max-width: none;
+  max-height: none;
+}
+
+.reveal pre.stretch code,
+.reveal pre.r-stretch code {
+  height: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
+}
+
+// Text that auto-fits it's container
+.reveal .r-fit-text {
+  display: inline-block; // https://github.com/rikschennink/fitty#performance
+  white-space: nowrap;
+}
+
+// Stack multiple elements on top of each other
+.reveal .r-stack {
+  display: grid;
+}
+
+.reveal .r-stack > * {
+  grid-area: 1/1;
+  margin: auto;
+}
+
+// Horizontal and vertical stacks
+.reveal .r-vstack,
+.reveal .r-hstack {
+  display: flex;
+
+  img,
+  video {
+    min-width: 0;
+    min-height: 0;
+    object-fit: contain;
+  }
+}
+
+.reveal .r-vstack {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.reveal .r-hstack {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+// Naming based on tailwindcss
+.reveal .items-stretch {
+  align-items: stretch;
+}
+.reveal .items-start {
+  align-items: flex-start;
+}
+.reveal .items-center {
+  align-items: center;
+}
+.reveal .items-end {
+  align-items: flex-end;
+}
+
+.reveal .justify-between {
+  justify-content: space-between;
+}
+.reveal .justify-around {
+  justify-content: space-around;
+}
+.reveal .justify-start {
+  justify-content: flex-start;
+}
+.reveal .justify-center {
+  justify-content: center;
+}
+.reveal .justify-end {
+  justify-content: flex-end;
+}
+.pressstart-text {
+  font-family: "Press Start 2P", cursive;
+  font-size: 22px;
+}
+
+.title-image {
+  width: 100%;
+  height: 250px;
+  background: url(../examples/assets/logo.png) no-repeat center;
+  background-size: contain;
+}
+.title-text {
+  border-bottom: 1px solid #fff;
+  display: inline-block;
+  font-size: 10px;
+}
+
+.slide-subtittle {
+  font-size: 16px;
+  display: block;
+  text-align: right;
+}
+
+.subtitle {
+  display: flex;
+}
+
+.subtitle-text.slide-2 {
+  font-size: 18px;
+  display: inline-block;
+  width: 55%;
+  line-height: 2;
+}
+
+.subtitle-image.slide-2 {
+  width: 45%;
+  height: 300px;
+  background: url(../examples/assets/slide2.png) no-repeat;
+  background-size: cover;
+  background-position: 100% 0;
+  border-radius: 20px;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.features-image1 {
+  position: absolute;
+  width: 25%;
+  bottom: 25%;
+  right: 0;
+  z-index: 3;
+}
+.features-image2 {
+  position: absolute;
+  width: 25%;
+  bottom: 0;
+  right: 2%;
+  z-index: 2;
+}
+.features-image3 {
+  position: absolute;
+  width: 26%;
+  bottom: 20%;
+  right: 30%;
+  z-index: 1;
+}
+
+.features-text {
+  font-size: 24px;
+  display: inline-block;
+  font-style: italic;
+  border-bottom: 1px solid #fff;
+  font-family: "Press Start 2P", cursive;
+}
+
+.features-layout {
+  list-style-type: none;
+}
+.features-descr {
+  font-size: 14px;
+}
+
+.racimatrix-tittle {
+  font-size: 20px;
+}
+
+.kanban-pict {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.kan-pict {
+  display: block;
+  width: 50%;
+  height: 50%;
+}
+
+.kanban-paragraph {
+  font-size: 14px;
+}

@@ -1,0 +1,264 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>reveal.js</title>
+	<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/black.css" id="theme">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<div class="title">
+					<div class="title-image"></div>
+					<span class="slide-subtittle pressstart-text">The Best Team from RS School</span>
+				</div>
+			</section>
+			<section>
+				<div class="subtitle">
+					<span class="subtitle-text slide-2 pressstart-text">CUBWAY SURFERS — это аналог всеми известной игры Subway
+						Surfers. Как и в
+						оригинале игры, в CUBWAY SURFERS есть главный персонаж, пробегающий среди большого количества
+						препятствий(поезда, дорожные ограждения, ямы) с целью собрать максимально возможное количество коинов и
+						побить рекорд.</span>
+					<div class="subtitle-image slide-2"></div>
+				</div>
+			</section>
+			<section>
+				<div class="features">
+					<span class="features-text">Основные фичи и особенности их реализации:</span>
+					<ul class="features-list">
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">3D-графика</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">Уникальные 3D-модели окружения и персонажей
+							</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">Система генерации препятствий и монет</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">Система анимаций персонажей</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">Система управления звуком</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">Система авторизации</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">База данных пользователей</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">Возможность управления с клавиатуры</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">Физика игры</span>
+						</li>
+					</ul>
+					<img src="examples/assets/slide3-1.png" alt="" class="features-image1">
+					<img src="examples/assets/slide3-2.png" alt="" class="features-image2">
+					<img src="examples/assets/slide3-3.png" alt="" class="features-image3">
+				</div>
+			</section>
+			<section>
+				<div class="racimatrix">
+					<span class="racimatrix-tittle pressstart-text">RACI матрица</span>
+					<img class="raci-pict"
+						src="https://habrastorage.org/storage2/c59/453/a5d/c59453a5de3ac9895c99e9116623e182.png" alt="">
+				</div>
+			</section>
+
+			<section>
+				<div class="features">
+					<span class="features-text pressstart-text">Какие возможности фреймворка THREE.js использовали мы? Да
+						практически все:</span>
+					<ul class="features-list">
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Scene, camera, mesh, clock, renderer, animate,
+								group;</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Ambient Light, Directional Light, Spot Light
+							</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Shadows maps</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Orbit Controlsй</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Управление камерой(математический просчёт движения)</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Загрузчики: MTLoader, OBJLoader, FBXLoader, AnimationMixer,
+								SVGLoader</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- BenchMark(FPS)</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Cache для оптимизации обработки 3D сцен</span>
+						</li>
+					</ul>
+			</section>
+
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Уникальные 3D-модели окружения и персонажей:</span>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						Была использована среда разработки 3D-моделей MagicVoxel в сочетании с Adobe Illustrator и Adobe Photoshop.
+						Уникальность
+						каждой модели заключается в ручном создании каждого элемента, начиная с простой воксельной монетки и
+						заканчивая полным
+						игровым окружением вместе с анимированными персонажами.
+					</span>
+				</div>
+			</section>
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Система генерации препятствий и монет:</span>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						Рандомная генерация препятствий реализауется таким образом, что на пути движения персонажа всегда есть хотя
+						бы один проходимый участок.<br>
+						Проблема бесконечности генерации препятсвий решена путем разработки буфера прототипов 3Д-объектов, из
+						которых создаются новые экземпляры.
+					</span>
+				</div>
+			</section>
+
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Система анимаций персонажей:</span><br>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						В игре реализована скелетная анимация с использованием программного пакета Mixamo.<br>
+						Для воспроизведения и смешивания анимаций используется THREE.AnimationMixer, а для соответствия скорости
+						игры
+						устанавливается продолжительность анимации.<br>
+						В процессе игры можно наблюдать достаточно интересные варианты анимации не только персонажей, но и их
+						поведений (столкновения, прыжки, кувырки)
+					</span>
+				</div>
+			</section>
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Система управления звуком:</span><br>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						Написан полноценный Angular сервис, доступ к которому можно получить из любого компонента приложения, для
+						управления
+						звуком.
+					</span>
+				</div>
+			</section>
+
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Возможность управления с клавиатуры:</span><br>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						В игре реализован стандартный алгоритм управления с клавиатуры с добавлением горячих клавиш.
+					</span>
+					<img style="max-width: 60%;" class="enter-pict" src="examples/assets/slide3-2.png" alt="">
+				</div>
+			</section>
+
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Система авторизации:</span><br>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						Используется Firebase Auth c активированными GitHub и Google провайдерами. Так же реализована верификация
+						почты.
+						<img class="enter-pict" src="examples/assets/enter.png" alt="">
+					</span>
+				</div>
+			</section>
+
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Координация деятельность команды:</span>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						Деятельность нашей команды координировалась на протяжении всего этапа разработки путем постановки задач с
+						помощью доски Trello и обязательного живого обсуждения посредство Skype мессенеджера.
+						Работа нашей команды была построена по схеме “Созвон-обсуждение-решение-разработка-созвон”
+					</span>
+				</div>
+			</section>
+			<section class="kanban-images">
+				<span class="features-text kanban-tittle">Рабочий процесс в действии:</span>
+				<div class="kanban-pict">
+					<img class="kan-pict" src="examples/assets/kan2.png" alt="">
+					<img class="kan-pict" src="examples/assets/kan3.png" alt="">
+					<img class="kan-pict" src="examples/assets/kan1.png" alt="">
+				</div>
+			</section>
+			<section class="steck-images">
+				<span class="steck-tittle features-text">Стек используемых технологий:</span>
+				<p class="steck-text pressstart-text">Angular, TypeScript, THREE.js/WebGL, Firebase</p>
+				<div class="steck-pict">
+					<img class="steck-pict" src="examples/assets/steck.png" alt="">
+				</div>
+			</section>
+			<section>
+				<div class="kanban">
+					<span class="kanban-tittle features-text">Какие были сложности и как они были решены:</span>
+					<span class="kanban-paragraph pressstart-text">
+						В процессе рандомной генерации препятствий возникали непроходимые участки, в последствии чего пришлось
+						полностью переписать алгоритм с учётом обязательного отсутствия тупиков и непроходимых участков.</span>
+					<span class="kanban-paragraph pressstart-text">
+						Так как в игре содержится много уникальных моделей, игра вышла достаточно “тяжелой”. Для оптимизации
+						производительности в параметрах игры доступны настройки алгоритмов рендеринга.
+					</span>
+				</div>
+			</section>
+			<section>
+				<div class="kanban">
+					<span class="kanban-tittle features-text">Еще пару слов о курсе RS School и о проделанной работе:</span>
+					<span class="kanban-paragraph pressstart-text">
+						Написать с нуля игру, спустя всего полгода обучения на курсе - задача не из простых. Но только благодрая
+						командным усилиям это стало осуществимо в сравнительно простой степени. Процесс стал не только технически
+						сложным и интересным, но и достаточно творческим. Придумать идею, применить фантазию плюс воплотить её в
+						графику и написать максимально качественный код - всё это в сумме дало вполне хороший результат. Каждый из
+						нас вынес достаточно опыта, чтобы двигаться в направлении FRONT-END дальше.
+					</span>
+				</div>
+			</section>
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			hash: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+</body>
+
+</html>
