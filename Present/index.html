@@ -73,11 +73,150 @@
 					<img src="examples/assets/slide3-3.png" alt="" class="features-image3">
 				</div>
 			</section>
+
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Уникальные 3D-модели окружения и персонажей:</span>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						Была использована среда разработки 3D-моделей MagicVoxel в сочетании с Adobe Illustrator и Adobe Photoshop.
+						Уникальность
+						каждой модели заключается в ручном создании каждого элемента, начиная с простой воксельной монетки и
+						заканчивая полным
+						игровым окружением вместе с анимированными персонажами.
+					</span>
+				</div>
+			</section>
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Система генерации препятствий и монет:</span>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						Рандомная генерация препятствий реализауется таким образом, что на пути движения персонажа всегда есть хотя
+						бы один проходимый участок.<br>
+						Для повышения производительности игры был разработан буфер прототипов 3Д-объектов, из
+						которых создаются новые экземпляры.
+					</span>
+				</div>
+			</section>
+
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Система анимаций персонажей:</span><br>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						В игре реализована скелетная анимация с использованием программного пакета Mixamo.<br>
+						Для воспроизведения и смешивания анимаций используется THREE.AnimationMixer, а для соответствия скорости
+						игры
+						устанавливается продолжительность анимации.<br>
+						В процессе игры можно наблюдать достаточно интересные варианты анимации не только персонажей, но и их
+						поведений (столкновения, прыжки, кувырки)
+					</span>
+				</div>
+			</section>
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Система управления звуком:</span><br>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						Написан полноценный Angular сервис, доступ к которому можно получить из любого компонента приложения, для
+						управления
+						звуком.
+					</span>
+				</div>
+			</section>
+
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Возможность управления с клавиатуры:</span><br>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						В игре реализован стандартный алгоритм управления с клавиатуры с добавлением горячих клавиш.
+					</span>
+					<img style="max-width: 60%;" class="enter-pict" src="examples/assets/slide3-2.png" alt="">
+				</div>
+			</section>
+
+
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Система авторизации:</span><br>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						Используется Firebase Auth c активированными GitHub и Google провайдерами. Так же реализована верификация
+						почты.
+						<img class="enter-pict" src="examples/assets/enter.png" alt="">
+					</span>
+				</div>
+			</section>
+
 			<section>
 				<div class="architecture">
 					<img style="height: 85vh;" src="examples/assets/arch.png" alt="arch">
 				</div>
 			</section>
+	
+			<section class="steck-images">
+				<span class="steck-tittle features-text">Стек используемых технологий:</span>
+				<p class="steck-text pressstart-text">Angular, TypeScript, THREE.js/WebGL, Firebase</p>
+				<div class="steck-pict">
+					<img class="steck-pict" src="examples/assets/steck.png" alt="">
+				</div>
+			</section>
+
+			<section>
+				<div class="features">
+					<span class="features-text pressstart-text">Какие возможности фреймворка THREE.js использовали мы? Да
+						практически все:</span>
+					<ul class="features-list">
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Scene, camera, mesh, clock, renderer, animate,
+								group;</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Ambient Light, Directional Light, Spot Light
+							</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Shadows maps</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Orbit Controlsй</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Управление камерой(математический просчёт движения)</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Загрузчики: MTLoader, OBJLoader, FBXLoader, AnimationMixer,
+								SVGLoader</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- BenchMark(FPS)</span>
+						</li>
+						<li class="features-layout">
+							<span class="features-descr pressstart-text">- Cache для оптимизации обработки 3D сцен</span>
+						</li>
+					</ul>
+			</section>
+			
+			<section>
+				<div class="kanban">
+					<span class="features-text features-text">Координация деятельность команды:</span>
+					<span class="features-descr kanban-paragraph pressstart-text">
+						Деятельность нашей команды координировалась на протяжении всего этапа разработки путем постановки задач с
+						помощью доски Trello и обязательного живого обсуждения посредство Skype мессенеджера.
+						Работа нашей команды была построена по схеме “Созвон-обсуждение-решение-разработка-созвон”
+					</span>
+				</div>
+			</section>
+			<section class="kanban-images">
+				<span class="features-text kanban-tittle">Рабочий процесс в действии:</span>
+				<div class="kanban-pict">
+					<img class="kan-pict" src="examples/assets/kan2.png" alt="">
+					<img class="kan-pict" src="examples/assets/kan3.png" alt="">
+					<img class="kan-pict" src="examples/assets/kan1.png" alt="">
+				</div>
+			</section>
+	
 			<section>
 				<div class="racimatrix">
 					<span class="racimatrix-tittle">RACI матрица</span>
@@ -184,143 +323,6 @@
 						<span style="font-size: 18px; display: block;" class="table-description">Accountable(A) – ответственный за проверку результатов или утверждение задачи.</span>
 						<span style="font-size: 18px; display: block;" class="table-description">Informed(I) – оповещается, информируется. </span>
 					</div>
-				</div>
-			</section>
-
-			<section>
-				<div class="features">
-					<span class="features-text pressstart-text">Какие возможности фреймворка THREE.js использовали мы? Да
-						практически все:</span>
-					<ul class="features-list">
-						<li class="features-layout">
-							<span class="features-descr pressstart-text">- Scene, camera, mesh, clock, renderer, animate,
-								group;</span>
-						</li>
-						<li class="features-layout">
-							<span class="features-descr pressstart-text">- Ambient Light, Directional Light, Spot Light
-							</span>
-						</li>
-						<li class="features-layout">
-							<span class="features-descr pressstart-text">- Shadows maps</span>
-						</li>
-						<li class="features-layout">
-							<span class="features-descr pressstart-text">- Orbit Controlsй</span>
-						</li>
-						<li class="features-layout">
-							<span class="features-descr pressstart-text">- Управление камерой(математический просчёт движения)</span>
-						</li>
-						<li class="features-layout">
-							<span class="features-descr pressstart-text">- Загрузчики: MTLoader, OBJLoader, FBXLoader, AnimationMixer,
-								SVGLoader</span>
-						</li>
-						<li class="features-layout">
-							<span class="features-descr pressstart-text">- BenchMark(FPS)</span>
-						</li>
-						<li class="features-layout">
-							<span class="features-descr pressstart-text">- Cache для оптимизации обработки 3D сцен</span>
-						</li>
-					</ul>
-			</section>
-
-
-			<section>
-				<div class="kanban">
-					<span class="features-text features-text">Уникальные 3D-модели окружения и персонажей:</span>
-					<span class="features-descr kanban-paragraph pressstart-text">
-						Была использована среда разработки 3D-моделей MagicVoxel в сочетании с Adobe Illustrator и Adobe Photoshop.
-						Уникальность
-						каждой модели заключается в ручном создании каждого элемента, начиная с простой воксельной монетки и
-						заканчивая полным
-						игровым окружением вместе с анимированными персонажами.
-					</span>
-				</div>
-			</section>
-
-			<section>
-				<div class="kanban">
-					<span class="features-text features-text">Система генерации препятствий и монет:</span>
-					<span class="features-descr kanban-paragraph pressstart-text">
-						Рандомная генерация препятствий реализауется таким образом, что на пути движения персонажа всегда есть хотя
-						бы один проходимый участок.<br>
-						Для повышения производительности игры был разработан буфер прототипов 3Д-объектов, из
-						которых создаются новые экземпляры.
-					</span>
-				</div>
-			</section>
-
-
-			<section>
-				<div class="kanban">
-					<span class="features-text features-text">Система анимаций персонажей:</span><br>
-					<span class="features-descr kanban-paragraph pressstart-text">
-						В игре реализована скелетная анимация с использованием программного пакета Mixamo.<br>
-						Для воспроизведения и смешивания анимаций используется THREE.AnimationMixer, а для соответствия скорости
-						игры
-						устанавливается продолжительность анимации.<br>
-						В процессе игры можно наблюдать достаточно интересные варианты анимации не только персонажей, но и их
-						поведений (столкновения, прыжки, кувырки)
-					</span>
-				</div>
-			</section>
-
-			<section>
-				<div class="kanban">
-					<span class="features-text features-text">Система управления звуком:</span><br>
-					<span class="features-descr kanban-paragraph pressstart-text">
-						Написан полноценный Angular сервис, доступ к которому можно получить из любого компонента приложения, для
-						управления
-						звуком.
-					</span>
-				</div>
-			</section>
-
-
-			<section>
-				<div class="kanban">
-					<span class="features-text features-text">Возможность управления с клавиатуры:</span><br>
-					<span class="features-descr kanban-paragraph pressstart-text">
-						В игре реализован стандартный алгоритм управления с клавиатуры с добавлением горячих клавиш.
-					</span>
-					<img style="max-width: 60%;" class="enter-pict" src="examples/assets/slide3-2.png" alt="">
-				</div>
-			</section>
-
-
-			<section>
-				<div class="kanban">
-					<span class="features-text features-text">Система авторизации:</span><br>
-					<span class="features-descr kanban-paragraph pressstart-text">
-						Используется Firebase Auth c активированными GitHub и Google провайдерами. Так же реализована верификация
-						почты.
-						<img class="enter-pict" src="examples/assets/enter.png" alt="">
-					</span>
-				</div>
-			</section>
-
-
-			<section>
-				<div class="kanban">
-					<span class="features-text features-text">Координация деятельность команды:</span>
-					<span class="features-descr kanban-paragraph pressstart-text">
-						Деятельность нашей команды координировалась на протяжении всего этапа разработки путем постановки задач с
-						помощью доски Trello и обязательного живого обсуждения посредство Skype мессенеджера.
-						Работа нашей команды была построена по схеме “Созвон-обсуждение-решение-разработка-созвон”
-					</span>
-				</div>
-			</section>
-			<section class="kanban-images">
-				<span class="features-text kanban-tittle">Рабочий процесс в действии:</span>
-				<div class="kanban-pict">
-					<img class="kan-pict" src="examples/assets/kan2.png" alt="">
-					<img class="kan-pict" src="examples/assets/kan3.png" alt="">
-					<img class="kan-pict" src="examples/assets/kan1.png" alt="">
-				</div>
-			</section>
-			<section class="steck-images">
-				<span class="steck-tittle features-text">Стек используемых технологий:</span>
-				<p class="steck-text pressstart-text">Angular, TypeScript, THREE.js/WebGL, Firebase</p>
-				<div class="steck-pict">
-					<img class="steck-pict" src="examples/assets/steck.png" alt="">
 				</div>
 			</section>
 			<section>
