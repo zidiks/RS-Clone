@@ -75,9 +75,110 @@
 			</section>
 			<section>
 				<div class="racimatrix">
-					<span class="racimatrix-tittle pressstart-text">RACI матрица</span>
-					<img class="raci-pict"
-						src="https://habrastorage.org/storage2/c59/453/a5d/c59453a5de3ac9895c99e9116623e182.png" alt="">
+					<span class="racimatrix-tittle">RACI матрица</span>
+					<table style="width:100%">
+						<tr>
+							<th style="font-size: 20px;" ></th>
+							<th style="font-size: 20px;" >Миронов В.</th> 
+							<th style="font-size: 20px;" >Якименко А.</th>
+							<th style="font-size: 20px;" >Васильев П.</th>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Общая архитектура приложения</td>
+							<td style="font-size: 20px;" >R / A</td> 
+							<td style="font-size: 20px;" >R</td>
+							<td style="font-size: 20px;" >R</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >3D-модели окружения</td>
+							<td style="font-size: 20px;" >I</td> 
+							<td style="font-size: 20px;" >R / A</td>
+							<td style="font-size: 20px;" >I</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Алгоритм генерации объектов</td>
+							<td style="font-size: 20px;" >R / A</td> 
+							<td style="font-size: 20px;" >I</td>
+							<td style="font-size: 20px;" >I</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Создание 3D-персонажей</td>
+							<td style="font-size: 20px;" >R</td> 
+							<td style="font-size: 20px;" >A</td>
+							<td style="font-size: 20px;" >A</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Менеджер звуков</td>
+							<td style="font-size: 20px;" >A</td> 
+							<td style="font-size: 20px;" >R</td>
+							<td style="font-size: 20px;" >I</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Система авторизации</td>
+							<td style="font-size: 20px;" >R / A</td> 
+							<td style="font-size: 20px;" >I</td>
+							<td style="font-size: 20px;" >I</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Управление с клавиатуры</td>
+							<td style="font-size: 20px;" >A</td> 
+							<td style="font-size: 20px;" >A</td>
+							<td style="font-size: 20px;" >R</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Физика игры и коллизии</td>
+							<td style="font-size: 20px;" >R / A</td> 
+							<td style="font-size: 20px;" >I</td>
+							<td style="font-size: 20px;" >I</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Игровой магазин</td>
+							<td style="font-size: 20px;" >R / A</td> 
+							<td style="font-size: 20px;" >I</td>
+							<td style="font-size: 20px;" >I</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Меню и настройки</td>
+							<td style="font-size: 20px;" >R / A</td> 
+							<td style="font-size: 20px;" >R / A</td>
+							<td style="font-size: 20px;" >A</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >База данных</td>
+							<td style="font-size: 20px;" >R / A</td> 
+							<td style="font-size: 20px;" >I</td>
+							<td style="font-size: 20px;" >I</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >UI</td>
+							<td style="font-size: 20px;" >I</td> 
+							<td style="font-size: 20px;" >R / A</td>
+							<td style="font-size: 20px;" >R</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Landing-page</td>
+							<td style="font-size: 20px;" >R / A</td> 
+							<td style="font-size: 20px;" >R / A</td>
+							<td style="font-size: 20px;" >R / A</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Статья</td>
+							<td style="font-size: 20px;" >A</td> 
+							<td style="font-size: 20px;" >A</td>
+							<td style="font-size: 20px;" >R / A</td>
+						</tr>
+						<tr>
+							<td style="font-size: 20px;" >Видео</td>
+							<td style="font-size: 20px;" >R / A</td> 
+							<td style="font-size: 20px;" >I</td>
+							<td style="font-size: 20px;" >A</td>
+						</tr>
+					</table>
+					<div class="">
+						<span style="font-size: 18px; display: block;" class="table-description">Responsible(R) => тот кто ответственный за выполнения задачи. </span>
+						<span style="font-size: 18px; display: block;" class="table-description">Accountable(A) – ответственный за проверку результатов или утверждение задачи.</span>
+						<span style="font-size: 18px; display: block;" class="table-description">Informed(I) – оповещается, информируется. </span>
+					</div>
 				</div>
 			</section>
 
@@ -136,7 +237,7 @@
 					<span class="features-descr kanban-paragraph pressstart-text">
 						Рандомная генерация препятствий реализауется таким образом, что на пути движения персонажа всегда есть хотя
 						бы один проходимый участок.<br>
-						Проблема бесконечности генерации препятсвий решена путем разработки буфера прототипов 3Д-объектов, из
+						Для повышения производительности игры был разработан буфер прототипов 3Д-объектов, из
 						которых создаются новые экземпляры.
 					</span>
 				</div>
